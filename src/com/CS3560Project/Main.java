@@ -5,6 +5,10 @@ import com.CS3560Project.structures.Product;
 import com.CS3560Project.structures.User;
 
 public class Main {
+    /**
+     * Test main to show how to use lombok methods
+     * @param args  program arguments
+     */
     public static void main(String[] args) {
         User user = new User("1234", "Test", "User");
         Product product = new Product("987", "TestItem");
