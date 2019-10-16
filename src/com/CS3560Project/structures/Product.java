@@ -14,14 +14,15 @@ import java.util.List;
 public class Product {
     private String ID;
     private String productName;
+    private double price;
     private List<String> searchTerms;
 
-    public Product(String id, String productName) {
-        this(id, productName, Arrays.asList(productName.split(Constants.SPACE_REGEX)));
+    public Product(String id, String productName, double price) {
+        this(id, productName, price, Arrays.asList(productName.split(Constants.SPACE_REGEX)));
     }
 
     @Override
     public String toString() {
-        return "{ID:\"" + getID() + "\",productName:\"" + getProductName() + "\"}";
+        return "{ID:\"" + getID() + "\",productName:\"" + getProductName() + "\",price:" + getPrice() + "}";
     }
 }

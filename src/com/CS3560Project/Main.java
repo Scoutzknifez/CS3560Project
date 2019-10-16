@@ -12,7 +12,7 @@ public class Main {
      */
     public static void main(String[] args) {
         User user = new User("1234", "Test", "User");
-        Product product = new Product("987", Utils.capitalize("Test_Item"));
+        Product product = new Product("987", Utils.capitalize("Test_Item"), 10.98);
         System.out.println(user);
         System.out.println(product);
 

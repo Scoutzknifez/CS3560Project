@@ -21,6 +21,15 @@ public class Cart {
         return getCartItems().add(product);
     }
 
+    public double getTotalCost() {
+        double totalPrice = 0;
+
+        for (Product product : cartItems)
+            totalPrice += product.getPrice();
+
+        return totalPrice;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
