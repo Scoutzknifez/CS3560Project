@@ -1,5 +1,6 @@
 package com.CS3560Project.structures;
 
+import com.CS3560Project.utility.Constants;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,7 +32,7 @@ public class Cart {
         for (Product product : cartItems)
             totalPrice += product.getPrice();
 
-        return totalPrice;
+        return totalPrice + (totalPrice * Constants.TAX_RATE);
     }
 
     /**

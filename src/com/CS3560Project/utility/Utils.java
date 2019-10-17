@@ -2,6 +2,7 @@ package com.CS3560Project.utility;
 
 import com.CS3560Project.structures.Product;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +27,21 @@ public class Utils {
                     return false;
                 })
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Formats a double to given decimal precision
+     * @param num               The number to truncate
+     * @param numberOfDecimals  Number of decimals places
+     * @return  formatted double
+     */
+    public static String formatDouble(double num, int numberOfDecimals) {
+        StringBuilder formatter = new StringBuilder();
+        formatter.append("#.");
+        for (int i = 0; i < numberOfDecimals; i++)
+            formatter.append("#");
+
+        return (new DecimalFormat(formatter.toString())).format(num);
     }
 
     /**

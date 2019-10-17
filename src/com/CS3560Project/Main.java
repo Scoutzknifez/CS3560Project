@@ -21,5 +21,6 @@ public class Main {
         System.out.println(cart);
 
         Utils.printList(Utils.filterByTerms(cart.getCartItems(), "Test"));
+        System.out.println(Utils.formatDouble(cart.getTotalCost(), 2));
     }
 }
