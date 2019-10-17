@@ -31,8 +31,8 @@ public class Utils {
 
     /**
      * Formats a double to given decimal precision
-     * @param num               The number to truncate
-     * @param numberOfDecimals  Number of decimals places
+     * @param   num               The number to truncate
+     * @param   numberOfDecimals  Number of decimals places
      * @return  formatted double
      */
     public static String formatDouble(double num, int numberOfDecimals) {
