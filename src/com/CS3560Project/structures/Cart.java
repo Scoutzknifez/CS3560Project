@@ -21,6 +21,10 @@ public class Cart {
         return getCartItems().add(product);
     }
 
+    /**
+     * Return the total price of items in the cart
+     * @return  total price
+     */
     public double getTotalCost() {
         double totalPrice = 0;
 
@@ -28,6 +32,14 @@ public class Cart {
             totalPrice += product.getPrice();
 
         return totalPrice;
+    }
+
+    /**
+     * Returns the count of items in the shopping cart
+     * @return  shopping cart item count
+     */
+    public int getCartSize() {
+        return getCartItems().size();
     }
 
     @Override
