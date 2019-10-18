@@ -11,9 +11,9 @@ public class Utils {
     /**
      * Given a product list, and a search term phrase, it will return a list containing
      * products with the relevant search terms
-     * @param productList   product list to search through
-     * @param searchRequest the string to get search terms out of
-     * @return              A filtered product list by search terms
+     * @param   productList   product list to search through
+     * @param   searchRequest the string to get search terms out of
+     * @return  A filtered product list by search terms
      */
     public static List<Product> filterByTerms(List<Product> productList, String searchRequest) {
         return productList.stream()
@@ -57,8 +57,8 @@ public class Utils {
 
     /**
      * Capitalize every letter after a space.
-     * @param sentence The sentence to capitalize.
-     * @return capitalized
+     * @param   sentence The sentence to capitalize.
+     * @return  capitalized phrase
      */
     public static String capitalize(String sentence) {
         String[] split = sentence.replaceAll("_", " ").split(" ");
