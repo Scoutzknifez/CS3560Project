@@ -25,9 +25,9 @@ public class Main {
         Utils.printList(Utils.filterByTerms(cart.getCartItems(), "Test"));
         System.out.println(Utils.formatDouble(cart.getTotalCost(), 2));
 
-        JFrame frame = new JFrame(Constants.APPLICATION_TITLE);
-        Template template = new Template();
-        frame.setContentPane(template.getPanel1());
+        JFrame frame = new JFrame(Constants.APPLICATION_TITLE);         // Parent JFrame with title
+        Template template = new Template();                             // Class representing GUI Form
+        frame.setContentPane(template.getPanel1());                     // Content Pane is set to templates panel1
         frame.pack();
         frame.setVisible(true);
     }
