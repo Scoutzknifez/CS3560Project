@@ -1,4 +1,4 @@
-package com.CS3560Project.structures;
+package com.CS3560Project.structures.products;
 
 import com.CS3560Project.utility.Constants;
 import lombok.AllArgsConstructor;
