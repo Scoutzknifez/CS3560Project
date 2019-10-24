@@ -1,5 +1,6 @@
 package com.CS3560Project.structures;
 
+import com.CS3560Project.structures.products.Product;
 import com.CS3560Project.utility.Constants;
 import lombok.Getter;
 import lombok.Setter;
