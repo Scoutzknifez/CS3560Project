@@ -24,6 +24,13 @@ public class Cart {
     }
 
     /**
+     * Removes all {@link Product} out of the shopping cart.
+     */
+    public void empty() {
+        cartItems.clear();
+    }
+
+    /**
      * Return the total price of items in the cart
      * @return  total price
      */
