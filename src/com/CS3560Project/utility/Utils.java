@@ -1,6 +1,6 @@
 package com.CS3560Project.utility;
 
-import com.CS3560Project.structures.Product;
+import com.CS3560Project.structures.products.Product;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;

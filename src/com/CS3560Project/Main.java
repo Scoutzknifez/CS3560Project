@@ -2,7 +2,8 @@ package com.CS3560Project;
 
 import com.CS3560Project.forms.Template;
 import com.CS3560Project.structures.Cart;
-import com.CS3560Project.structures.Product;
+import com.CS3560Project.structures.PhoneNumber;
+import com.CS3560Project.structures.products.Product;
 import com.CS3560Project.structures.User;
 import com.CS3560Project.utility.Constants;
 import com.CS3560Project.utility.Utils;
@@ -15,8 +16,11 @@ public class Main {
      * @param args  program arguments
      */
     public static void main(String[] args) {
-        User user = new User("1234", "Test", "User");
+        PhoneNumber phoneNumber = new PhoneNumber(951, 5063229);
+
+        User user = new User("1234", "Test", "User", phoneNumber, "33292 Testville", "cpp@cpp.edu", "wowWhatAPASS");
         Product product = new Product("987", Utils.capitalize("Test_Item"), 10.98);
+        System.out.println(user);
 
         Cart cart = new Cart(user);
         cart.addProduct(product);
