@@ -27,6 +27,9 @@ public class Main {
 
         try {
             thread.join();
+            for (Object user : worker.getItems()) {
+                System.out.println(user);
+            }
         } catch (Exception e) {
             Utils.log("Here when thread fails.");
         }
