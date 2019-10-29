@@ -16,6 +16,11 @@ public class Main {
      * @param args  program arguments
      */
     public static void main(String[] args) {
+        PhoneNumber ph = PhoneNumber.stringToPhoneNumber("(951)123-4567");
+        System.out.println(ph);
+    }
+
+    private static void testSet() {
         PhoneNumber phoneNumber = new PhoneNumber(951, 5063229);
 
         User user = new User("1234", "Test", "User", phoneNumber, "33292 Testville", "cpp@cpp.edu", "wowWhatAPASS");
