@@ -1,5 +1,6 @@
 package com.CS3560Project.utility;
 
+import com.CS3560Project.structures.TimeAtMoment;
 import com.CS3560Project.structures.products.Product;
 
 import java.text.DecimalFormat;
@@ -8,6 +9,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Utils {
+    /**
+     * Sends a message out to console with time stamp of log execution
+     * @param input The message to display
+     */
+    public static void log(String input) {
+        TimeAtMoment timeAtMoment = new TimeAtMoment(System.currentTimeMillis());
+        System.out.println("[" + timeAtMoment + "] " + input);
+    }
+
     /**
      * Given a product list, and a search term phrase, it will return a list containing
      * products with the relevant search terms

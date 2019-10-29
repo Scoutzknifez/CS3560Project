@@ -1,6 +1,8 @@
 package com.CS3560Project;
 
 import com.CS3560Project.forms.Template;
+import com.CS3560Project.sqlworkers.GetWorker;
+import com.CS3560Project.sqlworkers.Table;
 import com.CS3560Project.structures.Cart;
 import com.CS3560Project.structures.PhoneNumber;
 import com.CS3560Project.structures.products.Product;
@@ -18,6 +20,16 @@ public class Main {
     public static void main(String[] args) {
         PhoneNumber ph = PhoneNumber.stringToPhoneNumber("(951)123-4567");
         System.out.println(ph);
+
+        GetWorker worker = new GetWorker(Table.USERS);
+        Thread thread = new Thread(worker);
+        thread.start();
+
+        try {
+            thread.join();
+        } catch (Exception e) {
+            Utils.log("Here when thread fails.");
+        }
     }
 
     private static void testSet() {
