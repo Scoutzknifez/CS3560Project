@@ -15,7 +15,7 @@ public class Product {
     private String ID;
     private String productName;
     private double price;
-    private List<String> searchTerms;
+    private transient List<String> searchTerms;
 
     public Product(String id, String productName, double price) {
         this(id, productName, price, Arrays.asList(productName.split(Constants.SPACE_REGEX)));
