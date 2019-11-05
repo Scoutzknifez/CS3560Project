@@ -32,6 +32,9 @@ public class GetWorker extends Worker {
         closeConnection();
     }
 
+    /**
+     * Sends a query to the database and returns a result set.
+     */
     private void getFromDatabase() {
         String sqlArg = "SELECT * FROM " + getTable().name() + (getArguments().length == 0 ? "" : " " + getArguments()[0]); // TODO
         try {
