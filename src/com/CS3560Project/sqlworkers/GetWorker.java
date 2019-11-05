@@ -44,6 +44,10 @@ public class GetWorker extends Worker {
         }
     }
 
+    /**
+     * Result set is turned into an object set of type specified on construction.
+     * @param set   The set to turn into a list of objects
+     */
     private void putResultIntoList(ResultSet set) {
         items = new ArrayList<>();
         try {

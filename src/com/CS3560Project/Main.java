@@ -40,7 +40,7 @@ public class Main {
 
     private static void doingInsert() {
         PhoneNumber phoneNumber = new PhoneNumber(951, 5063229);
-        User user = new User("1234", "Test", "User", phoneNumber, "33292 Testville", "cpp@cpp.edu", "wowWhatAPASS");
+        User user = new User("5678", "Test2", "User2", phoneNumber, "15151", "cpp2@cpp.edu", "wowWhatAPASS2");
 
         InsertWorker worker = new InsertWorker(Table.USERS, new UserInsertion(user));
         Thread thread = new Thread(worker);
@@ -57,7 +57,7 @@ public class Main {
         PhoneNumber phoneNumber = new PhoneNumber(951, 5063229);
 
         User user = new User("1234", "Test", "User", phoneNumber, "33292 Testville", "cpp@cpp.edu", "wowWhatAPASS");
-        Product product = new Product("987", Utils.capitalize("Test_Item"), 10.98);
+        Product product = new Product("987", Utils.capitalize("Test_Item"), 10.98, "A test item", "Big Boy", 50);
         System.out.println(user);
 
         Cart cart = new Cart(user);

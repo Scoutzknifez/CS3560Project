@@ -46,6 +46,12 @@ public class User {
                 "\"}";
     }
 
+    /**
+     * createInstance method required for ANY structure stored in the database
+     * Creates an instance of this object with a result set
+     * @param set   The resultset to create an object with
+     * @return      The object created
+     */
     public static User createInstance(ResultSet set) {
         try {
             String id = set.getString("id");

@@ -21,27 +21,31 @@ public abstract class Worker implements Runnable {
         ready();
     }
 
-    public Statement ready() {
+    /**
+     * Gets the MySQL connector ready to work.
+     */
+    private void ready() {
         if (connectToDriver() == Result.FAILURE) {
             System.out.println("Could not connect driver for MySQL.");
-            return null;
+            return; // TODO should instead throw exceptions rather than returning
         }
+
 
         connection = connectToMySQLDatabase();
         if (connection == null) {
             Utils.log("Could not connect to MySQL Database.");
-            return null;
+            return;
         }
 
-        statement = getSQLStatement(connection);
-        if (statement == null) {
+        statement = getSQLStatement();
+        if (statement == null)
             System.out.println("Could not get MySQL statement.");
-            return null;
-        }
-
-        return statement;
     }
 
+    /**
+     * Gets the driver activated and fails if not present
+     * @return  Fail/Success
+     */
     private Result connectToDriver() {
         System.out.println("Connecting driver! ");
         try {
@@ -53,26 +57,36 @@ public abstract class Worker implements Runnable {
         return Result.FAILURE;
     }
 
+    /**
+     * Connects directly to the MySQL database with given credentials.
+     * @return  The connection to the database.
+     */
     private Connection connectToMySQLDatabase() {
         try {
-            Connection connection = DriverManager.getConnection(Constants.DATABASE_URL, Constants.USERNAME, Constants.PASSWORD);
-            return connection;
+            return DriverManager.getConnection(Constants.DATABASE_URL, Constants.USERNAME, Constants.PASSWORD);
         } catch (Exception e) {
             Utils.log("Could not connect to MySQL database at " + Constants.DATABASE_URL);
             return null;
         }
     }
 
-    private Statement getSQLStatement(Connection connection) {
+    /**
+     * Creates a new instance of a statement for the connected database.
+     * @return  A statement for the connected database.
+     */
+    private Statement getSQLStatement() {
         try {
-            return connection.createStatement();
+            return getConnection().createStatement();
         } catch (Exception e) {
             System.out.println("Could not create MySQL statement.");
             return null;
         }
     }
 
-    public void closeConnection() {
+    /**
+     * Closes the connection to the database safely, ending all open statements.
+     */
+    protected void closeConnection() {
         try {
             statement.close();
         } catch (Exception e) {
