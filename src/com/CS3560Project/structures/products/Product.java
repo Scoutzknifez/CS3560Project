@@ -1,9 +1,13 @@
 package com.CS3560Project.structures.products;
 
+import com.CS3560Project.exceptions.ParseFailureException;
+import com.CS3560Project.structures.User;
 import com.CS3560Project.utility.Constants;
+import com.CS3560Project.utility.Utils;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,5 +45,16 @@ public class Product {
                 "\",dimensions:\"" + getDimensions() +
                 "\",weight:" + getWeight() +
                 "}";
+    }
+
+    public static Product createInstance(ResultSet set) {
+        try {
+            // TODO Look at user for how to fill this in.
+            // set field names are in discord
+            return null;
+        } catch (Exception e) {
+            Utils.log("Could not parse returned list.");
+            throw new ParseFailureException(set, Product.class);
+        }
     }
 }
