@@ -1,6 +1,5 @@
 package com.CS3560Project;
 
-import com.CS3560Project.forms.Template;
 import com.CS3560Project.sqlworkers.GetWorker;
 import com.CS3560Project.sqlworkers.Table;
 import com.CS3560Project.sqlworkers.insertion.InsertWorker;
@@ -12,10 +11,8 @@ import com.CS3560Project.structures.PhoneNumber;
 import com.CS3560Project.structures.products.Product;
 import com.CS3560Project.structures.User;
 import com.CS3560Project.structures.products.ProductReview;
-import com.CS3560Project.utility.Constants;
 import com.CS3560Project.utility.Utils;
 
-import javax.swing.*;
 
 public class Main {
     /**
@@ -23,6 +20,7 @@ public class Main {
      * @param args  program arguments
      */
     public static void main(String[] args) {
+        ImageTesting.launch(ImageTesting.class);
     }
 
     private static void doingGetForUsers() {
@@ -127,10 +125,10 @@ public class Main {
         Utils.printList(Utils.filterByTerms(cart.getCartItems(), "Test"));
         System.out.println(Utils.formatDouble(cart.getTotalCost(), 2));
 
-        JFrame frame = new JFrame(Constants.APPLICATION_TITLE);         // Parent JFrame with title
+        /*JFrame frame = new JFrame(Constants.APPLICATION_TITLE);         // Parent JFrame with title
         Template template = new Template();                             // Class representing GUI Form
         frame.setContentPane(template.getPanel1());                     // Content Pane is set to templates panel1
         frame.pack();
-        frame.setVisible(true);
+        frame.setVisible(true); */
     }
 }
