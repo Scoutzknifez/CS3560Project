@@ -22,10 +22,10 @@ public class Main {
      * @param args  program arguments
      */
     public static void main(String[] args) {
-        doingInsertForReview();
+        doingGetForUsers();
     }
 
-    private static void doingGet() {
+    private static void doingGetForUsers() {
         GetWorker worker = new GetWorker(Table.USERS);
         Thread thread = new Thread(worker);
         thread.start();
@@ -54,7 +54,7 @@ public class Main {
         }
     }
 
-    /*private static void doingInsert() {
+    private static void doingInsertForUser() {
         PhoneNumber phoneNumber = new PhoneNumber(951, 5063229);
         User user = new User("5678", "Test2", "User2", phoneNumber, "15151", "cpp2@cpp.edu", "wowWhatAPASS2");
 
@@ -67,7 +67,7 @@ public class Main {
         } catch (Exception e) {
             Utils.log("Here when thread fails.");
         }
-    }*/
+    }
 
     private static void testSet() {
         PhoneNumber phoneNumber = new PhoneNumber(951, 5063229);
