@@ -23,9 +23,11 @@ public class Main {
      * @param args  program arguments
      */
     public static void main(String[] args) {
-//        doingInsertForReview();
-        doingInsertForProduct();
-        doingGetForProduct();
+        doingInsertForReview();
+        doingGetForReview();
+
+//        doingInsertForProduct(); works
+//        doingGetForProduct(); works
     }
 
     private static void doingGet() {
@@ -45,6 +47,21 @@ public class Main {
 
     private static void doingGetForProduct() {
         GetWorker worker = new GetWorker(Table.PRODUCTS);
+        Thread thread = new Thread(worker);
+        thread.start();
+
+        try {
+            thread.join();
+            for (Object obj : worker.getItems()) {
+                System.out.println(obj + " of type " + obj.getClass());
+            }
+        } catch (Exception e) {
+            Utils.log("Here when thread fails.");
+        }
+    }
+
+    private static void doingGetForReview() {
+        GetWorker worker = new GetWorker(Table.PRODUCT_REVIEWS);
         Thread thread = new Thread(worker);
         thread.start();
 
