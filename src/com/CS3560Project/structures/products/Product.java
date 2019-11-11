@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,6 +37,19 @@ public class Product {
         setSearchTerms(Arrays.asList(getProductName().split(Constants.SPACE_REGEX)));
     }
 
+    public Object[] fieldsToArray() {
+        List<Object> fieldList = new ArrayList<>();
+
+        fieldList.add(getID());
+        fieldList.add(getProductName());
+        fieldList.add(getPrice());
+        fieldList.add(getDescription());
+        fieldList.add(getDimensions());
+        fieldList.add(getWeight());
+
+        return fieldList.stream().toArray(Object[]::new);
+    }
+
     @Override
     public String toString() {
         return "{ID:\"" + getID() +
@@ -49,9 +63,14 @@ public class Product {
 
     public static Product createInstance(ResultSet set) {
         try {
-            // TODO Look at user for how to fill this in.
-            // set field names are in discord
-            return null;
+            String ID = set.getString("id");
+            String productName = set.getString("productName");
+            double price = set.getDouble("price");
+            String product_description = set.getString("product_description");
+            String dimensions = set.getString("dimensions");
+            double weight = set.getDouble("weight");
+
+            return new Product(ID, productName, price, product_description, dimensions, weight);
         } catch (Exception e) {
             Utils.log("Could not parse returned list.");
             throw new ParseFailureException(set, Product.class);

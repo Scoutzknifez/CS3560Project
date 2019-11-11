@@ -33,12 +33,16 @@ public class ProductReview {
 
     public static ProductReview createInstance(ResultSet set) {
         try {
-            // TODO Look at user for how to fill this in.
-            // set field names are in discord
-            return null;
+            String id = set.getString("id");
+            double rating = set.getDouble("rating");
+            String review = set.getString("review");
+
+            return new ProductReview(id, rating, review);
         } catch (Exception e) {
             Utils.log("Could not parse returned list.");
             throw new ParseFailureException(set, ProductReview.class);
         }
     }
+
+
 }
