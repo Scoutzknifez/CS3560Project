@@ -4,11 +4,13 @@ import com.CS3560Project.forms.Template;
 import com.CS3560Project.sqlworkers.GetWorker;
 import com.CS3560Project.sqlworkers.Table;
 import com.CS3560Project.sqlworkers.insertion.InsertWorker;
+import com.CS3560Project.sqlworkers.insertion.types.ProductReviewInsertion;
 import com.CS3560Project.sqlworkers.insertion.types.UserInsertion;
 import com.CS3560Project.structures.Cart;
 import com.CS3560Project.structures.PhoneNumber;
 import com.CS3560Project.structures.products.Product;
 import com.CS3560Project.structures.User;
+import com.CS3560Project.structures.products.ProductReview;
 import com.CS3560Project.utility.Constants;
 import com.CS3560Project.utility.Utils;
 
@@ -20,7 +22,7 @@ public class Main {
      * @param args  program arguments
      */
     public static void main(String[] args) {
-        doingGet();
+        doingInsertForReview();
     }
 
     private static void doingGet() {
@@ -38,7 +40,21 @@ public class Main {
         }
     }
 
-    private static void doingInsert() {
+    private static void doingInsertForReview() {
+        ProductReview pr = new ProductReview("1234", 2.5, "Mediocre");
+
+        InsertWorker worker = new InsertWorker(Table.PRODUCT_REVIEWS, new ProductReviewInsertion(pr));
+        Thread thread = new Thread(worker);
+        thread.start();
+
+        try {
+            thread.join();
+        } catch (Exception e) {
+            Utils.log("Here when thread fails.");
+        }
+    }
+
+    /*private static void doingInsert() {
         PhoneNumber phoneNumber = new PhoneNumber(951, 5063229);
         User user = new User("5678", "Test2", "User2", phoneNumber, "15151", "cpp2@cpp.edu", "wowWhatAPASS2");
 
@@ -51,7 +67,7 @@ public class Main {
         } catch (Exception e) {
             Utils.log("Here when thread fails.");
         }
-    }
+    }*/
 
     private static void testSet() {
         PhoneNumber phoneNumber = new PhoneNumber(951, 5063229);

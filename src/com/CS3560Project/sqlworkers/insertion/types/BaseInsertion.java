@@ -8,12 +8,16 @@ import lombok.Setter;
 public class BaseInsertion {
     private String stringForm;
 
-    public BaseInsertion(String[] toCompound) {
+    public BaseInsertion(Object[] toCompound) {
         StringBuilder sb = new StringBuilder();
         sb.append("(");
 
         for (int i = 0; i < toCompound.length; i++) {
-            sb.append("\"" + toCompound[i] + "\"");
+            Object obj = toCompound[i];
+            if (obj instanceof String)
+                sb.append("\"" + obj + "\"");
+            else
+                sb.append(obj);
 
             if (i != toCompound.length - 1)
                 sb.append(",");
