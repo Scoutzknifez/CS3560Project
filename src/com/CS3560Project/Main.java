@@ -4,6 +4,7 @@ import com.CS3560Project.forms.Template;
 import com.CS3560Project.sqlworkers.GetWorker;
 import com.CS3560Project.sqlworkers.Table;
 import com.CS3560Project.sqlworkers.insertion.InsertWorker;
+import com.CS3560Project.sqlworkers.insertion.types.ProductInsertion;
 import com.CS3560Project.sqlworkers.insertion.types.ProductReviewInsertion;
 import com.CS3560Project.sqlworkers.insertion.types.UserInsertion;
 import com.CS3560Project.structures.Cart;
@@ -22,11 +23,28 @@ public class Main {
      * @param args  program arguments
      */
     public static void main(String[] args) {
-        doingInsertForReview();
+//        doingInsertForReview();
+        doingInsertForProduct();
+        doingGetForProduct();
     }
 
     private static void doingGet() {
         GetWorker worker = new GetWorker(Table.USERS);
+        Thread thread = new Thread(worker);
+        thread.start();
+
+        try {
+            thread.join();
+            for (Object obj : worker.getItems()) {
+                System.out.println(obj + " of type " + obj.getClass());
+            }
+        } catch (Exception e) {
+            Utils.log("Here when thread fails.");
+        }
+    }
+
+    private static void doingGetForProduct() {
+        GetWorker worker = new GetWorker(Table.PRODUCTS);
         Thread thread = new Thread(worker);
         thread.start();
 
@@ -68,6 +86,20 @@ public class Main {
             Utils.log("Here when thread fails.");
         }
     }*/
+
+    private static void doingInsertForProduct(){
+        Product product = new Product("17", "Textbook", 100.00, "CS3560", "10x10x10", 10.00);
+
+        InsertWorker worker = new InsertWorker(Table.PRODUCTS, new ProductInsertion(product));
+        Thread thread = new Thread(worker);
+        thread.start();
+
+        try {
+            thread.join();
+        } catch (Exception e) {
+            Utils.log("Here when thread fails.");
+        }
+    }
 
     private static void testSet() {
         PhoneNumber phoneNumber = new PhoneNumber(951, 5063229);
