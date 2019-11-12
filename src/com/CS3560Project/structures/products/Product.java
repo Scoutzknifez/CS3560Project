@@ -1,7 +1,6 @@
 package com.CS3560Project.structures.products;
 
 import com.CS3560Project.exceptions.ParseFailureException;
-import com.CS3560Project.structures.User;
 import com.CS3560Project.utility.Constants;
 import com.CS3560Project.utility.Utils;
 import lombok.Getter;
@@ -23,7 +22,7 @@ public class Product {
     private double weight;
 
     private transient List<String> searchTerms;
-    private transient ProductImages productImages;
+    private transient List<ProductImage> productImages;
     private transient List<ProductReview> productReviews;
 
     public Product(String id, String productName, double price, String description, String dimensions, double weight) {

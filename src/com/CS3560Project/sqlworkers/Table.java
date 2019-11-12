@@ -2,7 +2,7 @@ package com.CS3560Project.sqlworkers;
 
 import com.CS3560Project.structures.User;
 import com.CS3560Project.structures.products.Product;
-import com.CS3560Project.structures.products.ProductImages;
+import com.CS3560Project.structures.products.ProductImage;
 import com.CS3560Project.structures.products.ProductReview;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum Table {
     PRODUCTS(Product.class),
-    PRODUCT_IMAGES(ProductImages.class),
+    PRODUCT_IMAGES(ProductImage.class),
     PRODUCT_REVIEWS(ProductReview.class),
     USERS(User.class);
 
