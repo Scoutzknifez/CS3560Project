@@ -5,7 +5,7 @@ Group Project for CS3560
 VM Arguments:
 --module-path "\libs\javafx-sdk-13.0.1\lib;mods\production"
 
-##For Lombok:
+### For Lombok:
 
 Make sure you have the Lombok plugin installed!
 
