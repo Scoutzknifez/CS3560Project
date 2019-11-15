@@ -1,14 +1,69 @@
 package com.CS3560Project.utility;
 
+import com.CS3560Project.exceptions.ParseFailureException;
 import com.CS3560Project.structures.TimeAtMoment;
 import com.CS3560Project.structures.products.Product;
+import javafx.embed.swing.SwingFXUtils;
 
+import javax.imageio.ImageIO;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class Utils {
+    /**
+     * Converts Base64 to it's BufferedImage representation
+     * @param base64 to convert
+     * @return BufferedImage representation
+     */
+    public static java.awt.image.BufferedImage base64ToBufferedImage(String base64) {
+        try {
+            byte[] array = Base64.getMimeDecoder().decode(base64);
+            ByteArrayInputStream bis = new ByteArrayInputStream(array);
+            return ImageIO.read(bis);
+        } catch (Exception e) {
+            throw new ParseFailureException(base64, java.awt.image.BufferedImage.class);
+        }
+    }
+
+    /**
+     * Converts BufferedImage to it's FXImage representation
+     * @param bufferedImage to convert
+     * @return FXImage representation
+     */
+    public static javafx.scene.image.Image bufferedImageToFXImage(java.awt.image.BufferedImage bufferedImage) {
+        return SwingFXUtils.toFXImage(bufferedImage, null);
+    }
+
+    /**
+     * Converts a FXImage to it's BufferedImage representation
+     * @param fximage to convert
+     * @return BufferedImage representation
+     */
+    public static java.awt.image.BufferedImage fxImageToBufferedImage(javafx.scene.image.Image fximage) {
+        return SwingFXUtils.fromFXImage(fximage, null);
+    }
+
+    /**
+     * Converts a BufferedImage to it's Base64 representation
+     * @param bufferedImage to convert
+     * @return base64 representation
+     */
+    public static String bufferedImageToBase64(java.awt.image.BufferedImage bufferedImage) {
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage, "png", bos);
+            byte[] imageBytes = bos.toByteArray();
+            return Base64.getMimeEncoder().encodeToString(imageBytes);
+        } catch (Exception e) {
+            throw new ParseFailureException(bufferedImage, Base64.class);
+        }
+    }
+
     /**
      * Sends a message out to console with time stamp of log execution
      * @param input The message to display
