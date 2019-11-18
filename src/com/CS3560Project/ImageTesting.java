@@ -9,6 +9,9 @@ import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
+/**
+ * Main running thread which hosts the GUI
+ */
 public class ImageTesting extends Application {
 
     //TODO EXTREMELY TEMP, Remove later
