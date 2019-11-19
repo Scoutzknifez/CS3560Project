@@ -22,7 +22,7 @@ public class Main {
     public static void main(String[] args) {
         // TODO We need a reference to the instance running, prob put in running constants
         // Shows how to dispatch the GUI from JFX
-        ImageTesting.launch(ImageTesting.class);
+        GUIMain.launch(GUIMain.class);
     }
 
     private static void doingGetForUsers() {

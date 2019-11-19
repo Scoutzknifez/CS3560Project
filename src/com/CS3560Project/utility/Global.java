@@ -1,7 +1,7 @@
 package com.CS3560Project.utility;
 
-import com.CS3560Project.ImageTesting;
+import com.CS3560Project.GUIMain;
 
 public class Global {
-    public static ImageTesting ref = null;
+    public static GUIMain ref = null;
 }
