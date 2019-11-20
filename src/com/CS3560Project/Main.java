@@ -20,7 +20,6 @@ public class Main {
      * @param args  program arguments
      */
     public static void main(String[] args) {
-        // TODO We need a reference to the instance running, prob put in running constants
         // Shows how to dispatch the GUI from JFX
         GUIMain.launch(GUIMain.class);
     }

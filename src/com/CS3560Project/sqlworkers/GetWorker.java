@@ -36,7 +36,7 @@ public class GetWorker extends Worker {
      * Sends a query to the database and returns a result set.
      */
     private void getFromDatabase() {
-        String sqlArg = "SELECT * FROM " + getTable().name() + (getArguments().length == 0 ? "" : " " + getArguments()[0]); // TODO
+        String sqlArg = "SELECT * FROM " + getTable().name() + (getArguments().length == 0 ? "" : " " + getArguments()[0]); // TODO, Im making this into MySQL unary operations
         try {
             putResultIntoList(getStatement().executeQuery(sqlArg));
         } catch (Exception e) {
