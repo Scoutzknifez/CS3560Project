@@ -14,7 +14,7 @@ import java.util.List;
 @Setter
 @Getter
 public class Product {
-    private String ID;
+    private String id;
     private String productName;
     private double price;
     private String description;
@@ -26,7 +26,7 @@ public class Product {
     private transient List<ProductReview> productReviews;
 
     public Product(String id, String productName, double price, String description, String dimensions, double weight) {
-        setID(id);
+        setId(id);
         setProductName(productName);
         setPrice(price);
         setDescription(description);
@@ -39,7 +39,7 @@ public class Product {
     public Object[] fieldsToArray() {
         List<Object> fieldList = new ArrayList<>();
 
-        fieldList.add(getID());
+        fieldList.add(getId());
         fieldList.add(getProductName());
         fieldList.add(getPrice());
         fieldList.add(getDescription());
@@ -51,7 +51,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return "{ID:\"" + getID() +
+        return "{ID:\"" + getId() +
                 "\",productName:\"" + getProductName() +
                 "\",price:" + getPrice() +
                 ",description:\"" + getDescription() +
@@ -62,14 +62,14 @@ public class Product {
 
     public static Product createInstance(ResultSet set) {
         try {
-            String ID = set.getString("id");
+            String id = set.getString("id");
             String productName = set.getString("productName");
             double price = set.getDouble("price");
             String product_description = set.getString("product_description");
             String dimensions = set.getString("dimensions");
             double weight = set.getDouble("weight");
 
-            return new Product(ID, productName, price, product_description, dimensions, weight);
+            return new Product(id, productName, price, product_description, dimensions, weight);
         } catch (Exception e) {
             Utils.log("Could not parse returned list.");
             throw new ParseFailureException(set, Product.class);

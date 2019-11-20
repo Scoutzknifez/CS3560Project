@@ -28,7 +28,9 @@ public class ProductReview {
 
     @Override
     public String toString() {
-        return "{rating:" + getRating() + ",review:\"" + getReview() + "\"}";
+        return "{rating:" + getRating() +
+                ",review:\"" + getReview() +
+                "\"}";
     }
 
     public static ProductReview createInstance(ResultSet set) {
