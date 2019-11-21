@@ -2,33 +2,76 @@ package com.CS3560Project.structures;
 
 import com.CS3560Project.structures.products.Product;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.Setter;
+import java.util.HashMap;
+import java.util.Map;
 
-import java.util.ArrayList;
-import java.util.List;
-
+@Getter
 @Setter
 @AllArgsConstructor
 public class Inventory {
-    private List<Product> productList;
+    private Map<Product, Integer> inventoryList;
 
     public Inventory() {
-        setProductList(new ArrayList<>());
+        setInventoryList(new HashMap<>());
     }
 
-    public boolean decrement(String productID) {
-        return false;
+    /**
+     * Increments a product's quantity in this inventory by a given quantity
+     * @param productID     the product id to increment
+     * @param incrementBy   the value to increment by
+     * @return              true if set contains product / false if not found
+     */
+    public boolean incrementByValue(String productID, int incrementBy) {
+        Product product = search(productID);
+        if (product == null)
+            throw new NullPointerException(productID);
+
+        int newQuantity = getInventoryList().get(product) + incrementBy;
+        getInventoryList().put(product, newQuantity);
+        return true;
     }
 
+    /**
+     * Increments a product's quantity in this inventory by 1
+     * @param productID     the product id to decrement
+     * @return              true if set contains product / false if not found
+     */
     public boolean increment(String productID) {
-        return false;
+        return incrementByValue(productID, 1);
     }
 
-    public boolean restock(String productID, int quantityChange) {
-        return false;
+    /**
+     * Decrements a product's quantity in this inventory by a given quantity
+     * @param productID     the product id to decrement
+     * @param decrementBy   the value to decrement by
+     * @return              true if set contains product / false if not found
+     */
+    public boolean decrementByValue(String productID, int decrementBy) {
+        return incrementByValue(productID, (-1 * decrementBy));
     }
 
-    public boolean search(String productID) {
-        return false;
+    /**
+     * Decrements a product's quantity in this inventory by 1
+     * @param productID     the product id to decrement
+     * @return              true if set contains product / false if not found
+     */
+    public boolean decrement(String productID) {
+        return decrementByValue(productID, 1);
+    }
+
+    /**
+     * Gets a product from the inventory using a productID
+     * @param productID     the product id to search for
+     * @return              true if set contains product / false if not found
+     */
+    public Product search(String productID) {
+        for (Product product : getInventoryList().keySet()) {
+            if (product.getId().equals(productID))
+                return product;
+        }
+
+        return null;
     }
 }
