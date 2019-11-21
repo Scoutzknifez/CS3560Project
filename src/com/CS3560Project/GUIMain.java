@@ -25,7 +25,7 @@ public class GUIMain extends Application {
         //Temp variables in place for quantity for now
         int totalCount = 0, count1 = 0, count2 = 0, count3 = 0, count4 = 0, count5 = 0, count6 = 0;
 
-        ArrayList<Product> products = new ArrayList<>();
+        ArrayList<Product> products = new ArrayList<>(); // TODO FetchController
 
         //Declarations/Initialization of all GUI components
         BorderPane borderpane = new BorderPane();
