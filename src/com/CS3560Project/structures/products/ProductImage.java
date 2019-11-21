@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ProductImage implements Databasable {
     private String id;
-    private int priority; // TODO Change DB to have this, display images in priority the smaller the number, the sooner it is shown, 0 is before 1
+    private int priority; // Displays images in priority the smaller the number, the sooner it is shown, 0 is before 1
     private String base64;
 
     public Object[] fieldsToArray() {
@@ -40,7 +40,7 @@ public class ProductImage implements Databasable {
     public static ProductImage createInstance(ResultSet set) {
         try {
             String id = set.getString("id");
-            int priority = set.getInt("priority"); // TODO
+            int priority = set.getInt("priority");
             String base64 = set.getString("base64image");
 
             return new ProductImage(id, priority, base64);

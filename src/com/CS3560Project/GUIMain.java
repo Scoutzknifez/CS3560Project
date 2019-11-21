@@ -1,7 +1,6 @@
 package com.CS3560Project;
 
 import com.CS3560Project.structures.products.Product;
-import com.CS3560Project.utility.Constants;
 
 import com.CS3560Project.utility.Global;
 import javafx.application.Application;
@@ -10,9 +9,10 @@ import javafx.stage.Stage;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
+
+import java.util.ArrayList;
 
 /**
  * Main running thread which hosts the GUI
@@ -21,7 +21,8 @@ public class GUIMain extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Global.guiMainReference = this;
-//Temp variables in place for quantity for now
+
+        //Temp variables in place for quantity for now
         int totalCount = 0, count1 = 0, count2 = 0, count3 = 0, count4 = 0, count5 = 0, count6 = 0;
 
         ArrayList<Product> products = new ArrayList<>();
@@ -114,99 +115,67 @@ public class GUIMain extends Application {
         //Adding to shopping cart; updates quantity under item
         //May be able to bind data to labels later, if time permits. Will work with repeated overwrite for now
         add1.setOnAction(event -> {
-            count1++;
+            // TODO Use this as a template idea, all can be calculated from shoppingcart object when implemented
+            /*count1++;
             totalCount++;
             quantity1.setText(count1);
-            cart.setText("Shopping Cart (" + totalCount + ")");
+            cart.setText("Shopping Cart (" + totalCount + ")");*/
         });
 
         add2.setOnAction(event -> {
-            count2++;
-            totalCount++;
-            quantity2.setText(count2);
-            cart.setText("Shopping Cart (" + totalCount + ")");
+
         });
 
         add3.setOnAction(event -> {
-            count3++;
-            totalCount++;
-            quantity3.setText(count3);
-            cart.setText("Shopping Cart (" + totalCount + ")");
+
         });
 
         add4.setOnAction(event -> {
-            count4++;
-            totalCount++;
-            quantity4.setText(count4);
-            cart.setText("Shopping Cart (" + totalCount + ")");
+
         });
 
         add5.setOnAction(event -> {
-            count5++;
-            totalCount++;
-            quantity5.setText(count5);
-            cart.setText("Shopping Cart (" + totalCount + ")");
+
         });
 
         add6.setOnAction(event -> {
-            count6++;
-            totalCount++;
-            quantity6.setText(count6);
-            cart.setText("Shopping Cart (" + totalCount + ")");
+
         });
 
-        //Removes from shopping cart; updates quanity under item
+        //Removes from shopping cart; updates quantity under item
         sub1.setOnAction(event -> {
-            count1--;
-            totalCount--;
-            quantity1.setText(count1);
-            cart.setText("Shopping Cart (" + totalCount + ")");
+
         });
 
         sub2.setOnAction(event -> {
-            count2--;
-            totalCount--;
-            quantity2.setText(count2);
-            cart.setText("Shopping Cart (" + totalCount + ")");
+
         });
+
         sub3.setOnAction(event -> {
-            count3--;
-            totalCount--;
-            quantity3.setText(count3);
-            cart.setText("Shopping Cart (" + totalCount + ")");
+
         });
 
         sub4.setOnAction(event -> {
-            count4--;
-            quantity4.setText(count4);
-            cart.setText("Shopping Cart (" + totalCount + ")");
+
         });
 
         sub5.setOnAction(event -> {
-            count5--;
-            totalCount--;
-            quantity5.setText(count5);
-            cart.setText("Shopping Cart (" + totalCount + ")");
+
         });
 
         sub6.setOnAction(event -> {
-            count6--;
-            totalCount--;
-            quantity6.setText(count6);
-            cart.setText("Shopping Cart (" + totalCount + ")");
+
         });
 
         //Read text field for given search term to decide on chosen items
         search.setOnKeyPressed(event ->{
-            if(event.getCode().equals(KeyCode.ENTER))
-            {
+            if(event.getCode().equals(KeyCode.ENTER)) {
                 searchResults(search.getText());
             }
         });
 
         searchButton.setOnAction(event ->{
-            if(!search.getText().equals(""))
-            {
+            if(!search.getText().equals("")) {
                 searchResults(search.getText());
             }
         });
@@ -229,6 +198,5 @@ public class GUIMain extends Application {
     protected void searchResults(String input)
     {
         return;
-    }
     }
 }
