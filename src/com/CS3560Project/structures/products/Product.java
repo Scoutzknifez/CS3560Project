@@ -1,6 +1,7 @@
 package com.CS3560Project.structures.products;
 
 import com.CS3560Project.exceptions.ParseFailureException;
+import com.CS3560Project.sqlworkers.insertion.Databasable;
 import com.CS3560Project.utility.Constants;
 import com.CS3560Project.utility.Utils;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Setter
 @Getter
-public class Product {
+public class Product implements Databasable {
     private String id;
     private String productName;
     private double price;

@@ -1,6 +1,7 @@
 package com.CS3560Project.structures;
 
 import com.CS3560Project.exceptions.ParseFailureException;
+import com.CS3560Project.sqlworkers.insertion.Databasable;
 import com.CS3560Project.utility.Utils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class User {
+public class User implements Databasable {
     private String ID;
     private String firstName;
     private String lastName;

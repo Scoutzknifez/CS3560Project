@@ -3,9 +3,6 @@ package com.CS3560Project;
 import com.CS3560Project.sqlworkers.GetWorker;
 import com.CS3560Project.sqlworkers.Table;
 import com.CS3560Project.sqlworkers.insertion.InsertWorker;
-import com.CS3560Project.sqlworkers.insertion.types.ProductInsertion;
-import com.CS3560Project.sqlworkers.insertion.types.ProductReviewInsertion;
-import com.CS3560Project.sqlworkers.insertion.types.UserInsertion;
 import com.CS3560Project.structures.Cart;
 import com.CS3560Project.structures.PhoneNumber;
 import com.CS3560Project.structures.products.Product;
@@ -72,7 +69,7 @@ public class Main {
     private static void doingInsertForReview() {
         ProductReview pr = new ProductReview("1234", 2.5, "Mediocre");
 
-        InsertWorker worker = new InsertWorker(Table.PRODUCT_REVIEWS, new ProductReviewInsertion(pr));
+        InsertWorker worker = new InsertWorker(Table.PRODUCT_REVIEWS, pr);
         Thread thread = new Thread(worker);
         thread.start();
 
@@ -87,7 +84,7 @@ public class Main {
         PhoneNumber phoneNumber = new PhoneNumber(951, 5063229);
         User user = new User("5678", "Test2", "User2", phoneNumber, "15151", "cpp2@cpp.edu", "wowWhatAPASS2");
 
-        InsertWorker worker = new InsertWorker(Table.USERS, new UserInsertion(user));
+        InsertWorker worker = new InsertWorker(Table.USERS, user);
         Thread thread = new Thread(worker);
         thread.start();
 
@@ -101,7 +98,7 @@ public class Main {
     private static void doingInsertForProduct(){
         Product product = new Product("17", "Textbook", 100.00, "CS3560", "10x10x10", 10.00);
 
-        InsertWorker worker = new InsertWorker(Table.PRODUCTS, new ProductInsertion(product));
+        InsertWorker worker = new InsertWorker(Table.PRODUCTS, product);
         Thread thread = new Thread(worker);
         thread.start();
 

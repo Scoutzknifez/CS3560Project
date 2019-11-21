@@ -1,8 +1,8 @@
 package com.CS3560Project.sqlworkers.insertion;
 
+import com.CS3560Project.sqlworkers.SQLHelper;
 import com.CS3560Project.sqlworkers.Table;
 import com.CS3560Project.sqlworkers.Worker;
-import com.CS3560Project.sqlworkers.insertion.types.BaseInsertion;
 import com.CS3560Project.utility.Utils;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,11 +10,11 @@ import lombok.Setter;
 @Setter
 @Getter
 public class InsertWorker extends Worker {
-    private BaseInsertion baseInsertion;
+    private String objectStringForm;
 
-    public InsertWorker(Table table, BaseInsertion bi) {
+    public InsertWorker(Table table, Databasable databasableObject) {
         super(table);
-        setBaseInsertion(bi);
+        setObjectStringForm(SQLHelper.databasableToInsertionForm(databasableObject));
     }
 
     @Override
@@ -27,7 +27,7 @@ public class InsertWorker extends Worker {
     }
 
     private void doInsertion() {
-        String sqlArg = "INSERT INTO " + getTable().name() + " VALUES " + getBaseInsertion().getStringForm();
+        String sqlArg = "INSERT INTO " + getTable().name() + " VALUES " + getObjectStringForm();
         try {
             getStatement().execute(sqlArg);
         } catch (Exception e) {

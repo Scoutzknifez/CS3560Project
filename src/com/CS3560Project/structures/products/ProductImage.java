@@ -1,6 +1,7 @@
 package com.CS3560Project.structures.products;
 
 import com.CS3560Project.exceptions.ParseFailureException;
+import com.CS3560Project.sqlworkers.insertion.Databasable;
 import com.CS3560Project.utility.Utils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductImage {
+public class ProductImage implements Databasable {
     private String id;
     private int priority; // TODO Change DB to have this, display images in priority the smaller the number, the sooner it is shown, 0 is before 1
     private String base64;
@@ -34,7 +35,6 @@ public class ProductImage {
                 "\",priority:" + getPriority() +
                 ",base64:\"" + getBase64() +
                 "\"}";
-
     }
 
     public static ProductImage createInstance(ResultSet set) {
