@@ -15,6 +15,8 @@ public class GUIMain extends Application {
     public void start(Stage stage) throws Exception {
         Global.guiMainReference = this;
 
+        //test
+
         Group root = new Group();
         Scene scene = new Scene(root, 1000, 800);
 
