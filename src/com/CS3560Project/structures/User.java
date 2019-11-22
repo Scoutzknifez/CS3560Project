@@ -17,12 +17,13 @@ public class User implements Databasable {
     private String firstName;
     private String lastName;
     private PhoneNumber phoneNumber;
-    private String address;
+    private String address; // TODO Change like above
     private String email;
     private String password;
+    private AccountRank rank;
 
-    public String[] fieldsToArray() {
-        List<String> fieldList = new ArrayList<>();
+    public Object[] fieldsToArray() {
+        List<Object> fieldList = new ArrayList<>();
 
         fieldList.add(getID());
         fieldList.add(getFirstName());
@@ -31,8 +32,9 @@ public class User implements Databasable {
         fieldList.add(getAddress());
         fieldList.add(getEmail());
         fieldList.add(getPassword());
+        fieldList.add(getRank().getOrdinal());
 
-        return fieldList.stream().toArray(String[]::new);
+        return fieldList.toArray();
     }
 
     @Override
@@ -44,7 +46,8 @@ public class User implements Databasable {
                 "\",address:\"" + getAddress() +
                 "\",email:\"" + getEmail() +
                 "\",password:\"" + getPassword() +
-                "\"}";
+                "\",rank:" + getRank() +
+                "}";
     }
 
     /**
@@ -58,13 +61,13 @@ public class User implements Databasable {
             String id = set.getString("id");
             String firstName = set.getString("firstName");
             String lastName = set.getString("lastName");
-            String phoneNumber = set.getString("phoneNumber");
+            PhoneNumber phoneNumber = PhoneNumber.stringToPhoneNumber(set.getString("phoneNumber"));
             String address = set.getString("address");
             String email = set.getString("email");
             String user_password = set.getString("user_password");
+            AccountRank user_rank = AccountRank.getRank(set.getInt("user_rank"));
 
-            return new User(id, firstName, lastName, PhoneNumber.stringToPhoneNumber(phoneNumber),
-                    address, email, user_password);
+            return new User(id, firstName, lastName, phoneNumber, address, email, user_password, user_rank);
         } catch (Exception e) {
             Utils.log("Could not parse returned list.");
             throw new ParseFailureException(set, User.class);
