@@ -4,8 +4,12 @@ import com.CS3560Project.structures.products.Product;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 @Getter
 @Setter
@@ -13,6 +17,7 @@ import java.util.Map;
 public class Inventory {
     private Map<Product, Integer> inventoryList;
 
+    // TODO Construct from a DB
     public Inventory() {
         setInventoryList(new HashMap<>());
     }
@@ -73,5 +78,31 @@ public class Inventory {
         }
 
         return null;
+    }
+
+    /**
+     * Searches this inventory for any products that match the given search terms
+     * @param searchTerms   The list of words to search by
+     * @return              A list of matching products
+     */
+    public List<Product> search(String... searchTerms) {
+        List<Product> productsFound = new ArrayList<>();
+
+        if (searchTerms.length == 1) {
+            Product found = search(searchTerms[0]);
+            if (found != null) {
+                productsFound.add(found);
+            }
+        }
+
+        for (Product product : getInventoryList().keySet()) {
+            for (String searchTerm : searchTerms) {
+                if (Pattern.compile(Pattern.quote(searchTerm), Pattern.CASE_INSENSITIVE).matcher(product.getProductName()).find() && !productsFound.contains(product)) {
+                    productsFound.add(product);
+                }
+            }
+        }
+
+        return productsFound;
     }
 }

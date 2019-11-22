@@ -2,14 +2,12 @@ package com.CS3560Project.structures.products;
 
 import com.CS3560Project.exceptions.ParseFailureException;
 import com.CS3560Project.sqlworkers.insertion.Databasable;
-import com.CS3560Project.utility.Constants;
 import com.CS3560Project.utility.Utils;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Setter
@@ -22,7 +20,6 @@ public class Product implements Databasable {
     private String dimensions;
     private double weight;
 
-    private transient List<String> searchTerms;
     private transient List<ProductImage> productImages;
     private transient List<ProductReview> productReviews;
 
@@ -33,8 +30,6 @@ public class Product implements Databasable {
         setDescription(description);
         setDimensions(dimensions);
         setWeight(weight);
-
-        setSearchTerms(Arrays.asList(getProductName().split(Constants.SPACE_REGEX)));
     }
 
     public Object[] fieldsToArray() {
