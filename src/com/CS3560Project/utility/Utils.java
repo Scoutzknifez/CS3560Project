@@ -12,6 +12,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Utils {
@@ -84,10 +85,8 @@ public class Utils {
         return productList.stream()
                 .filter(product -> {
                     for (String term : searchRequest.split(Constants.SPACE_REGEX)) {
-                        for (String productTerm : product.getSearchTerms()) {
-                            if (productTerm.trim().equalsIgnoreCase(term.trim()))
-                                return true;
-                        }
+                        if (Pattern.compile(Pattern.quote(term), Pattern.CASE_INSENSITIVE).matcher(product.getProductName()).find())
+                            return true;
                     }
                     return false;
                 })

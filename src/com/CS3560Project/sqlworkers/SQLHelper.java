@@ -7,14 +7,16 @@ public class SQLHelper {
         StringBuilder sb = new StringBuilder();
         sb.append("(");
 
-        for (int i = 0; i < databasableObject.fieldsToArray().length; i++) {
-            Object obj = databasableObject.fieldsToArray()[i];
+        Object[] fieldsInArray = databasableObject.fieldsToArray();
+
+        for (int i = 0; i < fieldsInArray.length; i++) {
+            Object obj = fieldsInArray[i];
             if (obj instanceof String)
                 sb.append("\"" + obj + "\"");
             else
                 sb.append(obj);
 
-            if (i != databasableObject.fieldsToArray().length - 1)
+            if (i != fieldsInArray.length - 1)
                 sb.append(",");
         }
 
