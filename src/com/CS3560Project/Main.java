@@ -19,7 +19,6 @@ public class Main {
      */
     public static void main(String[] args) {
         // Shows how to dispatch the GUI from JFX
-        doingGetForUsers();
         GUIMain.launch(GUIMain.class);
     }
 
