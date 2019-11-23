@@ -66,6 +66,7 @@ public class User implements Databasable {
             String email = set.getString("email");
             String user_password = set.getString("user_password");
             AccountRank user_rank = AccountRank.getRank(set.getInt("user_rank"));
+            // TODO if rank is vendor+, pull their inv by ID and push to object
 
             return new User(id, firstName, lastName, phoneNumber, address, email, user_password, user_rank);
         } catch (Exception e) {
