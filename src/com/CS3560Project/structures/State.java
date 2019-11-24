@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum States {
+public enum State {
     ALABAMA("AL"),
     ALASKA("AK"),
     AMERICAN_SAMOA("AS"),
@@ -57,6 +57,7 @@ public enum States {
     SOUTH_DAKOTA("SD"),
     TENNESSEE("TN"),
     TEXAS("TX"),
+    UNKNOWN("ERROR"),
     UTAH("UT"),
     VERMONT("VT"),
     VIRGIN_ISLANDS("VI"),
@@ -66,5 +67,19 @@ public enum States {
     WISCONSIN("WI"),
     WYOMING("WY");
 
+
     private String abbreviation;
+
+    /**
+     * Gets a state from a given abbreviation
+     * @param abbreviation  Abbreviation of state to get
+     * @return              State
+     */
+    public static State getStateFromAbbreviation(String abbreviation) {
+        for (State state : State.values()) {
+            if (state.getAbbreviation().equalsIgnoreCase(abbreviation))
+                return state;
+        }
+        return UNKNOWN;
+    }
 }
