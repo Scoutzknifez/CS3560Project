@@ -17,8 +17,8 @@ public class PhoneNumber {
 
     public static PhoneNumber stringToPhoneNumber(String toPhoneNumber) {
         try {
-            String areaCode = "";
-            String phoneNumber = "";
+            String areaCode;
+            String phoneNumber;
 
             String[] sections = toPhoneNumber.split("\\)");
 

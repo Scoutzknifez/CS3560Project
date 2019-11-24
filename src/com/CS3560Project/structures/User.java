@@ -17,7 +17,7 @@ public class User implements Databasable {
     private String firstName;
     private String lastName;
     private PhoneNumber phoneNumber;
-    private String address; // TODO Change like above
+    private Address address;
     private String email;
     private String password;
     private AccountRank rank;
@@ -29,7 +29,7 @@ public class User implements Databasable {
         fieldList.add(getFirstName());
         fieldList.add(getLastName());
         fieldList.add(getPhoneNumber().toString());
-        fieldList.add(getAddress());
+        fieldList.add(getAddress().toString());
         fieldList.add(getEmail());
         fieldList.add(getPassword());
         fieldList.add(getRank().getOrdinal());
@@ -42,8 +42,8 @@ public class User implements Databasable {
         return "{ID:\"" + getID() +
                 "\",firstName:\"" + getFirstName() +
                 "\",lastName:\"" + getLastName() +
-                "\",phoneNumber:\"" + getPhoneNumber() +
-                "\",address:\"" + getAddress() +
+                "\",phoneNumber:\"" + getPhoneNumber().toString() +
+                "\",address:\"" + getAddress().toString() +
                 "\",email:\"" + getEmail() +
                 "\",password:\"" + getPassword() +
                 "\",rank:" + getRank() +
@@ -62,7 +62,7 @@ public class User implements Databasable {
             String firstName = set.getString("firstName");
             String lastName = set.getString("lastName");
             PhoneNumber phoneNumber = PhoneNumber.stringToPhoneNumber(set.getString("phoneNumber"));
-            String address = set.getString("address");
+            Address address = Address.stringToAddress(set.getString("address"));
             String email = set.getString("email");
             String user_password = set.getString("user_password");
             AccountRank user_rank = AccountRank.getRank(set.getInt("user_rank"));
