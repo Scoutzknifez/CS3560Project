@@ -1,6 +1,7 @@
 package com.CS3560Project;
 
 import com.CS3560Project.structures.products.Product;
+import com.CS3560Project.structures.Inventory;
 
 import com.CS3560Project.utility.Global;
 import javafx.application.Application;
@@ -8,24 +9,29 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.image.*;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Main running thread which hosts the GUI
  */
 public class GUIMain extends Application {
-    private int totalCount = 0, count1 = 0, count2 = 0, count3 = 0, count4 = 0, count5 = 0, count6 = 0;
+    //Temp variables in place for quantity for now
+    protected int totalCount = 0, count1 = 0, count2 = 0, count3 = 0, count4 = 0, count5 = 0, count6 = 0;
+    //protected ArrayList<Product> products = new ArrayList<>(); // TODO FetchController
+    protected Inventory inv = new Inventory();
+    protected List<Product> searchResults;
+    protected ArrayList<ImageView> images = new ArrayList<>();
 
     @Override
     public void start(Stage stage) {
         Global.guiMainReference = this;
-        //Temp variables in place for quantity for now
 
-        ArrayList<Product> products = new ArrayList<>(); // TODO FetchController
 
         //Declarations/Initialization of all GUI components
         BorderPane borderpane = new BorderPane();
@@ -200,14 +206,16 @@ public class GUIMain extends Application {
 
         //Read text field for given search term to decide on chosen items
         search.setOnKeyPressed(event ->{
-            if(event.getCode().equals(KeyCode.ENTER)) {
-                searchResults(search.getText());
+            if(event.getCode() == KeyCode.ENTER)
+            {
+                searchResults(search.getText(), search);
             }
         });
 
         searchButton.setOnAction(event ->{
-            if(!search.getText().equals("")) {
-                searchResults(search.getText());
+            if(!search.getText().equals(""))
+            {
+                searchResults(search.getText(), search);
             }
         });
 
@@ -220,8 +228,8 @@ public class GUIMain extends Application {
     }
 
     //Searches through inventory to display products to screen after search bar is activated
-    protected void searchResults(String input)
+    protected void searchResults(String input, TextField searchBar)
     {
-        return;
+        List<Product> foundItems = inv.search(searchBar.getText().toString().split(" "));
     }
 }
