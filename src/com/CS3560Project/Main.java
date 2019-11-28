@@ -3,11 +3,8 @@ package com.CS3560Project;
 import com.CS3560Project.sqlworkers.GetWorker;
 import com.CS3560Project.sqlworkers.Table;
 import com.CS3560Project.sqlworkers.insertion.InsertWorker;
-import com.CS3560Project.structures.AccountRank;
-import com.CS3560Project.structures.Cart;
-import com.CS3560Project.structures.PhoneNumber;
+import com.CS3560Project.structures.*;
 import com.CS3560Project.structures.products.Product;
-import com.CS3560Project.structures.User;
 import com.CS3560Project.structures.products.ProductReview;
 import com.CS3560Project.utility.Utils;
 
@@ -83,7 +80,8 @@ public class Main {
 
     private static void doingInsertForUser() {
         PhoneNumber phoneNumber = new PhoneNumber(951, 5063229);
-        User user = new User("5678", "Test2", "User2", phoneNumber, "15151", "cpp2@cpp.edu", "wowWhatAPASS2", AccountRank.ADMIN);
+        Address address = new Address("15151 Sandhill", "Temecula", State.CALIFORNIA, 92591);
+        User user = new User("5678", "Test2", "User2", phoneNumber, address, "cpp2@cpp.edu", "wowWhatAPASS2", AccountRank.ADMIN);
 
         InsertWorker worker = new InsertWorker(Table.USERS, user);
         Thread thread = new Thread(worker);
@@ -112,8 +110,8 @@ public class Main {
 
     private static void testSet() {
         PhoneNumber phoneNumber = new PhoneNumber(951, 5063229);
-
-        User user = new User("1234", "Test", "User", phoneNumber, "33292 Testville", "cpp@cpp.edu", "wowWhatAPASS", AccountRank.VENDOR);
+        Address address = new Address("15151 Sandhill", "Temecula", State.CALIFORNIA, 92591);
+        User user = new User("1234", "Test", "User", phoneNumber, address, "cpp@cpp.edu", "wowWhatAPASS", AccountRank.VENDOR);
         Product product = new Product("987", Utils.capitalize("Test_Item"), 10.98, "A test item", "Big Boy", 50);
         System.out.println(user);
 
