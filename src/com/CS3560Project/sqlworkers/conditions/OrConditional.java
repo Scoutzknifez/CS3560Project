@@ -1,16 +1,20 @@
 package com.CS3560Project.sqlworkers.conditions;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
+@Setter
 @Getter
-@AllArgsConstructor
-public class OrConditional {
-    private Conditional condition1;
+public class OrConditional extends Conditional{
     private Conditional condition2;
+
+    public OrConditional(Conditional condition1, Conditional condition2) {
+        super(condition1.toString());
+        setCondition2(condition2);
+    }
 
     @Override
     public String toString() {
-        return "(" + getCondition1().toString() + " OR " + getCondition2().toString() + ")";
+        return "(" + super.toString() + " OR " + getCondition2().toString() + ")";
     }
 }

@@ -23,4 +23,10 @@ public class SQLHelper {
         sb.append(")");
         return sb.toString();
     }
+
+    public static String makeConditional(String field, Object value) {
+        return "`" + field + "` = " + (value instanceof String ?
+                "`" + value + "`" :
+                value);
+    }
 }
