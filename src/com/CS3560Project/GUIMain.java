@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * Main running thread which hosts the GUI
  */
@@ -247,10 +248,10 @@ public class GUIMain extends Application {
         plus.setOnAction(event -> {
             //adds more of item
             //get item number
-            Integer temp = 0;
+            int temp = 0;
             //increment and change the label
             temp++;
-            itemCount.setText(temp.toString());
+            itemCount.setText(temp + "");
         });
 
 
@@ -259,10 +260,10 @@ public class GUIMain extends Application {
         minus.setOnAction(event -> {
             //remove Item
             //get item number
-            Integer temp = 0;
+            int temp = 0;
             //increment and change the label
             temp--;
-            itemCount.setText(temp.toString());
+            itemCount.setText(temp + "");
         });
 
 
