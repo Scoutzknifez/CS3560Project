@@ -20,7 +20,7 @@ public class Main {
     }
 
     private static void doingGetForUsers() {
-        GetWorker worker = new GetWorker(Table.USERS);
+        GetWorker worker = new GetWorker(Table.USERS, null);
         Thread thread = new Thread(worker);
         thread.start();
 
@@ -35,7 +35,7 @@ public class Main {
     }
 
     private static void doingGetForProduct() {
-        GetWorker worker = new GetWorker(Table.PRODUCTS);
+        GetWorker worker = new GetWorker(Table.PRODUCTS, null);
         Thread thread = new Thread(worker);
         thread.start();
 
@@ -50,7 +50,7 @@ public class Main {
     }
 
     private static void doingGetForReview() {
-        GetWorker worker = new GetWorker(Table.PRODUCT_REVIEWS);
+        GetWorker worker = new GetWorker(Table.PRODUCT_REVIEWS, null);
         Thread thread = new Thread(worker);
         thread.start();
 

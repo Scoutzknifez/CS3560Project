@@ -1,5 +1,6 @@
 package com.CS3560Project.sqlworkers;
 
+import com.CS3560Project.sqlworkers.conditions.Conditional;
 import com.CS3560Project.utility.Utils;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,15 +9,23 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A fetcher from a SQL database.
+ */
 @Getter
 @Setter
 public class GetWorker extends Worker {
     private List<Object> items;
-    private String[] arguments;
+    private Conditional conditions;
 
-    public GetWorker(Table table, String... args) {
+    /**
+     * Constructor with specific table and conditions
+     * @param table         table to fetch from
+     * @param conditions    conditions to meet when fetching from database (null = no conditions)
+     */
+    public GetWorker(Table table, Conditional conditions) {
         super(table);
-        setArguments(args);
+        setConditions(conditions);
     }
 
     @Override
@@ -36,7 +45,16 @@ public class GetWorker extends Worker {
      * Sends a query to the database and returns a result set.
      */
     private void getFromDatabase() {
-        String sqlArg = "SELECT * FROM " + getTable().name() + (getArguments().length == 0 ? "" : " " + getArguments()[0]); // TODO, Im making this into MySQL unary operations
+        /* Showing how to structure a conditional for use in this section
+        OrConditional or = new OrConditional("size", 5, "shape", "circle");
+        AndConditional and = new AndConditional(or, new Conditional("height", 7));
+        OrConditional or2 = new OrConditional(or,and);
+        System.out.println(or2);
+
+        PRINTS OUT:
+        ((`size` = 5 OR `shape` = `circle`) OR ((`size` = 5 OR `shape` = `circle`) AND `height` = 7))*/
+
+        String sqlArg = "SELECT * FROM " + getTable().name() + (getConditions() == null ? "" : " WHERE " + getConditions().toString());
         try {
             putResultIntoList(getStatement().executeQuery(sqlArg));
         } catch (Exception e) {

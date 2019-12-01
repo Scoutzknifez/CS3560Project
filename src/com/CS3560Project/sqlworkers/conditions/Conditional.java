@@ -11,8 +11,8 @@ import lombok.Setter;
 public class Conditional {
     private String phrase;
 
-    public Conditional(String field, String value) {
-        setPhrase(SQLHelper.makeConditional(field, value));
+    public Conditional(String field, Object value) {
+        setPhrase(SQLHelper.makeConditionalPhrase(field, value));
     }
 
     @Override
