@@ -232,13 +232,13 @@ public class GUIMain extends Application {
     }
 
     //Searches through inventory to display products to screen after search bar is activated
-    protected void searchResults(String input, TextField searchBar)
+    private void searchResults(String input, TextField searchBar)
     {
         List<Product> foundItems = inv.search(searchBar.getText().toString().split(" "));
     }
 
     //this is for the shopping cart windowpane
-    protected static GridPane makeItem() throws FileNotFoundException {
+    private static GridPane makeItem() throws FileNotFoundException {
         Label itemCount = new Label("0");
 
 
@@ -304,7 +304,7 @@ public class GUIMain extends Application {
         return temp;
     }
 
-    protected  void shoppingCart() throws FileNotFoundException {
+    private  void shoppingCart() throws FileNotFoundException {
         Stage primaryStage = new Stage();
         primaryStage.setTitle("Name of Platform");
         primaryStage.setMinHeight(300);
@@ -345,13 +345,13 @@ public class GUIMain extends Application {
         primaryStage.show();
     }
 
-    protected void newUser(){
+    private void newUser(){
         Stage primaryStage = new Stage();
         primaryStage.setTitle("Make a New Account");
         //Scene demo = new Scene();
     }
 
-    protected void login (){
+    private void login (){
         Stage primaryStage = new Stage();
         primaryStage.setTitle("Platform Name");
         primaryStage.setMinHeight(400);
