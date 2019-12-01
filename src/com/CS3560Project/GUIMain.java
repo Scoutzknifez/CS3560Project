@@ -5,6 +5,8 @@ import com.CS3560Project.structures.Inventory;
 
 import com.CS3560Project.utility.Global;
 import javafx.application.Application;
+import javafx.beans.binding.BooleanBinding;
+import javafx.geometry.HPos;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
@@ -14,6 +16,8 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -232,4 +236,187 @@ public class GUIMain extends Application {
     {
         List<Product> foundItems = inv.search(searchBar.getText().toString().split(" "));
     }
+
+    //this is for the shopping cart windowpane
+    protected static GridPane makeItem() throws FileNotFoundException {
+        Label itemCount = new Label("0");
+
+
+        Button plus = new Button("+");
+        plus.autosize();
+        plus.setOnAction(event -> {
+            //adds more of item
+            //get item number
+            Integer temp = 0;
+            //increment and change the label
+            temp++;
+            itemCount.setText(temp.toString());
+        });
+
+
+        Button minus = new Button("-");
+        minus.setMinSize(plus.getHeight(), plus.getWidth());
+        minus.setOnAction(event -> {
+            //remove Item
+            //get item number
+            Integer temp = 0;
+            //increment and change the label
+            temp--;
+            itemCount.setText(temp.toString());
+        });
+
+
+        Label itemName = new Label("item");
+
+        //place holder item
+        Image itemImage = new Image(new FileInputStream("C:\\Users\\Kristine\\Desktop\\purikura fun times!.JPG"));
+        ImageView itemImageSet = new ImageView(itemImage);
+        itemImageSet.setPreserveRatio(true);
+        itemImageSet.setFitHeight(50);
+
+
+        GridPane temp = new GridPane();
+        temp.add(itemImageSet, 0, 0);
+        temp.add(itemName, 1, 0);
+        temp.add(minus, 2, 0);
+        temp.add(itemCount, 3, 0);
+        temp.add(plus, 4, 0);
+
+        ColumnConstraints col1 = new ColumnConstraints();
+        ColumnConstraints col2 = new ColumnConstraints();
+        ColumnConstraints col3 = new ColumnConstraints();
+        ColumnConstraints col4 = new ColumnConstraints();
+        ColumnConstraints col5 = new ColumnConstraints();
+
+        col1.setPercentWidth(25);
+        col2.setPercentWidth(50);
+        col3.setPercentWidth(10);
+        col4.setPercentWidth(15);
+        col5.setPercentWidth(10);
+
+        temp.getColumnConstraints().addAll(col1, col2, col3, col4, col5);
+        temp.setPadding(new Insets(20));
+        temp.setHalignment(itemImageSet, HPos.CENTER);
+        temp.setHalignment(itemName, HPos.LEFT);
+        temp.setHalignment(minus, HPos.CENTER);
+        temp.setHalignment(itemCount, HPos.CENTER);
+        temp.setHalignment(plus, HPos.CENTER);
+        return temp;
+    }
+
+    protected  void shoppingCart() throws FileNotFoundException {
+        Stage primaryStage = new Stage();
+        primaryStage.setTitle("Name of Platform");
+        primaryStage.setMinHeight(300);
+        primaryStage.setMinWidth(400);
+
+        Button checkOut = new Button("Checkout");
+        checkOut.setOnAction(event -> {
+            //go to next window
+        });
+
+        Button goBack = new Button("Go Back");
+        checkOut.setOnAction(event -> {
+            //go to previous window
+        });
+
+        Label title = new Label("Shopping Cart");
+
+        VBox list = new VBox();
+        list.setPadding(new Insets(10));
+        list.getChildren().add(title);
+        list.getChildren().add(makeItem());
+        //get item list and add items to list
+        list.setAlignment(Pos.BASELINE_CENTER);
+
+
+        HBox navi = new HBox(goBack, checkOut);
+        navi.setAlignment(Pos.CENTER);
+        navi.setSpacing(10);
+        BorderPane ex = new BorderPane();
+        ex.setCenter(list);
+        ex.setBottom(navi);
+        BorderPane.setMargin(navi, new Insets(10));
+
+
+        Scene demo = new Scene(ex);
+        //demo.getStylesheets().add("sample/style.css");
+        primaryStage.setScene(demo);
+        primaryStage.show();
+    }
+
+    protected void newUser(){
+        Stage primaryStage = new Stage();
+        primaryStage.setTitle("Make a New Account");
+        //Scene demo = new Scene();
+    }
+
+    protected void login (){
+        Stage primaryStage = new Stage();
+        primaryStage.setTitle("Platform Name");
+        primaryStage.setMinHeight(400);
+        primaryStage.setMinWidth(400);
+        primaryStage.setMaxHeight(400);
+        primaryStage.setMaxWidth(400);
+
+
+        Label prompt = new Label("Please Sign In");
+        Label invalid = new Label("");
+
+
+        /////////HYPERLINK WIP (trying to figure out how to move between windows)
+        ////////not really necessary, but working on a create new user GUI
+        Hyperlink newUser = new Hyperlink("Create an Account");
+        newUser.setOnAction(event -> {
+
+        });
+
+
+        /////////Text and Password Fields
+        Label uID = new Label("Username:");
+        TextField userID = new TextField();
+        userID.setPadding(new Insets(10));
+
+        Label pw = new Label("Password:");
+        PasswordField password = new PasswordField();
+        password.setPadding(new Insets(10));
+
+
+        ////////SUBMIT BUTTON
+        Button submit = new Button("Submit");
+        BooleanBinding b = new BooleanBinding() {
+
+            {
+                super.bind(userID.textProperty(), password.textProperty());
+            }
+
+            @Override
+            protected boolean computeValue() {
+                return (userID.getText().isEmpty() || password.getText()
+                        .isEmpty());
+            }
+        };
+        submit.disableProperty().bind(b);
+        submit.setOnAction(event -> {
+            //submit username and password for authentication
+            //if fails, change the invalid label
+        });
+
+
+        ///////VBOX
+        VBox ex = new VBox(10, prompt, uID, userID, pw, password, submit, invalid, newUser);
+        ex.setPadding(new Insets(10));
+        ex.setAlignment(Pos.BASELINE_CENTER);
+
+
+        ///////Scene
+        Scene demo = new Scene(ex);
+        primaryStage.setScene(demo);
+        primaryStage.show();
+    }
+
+
+
+
+
 }
