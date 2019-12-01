@@ -8,6 +8,7 @@ import javafx.application.Application;
 import javafx.beans.binding.BooleanBinding;
 import javafx.geometry.HPos;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -36,7 +37,6 @@ public class GUIMain extends Application {
     @Override
     public void start(Stage stage) {
         Global.guiMainReference = this;
-
 
         //Declarations/Initialization of all GUI components
         BorderPane borderpane = new BorderPane();
@@ -114,6 +114,18 @@ public class GUIMain extends Application {
         shoppingList.setPadding(new Insets(10,10,10,10));
 
         Label cart = new Label("Shopping Cart (0)");
+        cart.addEventHandler(MouseEvent.MOUSE_CLICKED, event ->{
+            try
+            {
+                shoppingCart();
+            }
+            catch(Exception e)
+            {
+                Alert notFound = new Alert(Alert.AlertType.ERROR, "There was an error finding the next page.");
+                notFound.show();
+            }
+
+        });
 
         HBox hbox = new HBox(50, hboxSearch, cart);
         hbox.setAlignment(Pos.CENTER);
@@ -167,7 +179,7 @@ public class GUIMain extends Application {
             cart.setText("Shopping Cart (" + totalCount + ")");
         });
 
-        //Removes from shopping cart; updates quanity under item
+        //Removes from shopping cart; updates quantity under item
         sub1.setOnAction(event -> {
             count1--;
             totalCount--;
@@ -238,6 +250,7 @@ public class GUIMain extends Application {
         List<Product> foundItems = inv.search(searchBar.getText().toString().split(" "));
     }
 
+    //Kristine's Code
     //this is for the shopping cart windowpane
     private static GridPane makeItem() throws FileNotFoundException {
         Label itemCount = new Label("0");
@@ -307,7 +320,7 @@ public class GUIMain extends Application {
 
     private  void shoppingCart() throws FileNotFoundException {
         Stage primaryStage = new Stage();
-        primaryStage.setTitle("Name of Platform");
+        primaryStage.setTitle("Shopping Cart");
         primaryStage.setMinHeight(300);
         primaryStage.setMinWidth(400);
 
