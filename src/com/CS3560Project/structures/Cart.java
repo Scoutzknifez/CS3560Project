@@ -2,6 +2,7 @@ package com.CS3560Project.structures;
 
 import com.CS3560Project.structures.products.Product;
 import com.CS3560Project.utility.Constants;
+import com.CS3560Project.utility.Utils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -41,6 +42,14 @@ public class Cart {
             totalPrice += product.getPrice();
 
         return totalPrice + (totalPrice * Constants.TAX_RATE);
+    }
+
+    /**
+     * Returns the carts total in the format #.##
+     * @return  formatted total price
+     */
+    private String getTotal() {
+        return Utils.formatDouble(getTotalCost(), 2);
     }
 
     /**
