@@ -1,5 +1,7 @@
 package com.CS3560Project;
 
+import com.CS3560Project.structures.Cart;
+import com.CS3560Project.structures.User;
 import com.CS3560Project.structures.products.Product;
 import com.CS3560Project.structures.inventory.Inventory;
 
@@ -21,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -33,6 +36,7 @@ public class GUIMain extends Application {
     protected Inventory inv = new Inventory();
     protected List<Product> searchResults;
     protected ArrayList<ImageView> images = new ArrayList<>();
+    protected static Cart cart = new Cart(User.createInstance(null));
 
     @Override
     public void start(Stage stage) {
@@ -252,31 +256,37 @@ public class GUIMain extends Application {
 
     //Kristine's Code
     //this is for the shopping cart windowpane
-    private static GridPane makeItem() throws FileNotFoundException {
+    private static GridPane makeItem(Product product) throws FileNotFoundException {
         Label itemCount = new Label("0");
 
+        AtomicInteger count = new AtomicInteger();
+        for(Product item: cart.getCartItems()) {
+            if (item.equals(product))
+                count.getAndIncrement();
+        }
 
         Button plus = new Button("+");
         plus.autosize();
         plus.setOnAction(event -> {
             //adds more of item
-            //get item number
-            int temp = 0;
-            //increment and change the label
-            temp++;
-            itemCount.setText(temp + "");
-        });
+            cart.addProduct(product);
+            count.getAndIncrement();
 
+            //increment and change the label
+            itemCount.setText(count + "");
+        });
 
         Button minus = new Button("-");
         minus.setMinSize(plus.getHeight(), plus.getWidth());
         minus.setOnAction(event -> {
+
             //remove Item
-            //get item number
-            int temp = 0;
+            cart.getCartItems().remove(product);
+            count.getAndDecrement();
+\
             //increment and change the label
-            temp--;
-            itemCount.setText(temp + "");
+
+            itemCount.setText(count + "");
         });
 
 
