@@ -2,22 +2,26 @@ package com.CS3560Project.structures.products;
 
 import com.CS3560Project.exceptions.ParseFailureException;
 import com.CS3560Project.sqlworkers.insertion.Databasable;
-import com.CS3560Project.utility.Utils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+@Setter
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
 public class ProductImage implements Databasable {
-    private String id;
-    private int priority; // Displays images in priority the smaller the number, the sooner it is shown, 0 is before 1
+    private String id;      // Compound Primary Key
+    // Displays images in priority the smaller the number, the sooner it is shown, 0 is before 1
+    private int priority;   // Compound Alternate Key
     private String base64;
+
+    public ProductImage(Product product, int priority, String base64) {
+        this (product.getId(), priority, base64);
+    }
 
     public Object[] fieldsToArray() {
         List<Object> fieldList = new ArrayList<>();
@@ -31,10 +35,10 @@ public class ProductImage implements Databasable {
 
     @Override
     public String toString() {
-        return "{ID:\"" + getId() +
-                "\",priority:" + getPriority() +
-                ",base64:\"" + getBase64() +
-                "\"}";
+        return "{\n\tID:\"" + getId() +
+                "\",\n\tpriority:" + getPriority() +
+                ",\n\tbase64:\"" + getBase64() +
+                "\"\n}";
     }
 
     public static ProductImage createInstance(ResultSet set) {
@@ -45,7 +49,6 @@ public class ProductImage implements Databasable {
 
             return new ProductImage(id, priority, base64);
         } catch (Exception e) {
-            Utils.log("Could not parse returned list.");
             throw new ParseFailureException(set, ProductImage.class);
         }
     }

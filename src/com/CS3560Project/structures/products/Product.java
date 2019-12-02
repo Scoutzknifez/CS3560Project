@@ -1,8 +1,13 @@
 package com.CS3560Project.structures.products;
 
 import com.CS3560Project.exceptions.ParseFailureException;
+import com.CS3560Project.sqlworkers.SQLHelper;
+import com.CS3560Project.sqlworkers.Table;
+import com.CS3560Project.sqlworkers.conditions.Conditional;
 import com.CS3560Project.sqlworkers.insertion.Databasable;
+import com.CS3560Project.utility.Global;
 import com.CS3560Project.utility.Utils;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +17,7 @@ import java.util.List;
 
 @Setter
 @Getter
+@AllArgsConstructor
 public class Product implements Databasable {
     private String id;
     private String productName;
@@ -20,11 +26,12 @@ public class Product implements Databasable {
     private String dimensions;
     private double weight;
 
+    // Fields that are not REQUIRED to be filled in when object is created, also not stored with product
     private transient List<ProductImage> productImages;
     private transient List<ProductReview> productReviews;
 
-    public Product(String id, String productName, double price, String description, String dimensions, double weight) {
-        setId(id);
+    public Product(String productName, double price, String description, String dimensions, double weight) {
+        setId(Utils.generateID(Table.PRODUCTS));
         setProductName(productName);
         setPrice(price);
         setDescription(description);
@@ -45,15 +52,45 @@ public class Product implements Databasable {
         return fieldList.stream().toArray(Object[]::new);
     }
 
+    /**
+     * Gets the average rating of this product based off of current reviews
+     * @return  The average rating
+     */
+    public double getAverageRating() {
+        double avg = 0;
+        for (ProductReview review : getProductReviews())
+            avg += review.getRating();
+
+        // Keeps the range from [0 - 5]
+        return Math.max(0, Math.min(5, (avg / getProductReviews().size())));
+    }
+
     @Override
     public String toString() {
-        return "{ID:\"" + getId() +
-                "\",productName:\"" + getProductName() +
-                "\",price:" + getPrice() +
-                ",description:\"" + getDescription() +
-                "\",dimensions:\"" + getDimensions() +
-                "\",weight:" + getWeight() +
-                "}";
+        StringBuilder sb = new StringBuilder();
+        String beforeConcatenation = "{\n\tID:\"" + getId() +
+                "\",\n\tproductName:\"" + getProductName() +
+                "\",\n\tprice:" + getPrice() +
+                ",\n\tdescription:\"" + getDescription() +
+                "\",\n\tdimensions:\"" + getDimensions() +
+                "\",\n\tweight:" + getWeight();
+        sb.append(beforeConcatenation);
+
+        sb.append(",\n\tproductImages:[\n");
+        String section;
+        for (int i = 0; i < getProductImages().size(); i++) {
+            //ProductImage pi = getProductImages()
+            section = "\t\t" + getProductImages().get(i) + ",\n";
+            sb.append(section);
+        }
+
+        sb.append("\t],\n\tproductReviews:[\n");
+        for (int i = 0; i < getProductReviews().size(); i++) {
+            section = "\t\t" + getProductReviews().get(i) + ",\n";
+            sb.append(section);
+        }
+        sb.append("\t]\n}");
+        return sb.toString();
     }
 
     public static Product createInstance(ResultSet set) {
@@ -65,9 +102,15 @@ public class Product implements Databasable {
             String dimensions = set.getString("dimensions");
             double weight = set.getDouble("weight");
 
-            return new Product(id, productName, price, product_description, dimensions, weight);
+            // Fields that are fetched and set from different databases
+            Conditional idCondition = new Conditional("id", id);
+            List<ProductImage> images = (List<ProductImage>)SQLHelper.getFromTableWithConditions(Table.PRODUCT_IMAGES, idCondition);
+            List<ProductReview> reviews = (List<ProductReview>) SQLHelper.getFromTableWithConditions(Table.PRODUCT_REVIEWS, idCondition);
+
+            Product product = new Product(id, productName, price, product_description, dimensions, weight, images, reviews);
+            Global.productList.add(product);
+            return product;
         } catch (Exception e) {
-            Utils.log("Could not parse returned list.");
             throw new ParseFailureException(set, Product.class);
         }
     }
