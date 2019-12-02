@@ -257,7 +257,7 @@ public class GUIMain extends Application {
     //Kristine's Code
     //this is for the shopping cart windowpane
     private static GridPane makeItem(Product product) throws FileNotFoundException {
-        Label itemCount = new Label("0");
+        Label itemCount = new Label("");
 
         AtomicInteger count = new AtomicInteger();
         for(Product item: cart.getCartItems()) {
@@ -292,7 +292,7 @@ public class GUIMain extends Application {
 
         Label itemName = new Label("item");
 
-        //place holder item
+        //TODO figure out how to pull image from database
         Image itemImage = new Image(new FileInputStream("C:\\Users\\Kristine\\Desktop\\purikura fun times!.JPG"));
         ImageView itemImageSet = new ImageView(itemImage);
         itemImageSet.setPreserveRatio(true);
@@ -336,21 +336,28 @@ public class GUIMain extends Application {
 
         Button checkOut = new Button("Checkout");
         checkOut.setOnAction(event -> {
-            //go to next window
+            checkOutWin();
         });
 
         Button goBack = new Button("Go Back");
         checkOut.setOnAction(event -> {
-            //go to previous window
+            //TODO figure how to go to previous page
         });
 
         Label title = new Label("Shopping Cart");
-
         VBox list = new VBox();
         list.setPadding(new Insets(10));
         list.getChildren().add(title);
-        list.getChildren().add(makeItem());
-        //get item list and add items to list
+
+        //makes the rows for items
+        ArrayList<Product> addedItems = new ArrayList<Product>();
+        for(Product product: cart.getCartItems()) {
+            if(!addedItems.contains(product)) {
+                addedItems.add(product);
+                list.getChildren().add(makeItem(product));
+            }
+        }
+
         list.setAlignment(Pos.BASELINE_CENTER);
 
 
@@ -364,7 +371,6 @@ public class GUIMain extends Application {
 
 
         Scene demo = new Scene(ex);
-        //demo.getStylesheets().add("sample/style.css");
         primaryStage.setScene(demo);
         primaryStage.show();
     }
@@ -439,7 +445,9 @@ public class GUIMain extends Application {
         primaryStage.show();
     }
 
+    private void checkOutWin(){
 
+    }
 
 
 
