@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 public class GetWorker extends Worker {
-    private List<Object> items;
+    private List<?> items;
     private Conditional conditions;
 
     /**
@@ -67,12 +67,13 @@ public class GetWorker extends Worker {
      * @param set   The set to turn into a list of objects
      */
     private void putResultIntoList(ResultSet set) {
-        items = new ArrayList<>();
+        List<Object> list = new ArrayList<>();
         try {
             while (set.next()) {
-                items.add(getTable().getConstructorClass().getDeclaredMethod("createInstance", ResultSet.class)
+                list.add(getTable().getConstructorClass().getDeclaredMethod("createInstance", ResultSet.class)
                         .invoke(getTable().getConstructorClass(), set));
             }
+            items = list;
         } catch (Exception e) {
             e.printStackTrace();
             Utils.log("Could not parse returned list from " + getTable().name() + " table.");
