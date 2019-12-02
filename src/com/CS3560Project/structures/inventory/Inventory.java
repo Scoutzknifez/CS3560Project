@@ -1,6 +1,8 @@
-package com.CS3560Project.structures;
+package com.CS3560Project.structures.inventory;
 
+import com.CS3560Project.sqlworkers.Table;
 import com.CS3560Project.structures.products.Product;
+import com.CS3560Project.utility.Utils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,11 +17,16 @@ import java.util.regex.Pattern;
 @Setter
 @AllArgsConstructor
 public class Inventory {
-    private Map<Product, Integer> inventoryList;
+    private String id;
+    private Map<Product, Integer> inventory = new HashMap<>();
 
     // TODO Construct from a DB
     public Inventory() {
-        setInventoryList(new HashMap<>());
+        this (Utils.generateID(Table.INVENTORIES));
+    }
+
+    public Inventory(String id) {
+        setId(id);
     }
 
     /**
@@ -33,8 +40,8 @@ public class Inventory {
         if (product == null)
             throw new NullPointerException(productID);
 
-        int newQuantity = getInventoryList().get(product) + incrementBy;
-        getInventoryList().put(product, newQuantity);
+        int newQuantity = getInventory().get(product) + incrementBy;
+        getInventory().put(product, newQuantity);
         return true;
     }
 
@@ -72,7 +79,7 @@ public class Inventory {
      * @return              true if set contains product / false if not found
      */
     public Product search(String productID) {
-        for (Product product : getInventoryList().keySet()) {
+        for (Product product : getInventory().keySet()) {
             if (product.getId().equals(productID))
                 return product;
         }
@@ -95,7 +102,7 @@ public class Inventory {
             }
         }
 
-        for (Product product : getInventoryList().keySet()) {
+        for (Product product : getInventory().keySet()) {
             for (String searchTerm : searchTerms) {
                 if (Pattern.compile(Pattern.quote(searchTerm), Pattern.CASE_INSENSITIVE).matcher(product.getProductName()).find() && !productsFound.contains(product)) {
                     productsFound.add(product);
@@ -104,5 +111,18 @@ public class Inventory {
         }
 
         return productsFound;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{\n\tid:\"");
+        sb.append(getId());
+        sb.append("\",\n\tinventory:[");
+
+        //for ()
+
+        // TODO
+        return super.toString();
     }
 }
