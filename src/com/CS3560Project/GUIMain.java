@@ -1,7 +1,7 @@
 package com.CS3560Project;
 
 import com.CS3560Project.structures.products.Product;
-import com.CS3560Project.structures.Inventory;
+import com.CS3560Project.structures.inventory.Inventory;
 
 import com.CS3560Project.utility.Global;
 import javafx.application.Application;
