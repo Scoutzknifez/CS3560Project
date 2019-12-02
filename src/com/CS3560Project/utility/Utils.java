@@ -1,6 +1,9 @@
 package com.CS3560Project.utility;
 
 import com.CS3560Project.exceptions.ParseFailureException;
+import com.CS3560Project.sqlworkers.SQLHelper;
+import com.CS3560Project.sqlworkers.Table;
+import com.CS3560Project.sqlworkers.conditions.Conditional;
 import com.CS3560Project.structures.TimeAtMoment;
 import com.CS3560Project.structures.products.Product;
 import javafx.embed.swing.SwingFXUtils;
@@ -11,11 +14,66 @@ import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Utils {
+    /**
+     * Generates one random character based off settings supplied
+     * @param setting   The type of character you want in response
+     * @return          One single character from requested set
+     */
+    private static char generateRandomChar(CharGeneratorSettings setting) {
+        List<Integer> possibleChars = new ArrayList<>();
+        // Add all characters to possible outcome list
+        if (setting == CharGeneratorSettings.ALL || setting == CharGeneratorSettings.CHARACTER) {
+            //  From     A      -> Z
+            for (int i = 65; i <= 90; i++) {
+                possibleChars.add(i);
+            }
+
+            // From      a      -> z
+            for (int i = 97; i <= 122; i++) {
+                possibleChars.add(i);
+            }
+        }
+
+        // Add all numbers to possible outcome list
+        if (setting == CharGeneratorSettings.ALL || setting == CharGeneratorSettings.NUMBER) {
+            // From      0      -> 9
+            for (int i = 48; i <= 57; i++) {
+                possibleChars.add(i);
+            }
+        }
+
+        // Selects a random element from 0 to SIZE
+        return ((char) possibleChars.get(Global.random.nextInt(possibleChars.size())).intValue());
+    }
+
+    private enum CharGeneratorSettings {
+        ALL,
+        CHARACTER,
+        NUMBER,
+    }
+
+    public static String generateID(Table table) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < Constants.ID_LENGTH; i++)
+            sb.append(generateRandomChar(CharGeneratorSettings.ALL));
+
+        String id = sb.toString();
+
+        // If not allowing duplicate IDs, each database must contain an ID field
+        List<?> results = SQLHelper.getFromTableWithConditions(table, new Conditional("id", id));
+        if (results.size() > 0) {
+            return generateID(table);
+        } else {
+            return id;
+        }
+    }
+
     /**
      * Converts Base64 to it's BufferedImage representation
      * @param base64 to convert
@@ -111,11 +169,10 @@ public class Utils {
     /**
      * Prints out the each item in the list
      * @param list  The list to print out
-     * @param <T>   Generic Key for contents of list
      */
-    public static <T> void printList(List<T> list) {
-        for(T item : list) {
-            System.out.println(item);
+    public static void printList(Collection<?> list) {
+        for(Object obj : list) {
+            System.out.println(obj);
         }
     }
 
