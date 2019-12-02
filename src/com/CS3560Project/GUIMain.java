@@ -283,7 +283,7 @@ public class GUIMain extends Application {
             //remove Item
             cart.getCartItems().remove(product);
             count.getAndDecrement();
-\
+
             //increment and change the label
 
             itemCount.setText(count + "");
@@ -329,25 +329,30 @@ public class GUIMain extends Application {
     }
 
     private  void shoppingCart() throws FileNotFoundException {
+
         Stage primaryStage = new Stage();
+
+
         primaryStage.setTitle("Shopping Cart");
         primaryStage.setMinHeight(300);
         primaryStage.setMinWidth(400);
+
 
         Button checkOut = new Button("Checkout");
         checkOut.setOnAction(event -> {
             checkOutWin();
         });
-
         Button goBack = new Button("Go Back");
         checkOut.setOnAction(event -> {
             //TODO figure how to go to previous page
         });
 
+
         Label title = new Label("Shopping Cart");
         VBox list = new VBox();
         list.setPadding(new Insets(10));
         list.getChildren().add(title);
+
 
         //makes the rows for items
         ArrayList<Product> addedItems = new ArrayList<Product>();
@@ -357,13 +362,14 @@ public class GUIMain extends Application {
                 list.getChildren().add(makeItem(product));
             }
         }
-
         list.setAlignment(Pos.BASELINE_CENTER);
 
 
         HBox navi = new HBox(goBack, checkOut);
         navi.setAlignment(Pos.CENTER);
         navi.setSpacing(10);
+
+
         BorderPane ex = new BorderPane();
         ex.setCenter(list);
         ex.setBottom(navi);
