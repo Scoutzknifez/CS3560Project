@@ -2,6 +2,7 @@ package com.CS3560Project.sqlworkers;
 
 import com.CS3560Project.sqlworkers.insertion.Databasable;
 import com.CS3560Project.structures.User;
+import com.CS3560Project.structures.inventory.InventorySlot;
 import com.CS3560Project.structures.products.Product;
 import com.CS3560Project.structures.products.ProductImage;
 import com.CS3560Project.structures.products.ProductReview;
@@ -18,6 +19,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Table {
+    INVENTORIES(InventorySlot.class),
     PRODUCTS(Product.class),
     PRODUCT_IMAGES(ProductImage.class),
     PRODUCT_REVIEWS(ProductReview.class),
