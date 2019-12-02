@@ -1,15 +1,18 @@
 package com.CS3560Project.structures;
 
 import com.CS3560Project.exceptions.ParseFailureException;
+import com.CS3560Project.sqlworkers.Table;
 import com.CS3560Project.sqlworkers.insertion.Databasable;
 import com.CS3560Project.utility.Utils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+@Setter
 @Getter
 @AllArgsConstructor
 public class User implements Databasable {
@@ -21,6 +24,10 @@ public class User implements Databasable {
     private String email;
     private String password;
     private AccountRank rank;
+
+    public User(String firstName, String lastName, PhoneNumber phoneNumber, Address address, String email, String password, AccountRank rank) {
+        this(Utils.generateID(Table.USERS), firstName, lastName, phoneNumber, address, email, password, rank);
+    }
 
     public Object[] fieldsToArray() {
         List<Object> fieldList = new ArrayList<>();
@@ -70,7 +77,6 @@ public class User implements Databasable {
 
             return new User(id, firstName, lastName, phoneNumber, address, email, user_password, user_rank);
         } catch (Exception e) {
-            Utils.log("Could not parse returned list.");
             throw new ParseFailureException(set, User.class);
         }
     }
