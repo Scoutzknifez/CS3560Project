@@ -25,18 +25,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-
 /**
  * Main running thread which hosts the GUI
  */
 public class GUIMain extends Application {
-    //Temp variables in place for quantity for now
+    // TODO Temp variables in place for quantity for now
     protected int totalCount = 0, count1 = 0, count2 = 0, count3 = 0, count4 = 0, count5 = 0, count6 = 0;
-    //protected ArrayList<Product> products = new ArrayList<>(); // TODO FetchController
-    protected Inventory inv = new Inventory();
-    protected List<Product> searchResults;
-    protected ArrayList<ImageView> images = new ArrayList<>();
-    protected static Cart cart = new Cart(User.createInstance(null));
+
+    protected Inventory inv = new Inventory(); // TODO This is old / outdated - Cody (Needs to not really have a reference to an inventory anymore but rather Global.inventoryList)
+    protected List<Product> searchResults; // TODO Needs to be fetched from active inventories - Cody (This is something I will take part in on Monday)
+    protected ArrayList<ImageView> images = new ArrayList<>(); // TODO This aint right - Cody (Products own images themselves)
+    protected static Cart cart = new Cart(User.createInstance(null)); // TODO This aint right - Cody (Nothing calls createInstance except reflection)
 
     @Override
     public void start(Stage stage) {
@@ -293,6 +292,7 @@ public class GUIMain extends Application {
         Label itemName = new Label("item");
 
         //TODO figure out how to pull image from database
+        // Images are already pulled from database and given to a product on creation (if the product has images) - Cody
         Image itemImage = new Image(new FileInputStream("C:\\Users\\Kristine\\Desktop\\purikura fun times!.JPG"));
         ImageView itemImageSet = new ImageView(itemImage);
         itemImageSet.setPreserveRatio(true);
@@ -400,15 +400,15 @@ public class GUIMain extends Application {
         Label invalid = new Label("");
 
 
-        /////////HYPERLINK WIP (trying to figure out how to move between windows)
-        ////////not really necessary, but working on a create new user GUI
+        //HYPERLINK WIP (trying to figure out how to move between windows)
+        //not really necessary, but working on a create new user GUI
         Hyperlink newUser = new Hyperlink("Create an Account");
         newUser.setOnAction(event -> {
 
         });
 
 
-        /////////Text and Password Fields
+        //Text and Password Fields
         Label uID = new Label("Username:");
         TextField userID = new TextField();
         userID.setPadding(new Insets(10));
@@ -418,7 +418,7 @@ public class GUIMain extends Application {
         password.setPadding(new Insets(10));
 
 
-        ////////SUBMIT BUTTON
+        //SUBMIT BUTTON
         Button submit = new Button("Submit");
         BooleanBinding b = new BooleanBinding() {
 
@@ -439,22 +439,19 @@ public class GUIMain extends Application {
         });
 
 
-        ///////VBOX
+        //VBOX
         VBox ex = new VBox(10, prompt, uID, userID, pw, password, submit, invalid, newUser);
         ex.setPadding(new Insets(10));
         ex.setAlignment(Pos.BASELINE_CENTER);
 
 
-        ///////Scene
+        //Scene
         Scene demo = new Scene(ex);
         primaryStage.setScene(demo);
         primaryStage.show();
     }
 
-    private void checkOutWin(){
+    private void checkOutWin() {
 
     }
-
-
-
 }
