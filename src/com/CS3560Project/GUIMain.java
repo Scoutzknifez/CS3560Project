@@ -449,6 +449,45 @@ public class GUIMain extends Application {
     }
 
     private void checkOutWin() {
+        Stage primaryStage = new Stage();
+
+        //TODO Make sure this only pops up if not logged in
+        Label ReturningUser = new Label("Returning User?");
+        Label login = new Label("Login");
+
+        //form if the user is a guest
+        final Label SHIPPING = new Label("Shipping address");
+        final Label ADDRESS_LINE1 = new Label();
+        final Label ADDRESS_LINE2 = new Label();
+        final Label CITY = new Label();
+        final Label STATE = new Label();
+        final Label COUNTRY = new Label();
+        final Label ZIPCODE = new Label();
+
+        TextField aL1 = new TextField();
+        TextField aL2 = new TextField();
+        TextField city = new TextField();
+        TextField state = new TextField();
+        TextField country = new TextField();
+        TextField zip = new TextField();
+
+        final Label PAYMENT_METHOD = new Label();
+
+        final ToggleGroup paymentChoices = new ToggleGroup();
+        RadioButton paypal = new RadioButton("Paypal");
+        RadioButton creditCard = new RadioButton("Credit Card");
+        RadioButton debitCard = new RadioButton("Debit Card");
+        paypal.setToggleGroup(paymentChoices);
+        creditCard.setToggleGroup(paymentChoices);
+        debitCard.setToggleGroup(paymentChoices);
+
+
+        //AMOUNT DUE
+        final Label AMOUNT_DUE = new Label();
+        final Label TOTAL_ITEMS_PURCHASED = new Label();
+        final Label TOTAL_COST = new Label();
+
+
 
     }
 }
