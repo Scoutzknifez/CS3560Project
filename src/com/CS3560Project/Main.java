@@ -23,7 +23,7 @@ public class Main {
         Utils.printList(Global.inventoryList);
 
         // TODO Wait for info to be fetched and parsed before this
-        // Shows how to dispatch the GUI from JFX
+        // Shows how to dispatch the com.CS3560Project.GUI from JFX
         GUIMain.launch(GUIMain.class);
     }
 

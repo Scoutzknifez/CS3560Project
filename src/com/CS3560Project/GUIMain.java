@@ -4,6 +4,7 @@ import com.CS3560Project.structures.Cart;
 import com.CS3560Project.structures.User;
 import com.CS3560Project.structures.products.Product;
 import com.CS3560Project.structures.inventory.Inventory;
+import com.CS3560Project.GUI.ProductView;
 
 import com.CS3560Project.utility.Global;
 import javafx.application.Application;
@@ -35,16 +36,28 @@ public class GUIMain extends Application {
     // TODO Temp variables in place for quantity for now
     protected int totalCount = 0, count1 = 0, count2 = 0, count3 = 0, count4 = 0, count5 = 0, count6 = 0;
 
-    protected Inventory inv = new Inventory(); // TODO This is old / outdated - Cody (Needs to not really have a reference to an inventory anymore but rather Global.inventoryList)
+    protected List inv = Global.inventoryList; // TODO This is old / outdated - Cody (Needs to not really have a reference to an inventory anymore but rather Global.inventoryList)
     protected List<Product> searchResults; // TODO Needs to be fetched from active inventories - Cody (This is something I will take part in on Monday)
-    protected ArrayList<ImageView> images = new ArrayList<>(); // TODO This aint right - Cody (Products own images themselves)
+    protected ArrayList<ProductView> images = new ArrayList<>(); // TODO This aint right - Cody (Products own images themselves)
     protected static User user = new User(null,null,null,null,null,null,null);
     protected static Cart cart = new Cart(user);
+    protected Stage primaryStage;
 
     @Override
     public void start(Stage stage) {
         Global.guiMainReference = this;
-        checkOutWin();
+        login();
+    }
+
+    //Searches through inventory to display products to screen after search bar is activated
+    private void searchResults(String input, TextField searchBar)
+    {
+        Inventory foundItems = Global.getInventory(input);
+    }
+
+    private void shoppingPage()
+    {
+        primaryStage.close();
         //Declarations/Initialization of all GUI components
         BorderPane borderpane = new BorderPane();
         GridPane shoppingList = new GridPane();
@@ -245,16 +258,10 @@ public class GUIMain extends Application {
 
         Scene scene = new Scene(borderpane,400,400);
         //scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-        Stage primaryStage = new Stage();
+        primaryStage = new Stage();
         primaryStage.setTitle("Online Shopping Network");
         primaryStage.setScene(scene);
         primaryStage.show();
-    }
-
-    //Searches through inventory to display products to screen after search bar is activated
-    private void searchResults(String input, TextField searchBar)
-    {
-        List<Product> foundItems = inv.search(searchBar.getText().toString().split(" "));
     }
 
     //Kristine's Code
@@ -334,8 +341,8 @@ public class GUIMain extends Application {
     }
 
     private  void shoppingCart() throws FileNotFoundException {
-
-        Stage primaryStage = new Stage();
+        primaryStage.close();
+        primaryStage = new Stage();
 
 
         primaryStage.setTitle("Shopping Cart");
@@ -344,14 +351,15 @@ public class GUIMain extends Application {
 
 
         Button checkOut = new Button("Checkout");
-        checkOut.setOnAction(actionEvent -> {
+        checkOut.setOnAction(event -> {
             //TODO this button won't work, trying to figure out why
             checkOutWin();
         });
 
         Button goBack = new Button("Go Back");
-        checkOut.setOnAction(actionEvent -> {
+        goBack.setOnAction(event -> {
             //TODO figure how to go to previous page
+            shoppingPage();
         });
 
         VBox list = new VBox();
@@ -392,7 +400,7 @@ public class GUIMain extends Application {
     }
 
     private void login (){
-        Stage primaryStage = new Stage();
+        primaryStage = new Stage();
         primaryStage.setTitle("Login to MarketPlace");
         primaryStage.setMinHeight(400);
         primaryStage.setMinWidth(400);
@@ -405,6 +413,7 @@ public class GUIMain extends Application {
 
         Button guestUser = new Button("Login as Guest");
         guestUser.setOnAction(event -> {
+            shoppingPage();
             //TODO link this to the shopping page
             // The user should be initialized as empty
         });
@@ -437,7 +446,7 @@ public class GUIMain extends Application {
         submit.setOnAction(event -> {
             //TODO look through database for authentication
             // if fails, change the invalid label to notify the user that it's wrong
-            //  else make sure the User information is filled using database info
+            // else make sure the User information is filled using database info
         });
 
         VBox ex = new VBox(10, prompt, uID, userID, pw, password, submit, guestUser, invalid);
@@ -452,7 +461,8 @@ public class GUIMain extends Application {
     }
 
     private void checkOutWin() {
-        Stage primaryStage = new Stage();
+        primaryStage.close();
+        primaryStage = new Stage();
         Scene ex = null;
         Separator separator = new Separator();
         Separator separator0 = new Separator();
