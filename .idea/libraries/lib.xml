@@ -4,6 +4,9 @@
       <root url="file://$PROJECT_DIR$/libs/javafx-sdk-13.0.1/lib" />
     </CLASSES>
     <JAVADOC />
+    <NATIVE>
+      <root url="file://$PROJECT_DIR$/libs/javafx-sdk-13.0.1" />
+    </NATIVE>
     <SOURCES>
       <root url="file://$PROJECT_DIR$/libs/javafx-sdk-13.0.1/lib" />
     </SOURCES>

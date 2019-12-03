@@ -13,7 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.geometry.*;
 import javafx.scene.image.*;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -35,12 +35,13 @@ public class GUIMain extends Application {
     protected Inventory inv = new Inventory(); // TODO This is old / outdated - Cody (Needs to not really have a reference to an inventory anymore but rather Global.inventoryList)
     protected List<Product> searchResults; // TODO Needs to be fetched from active inventories - Cody (This is something I will take part in on Monday)
     protected ArrayList<ImageView> images = new ArrayList<>(); // TODO This aint right - Cody (Products own images themselves)
-    protected static Cart cart = new Cart(User.createInstance(null)); // TODO This aint right - Cody (Nothing calls createInstance except reflection)
+    protected static User user = new User(null,null,null,null,null,null,null);
+    protected static Cart cart = new Cart(user);
 
     @Override
     public void start(Stage stage) {
         Global.guiMainReference = this;
-
+        login();
         //Declarations/Initialization of all GUI components
         BorderPane borderpane = new BorderPane();
         GridPane shoppingList = new GridPane();
@@ -256,6 +257,7 @@ public class GUIMain extends Application {
     //Kristine's Code
     //this is for the shopping cart windowpane
     private static GridPane makeItem(Product product) throws FileNotFoundException {
+        System.out.println(product.toString());
         Label itemCount = new Label("");
 
         AtomicInteger count = new AtomicInteger();
@@ -340,19 +342,17 @@ public class GUIMain extends Application {
 
         Button checkOut = new Button("Checkout");
         checkOut.setOnAction(event -> {
+            primaryStage.close();
             checkOutWin();
         });
+
         Button goBack = new Button("Go Back");
         checkOut.setOnAction(event -> {
             //TODO figure how to go to previous page
         });
 
-
-        Label title = new Label("Shopping Cart");
         VBox list = new VBox();
         list.setPadding(new Insets(10));
-        list.getChildren().add(title);
-
 
         //makes the rows for items
         ArrayList<Product> addedItems = new ArrayList<Product>();
@@ -381,6 +381,7 @@ public class GUIMain extends Application {
         primaryStage.show();
     }
 
+    //TODO make a form
     private void newUser(){
         Stage primaryStage = new Stage();
         primaryStage.setTitle("Make a New Account");
@@ -389,7 +390,7 @@ public class GUIMain extends Application {
 
     private void login (){
         Stage primaryStage = new Stage();
-        primaryStage.setTitle("Platform Name");
+        primaryStage.setTitle("Login to MarketPlace");
         primaryStage.setMinHeight(400);
         primaryStage.setMinWidth(400);
         primaryStage.setMaxHeight(400);
@@ -399,12 +400,10 @@ public class GUIMain extends Application {
         Label prompt = new Label("Please Sign In");
         Label invalid = new Label("");
 
-
-        //HYPERLINK WIP (trying to figure out how to move between windows)
-        //not really necessary, but working on a create new user GUI
-        Hyperlink newUser = new Hyperlink("Create an Account");
-        newUser.setOnAction(event -> {
-
+        Button guestUser = new Button("Login as Guest");
+        guestUser.setOnAction(event -> {
+            //TODO link this to the shopping page
+            // The user should be initialized as empty
         });
 
 
@@ -418,7 +417,6 @@ public class GUIMain extends Application {
         password.setPadding(new Insets(10));
 
 
-        //SUBMIT BUTTON
         Button submit = new Button("Submit");
         BooleanBinding b = new BooleanBinding() {
 
@@ -427,23 +425,22 @@ public class GUIMain extends Application {
             }
 
             @Override
-            protected boolean computeValue() {
-                return (userID.getText().isEmpty() || password.getText()
-                        .isEmpty());
+            protected boolean computeValue()
+            {
+                return (userID.getText().isEmpty() || password.getText().isEmpty());
             }
         };
         submit.disableProperty().bind(b);
         submit.setOnAction(event -> {
-            //submit username and password for authentication
-            //if fails, change the invalid label
+            //TODO look through database for authentication
+            // if fails, change the invalid label to notify the user that it's wrong
+            // else make sure the User information is filled using database info
         });
 
-
-        //VBOX
-        VBox ex = new VBox(10, prompt, uID, userID, pw, password, submit, invalid, newUser);
+        VBox ex = new VBox(10, prompt, uID, userID, pw, password, submit, guestUser, invalid);
         ex.setPadding(new Insets(10));
-        ex.setAlignment(Pos.BASELINE_CENTER);
-
+        ex.setSpacing(20);
+        ex.setAlignment(Pos.CENTER);
 
         //Scene
         Scene demo = new Scene(ex);
