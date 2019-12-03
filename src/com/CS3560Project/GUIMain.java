@@ -8,6 +8,8 @@ import com.CS3560Project.structures.inventory.Inventory;
 import com.CS3560Project.utility.Global;
 import javafx.application.Application;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
@@ -456,13 +458,14 @@ public class GUIMain extends Application {
         Label login = new Label("Login");
 
         //form if the user is a guest
+        //shipping info
         final Label SHIPPING = new Label("Shipping address");
-        final Label ADDRESS_LINE1 = new Label();
-        final Label ADDRESS_LINE2 = new Label();
-        final Label CITY = new Label();
-        final Label STATE = new Label();
-        final Label COUNTRY = new Label();
-        final Label ZIPCODE = new Label();
+        final Label ADDRESS_LINE1 = new Label("Address Line 1");
+        final Label ADDRESS_LINE2 = new Label("Address Line 2");
+        final Label CITY = new Label("City");
+        final Label STATE = new Label("State");
+        final Label COUNTRY = new Label("Country");
+        final Label ZIPCODE = new Label("Zip Code");
 
         TextField aL1 = new TextField();
         TextField aL2 = new TextField();
@@ -471,8 +474,25 @@ public class GUIMain extends Application {
         TextField country = new TextField();
         TextField zip = new TextField();
 
-        final Label PAYMENT_METHOD = new Label();
+        GridPane shippingForm = new GridPane();
+        shippingForm.add(SHIPPING, 0, 0);
+        shippingForm.add(ADDRESS_LINE1, 0, 1);
+        shippingForm.add(ADDRESS_LINE2, 0, 2);
+        shippingForm.add(CITY, 0, 3);
+        shippingForm.add(STATE, 0, 4);
+        shippingForm.add(COUNTRY, 0, 5);
+        shippingForm.add(ZIPCODE, 0 , 6);
+        shippingForm.add(SHIPPING, 1, 0);
+        shippingForm.add(aL1, 1, 1);
+        shippingForm.add(aL2, 1, 2);
+        shippingForm.add(city, 1, 3);
+        shippingForm.add(state, 1, 4);
+        shippingForm.add(country, 1, 5);
+        shippingForm.add(zip, 1 , 6);
+        shippingForm.setMinSize(30, 50);
 
+        //payment info
+        final Label PAYMENT_METHOD = new Label("Payment Method");
         final ToggleGroup paymentChoices = new ToggleGroup();
         RadioButton paypal = new RadioButton("Paypal");
         RadioButton creditCard = new RadioButton("Credit Card");
@@ -482,12 +502,52 @@ public class GUIMain extends Application {
         debitCard.setToggleGroup(paymentChoices);
 
 
+        HBox toggle = new HBox();
+        toggle.getChildren().addAll(paypal, creditCard, debitCard);
+        toggle.setAlignment(Pos.CENTER);
+        toggle.setSpacing(10);
+        toggle.setPadding(new Insets(10));
+
+
+        VBox paymentForm = new VBox();
+        paymentForm.getChildren().add(PAYMENT_METHOD);
+        paymentForm.getChildren().add(toggle);
+        paymentChoices.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observableValue, Toggle toggle, Toggle t1) {
+                if(paymentChoices.getSelectedToggle() == paypal){
+                    //TODO get form
+                }
+                else if(paymentChoices.getSelectedToggle() == creditCard){
+                    //TODO get form
+                }
+                else if(paymentChoices.getSelectedToggle() == debitCard){
+                    //TODO get form
+                }
+            }
+        });
+
+
         //AMOUNT DUE
-        final Label AMOUNT_DUE = new Label();
-        final Label TOTAL_ITEMS_PURCHASED = new Label();
-        final Label TOTAL_COST = new Label();
+        final Label TOTAL_ITEMS_PURCHASED = new Label("Total Items Purchased: " + cart.getCartSize());
+        final Label AMOUNT_DUE = new Label("Amount Due: " + cart.getTotalCost());
+        Button purchase = new Button("Purchase");
+        purchase.setOnAction(actionEvent -> {
+            //TODO make a reciept page
+        });
+        Button back = new Button("Go Back");
+        back.setOnAction(actionEvent -> {
+            //TODO go back to cart
+        });
+
+        VBox summary = new VBox();
+        summary.getChildren().addAll(TOTAL_ITEMS_PURCHASED, AMOUNT_DUE);
 
 
+
+    }
+
+    protected void receipt(){
 
     }
 }
