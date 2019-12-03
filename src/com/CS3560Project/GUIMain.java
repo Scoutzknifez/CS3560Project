@@ -344,12 +344,13 @@ public class GUIMain extends Application {
 
 
         Button checkOut = new Button("Checkout");
-        checkOut.setOnAction(event -> {
+        checkOut.setOnAction(actionEvent -> {
+            //TODO this button won't work, trying to figure out why
             checkOutWin();
         });
 
         Button goBack = new Button("Go Back");
-        checkOut.setOnAction(event -> {
+        checkOut.setOnAction(actionEvent -> {
             //TODO figure how to go to previous page
         });
 
@@ -499,12 +500,13 @@ public class GUIMain extends Application {
         final Label COUNTRY = new Label("Country");
         final Label ZIPCODE = new Label("Zip Code");
 
-        TextField aL1 = new TextField();
-        TextField aL2 = new TextField();
-        TextField city = new TextField();
-        TextField state = new TextField();
-        TextField country = new TextField();
-        TextField zip = new TextField();
+        //TODO parse the address string, the user can still change it as needed
+        TextField aL1 = new TextField("");
+        TextField aL2 = new TextField("");
+        TextField city = new TextField("");
+        TextField state = new TextField("");
+        TextField country = new TextField("");
+        TextField zip = new TextField("");
 
         GridPane shippingForm = new GridPane();
         shippingForm.add(ADDRESS_LINE1, 0, 1);
@@ -627,5 +629,45 @@ public class GUIMain extends Application {
 
     protected void receipt(){
     //TODO make receipt page
+        Stage primaryStage = new Stage();
+        primaryStage.setTitle("Purchase Complete");
+        primaryStage.setMinWidth(300);
+        primaryStage.setMinHeight(250);
+
+        Label thanks = new Label("Thank you for shopping with us!");
+          thanks.setStyle("-fx-font-weight: bold");
+        Label action = new Label("A confirmation and receipt have been sent to " + user.getEmail());
+        Button back = new Button("Back to shopping");
+        back.setOnAction(event -> {
+            primaryStage.close();
+            //TODO go back to the shopping window
+        });
+        Button closeWin = new Button("Logout and close");
+        closeWin.setOnAction(event -> {
+            //TODO clear user data
+            primaryStage.close();
+            //TODO if user data clear
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Logout successful");
+            alert.showAndWait();
+            //TODO if not
+            Alert fail = new Alert(Alert.AlertType.ERROR);
+            fail.setTitle("Error");
+            fail.setHeaderText("Unable to Logout at the moment");
+            fail.showAndWait();
+        });
+        Separator s = new Separator();
+
+
+        VBox all = new VBox();
+        all.getChildren().addAll(thanks,s, action, back, closeWin);
+        all.setPadding(new Insets(10));
+        all.setSpacing(10);
+        all.setAlignment(Pos.CENTER);
+
+
+        Scene ex = new Scene(all, 300, 250);
+        primaryStage.setScene(ex);
+        primaryStage.show();
     }
 }
