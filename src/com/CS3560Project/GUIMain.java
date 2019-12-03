@@ -20,6 +20,7 @@ import javafx.scene.image.*;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
+import org.w3c.dom.Text;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -382,10 +383,10 @@ public class GUIMain extends Application {
         primaryStage.show();
     }
 
-    //TODO make a form
     private void newUser(){
         Stage primaryStage = new Stage();
         primaryStage.setTitle("Make a New Account");
+        //TODO make newUser page
         //Scene demo = new Scene();
     }
 
@@ -435,7 +436,7 @@ public class GUIMain extends Application {
         submit.setOnAction(event -> {
             //TODO look through database for authentication
             // if fails, change the invalid label to notify the user that it's wrong
-            // else make sure the User information is filled using database info
+            //  else make sure the User information is filled using database info
         });
 
         VBox ex = new VBox(10, prompt, uID, userID, pw, password, submit, guestUser, invalid);
@@ -451,12 +452,35 @@ public class GUIMain extends Application {
 
     private void checkOutWin() {
         Stage primaryStage = new Stage();
+        Scene ex = null;
         Separator separator = new Separator();
         Separator separator0 = new Separator();
         Separator separator1 = new Separator();
         Separator separator2 = new Separator();
+        Separator separator3 = new Separator();
+        final Label SHIPPING = new Label("Shipping address");
+        final Label PAYMENT_METHOD = new Label("Payment Method");
 
-        //TODO Make sure this only pops up if not logged in
+        //AMOUNT DUE and BUTTONS
+        final Label TOTAL_ITEMS_PURCHASED = new Label("Total Items Purchased: " + cart.getCartSize());
+        final Label AMOUNT_DUE = new Label("Amount Due: " + cart.getTotalCost());
+        Button purchase = new Button("Purchase");
+        purchase.setOnAction(actionEvent -> {
+            //TODO condition that the input is valid before purchase
+            receipt();
+        });
+
+        Button back = new Button("Go Back");
+        back.setOnAction(actionEvent -> {
+            primaryStage.close();
+            try {
+                shoppingCart();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
+
+
         Label ReturningUser = new Label("Returning User? ");
         Label login = new Label("Login");
         HBox loginBar = new HBox();
@@ -468,7 +492,6 @@ public class GUIMain extends Application {
 
         //form if the user is a guest
         //shipping info
-        final Label SHIPPING = new Label("Shipping address");
         final Label ADDRESS_LINE1 = new Label("Address Line 1");
         final Label ADDRESS_LINE2 = new Label("Address Line 2");
         final Label CITY = new Label("City");
@@ -489,19 +512,18 @@ public class GUIMain extends Application {
         shippingForm.add(CITY, 0, 3);
         shippingForm.add(STATE, 0, 4);
         shippingForm.add(COUNTRY, 0, 5);
-        shippingForm.add(ZIPCODE, 0 , 6);
+        shippingForm.add(ZIPCODE, 0, 6);
         shippingForm.add(aL1, 1, 1);
         shippingForm.add(aL2, 1, 2);
         shippingForm.add(city, 1, 3);
         shippingForm.add(state, 1, 4);
         shippingForm.add(country, 1, 5);
-        shippingForm.add(zip, 1 , 6);
+        shippingForm.add(zip, 1, 6);
         shippingForm.setMinSize(30, 50);
         shippingForm.setHgap(10);
 
 
         //payment info
-        final Label PAYMENT_METHOD = new Label("Payment Method");
         final ToggleGroup paymentChoices = new ToggleGroup();
         RadioButton paypal = new RadioButton("Paypal");
         RadioButton creditCard = new RadioButton("Credit Card");
@@ -509,8 +531,65 @@ public class GUIMain extends Application {
         paypal.setToggleGroup(paymentChoices);
         creditCard.setToggleGroup(paymentChoices);
         debitCard.setToggleGroup(paymentChoices);
+        GridPane pm = new GridPane();
+        pm.setHgap(10);
+        pm.setPadding(new Insets(10));
+        pm.setAlignment(Pos.CENTER_LEFT);
+        paymentChoices.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observableValue, Toggle toggle, Toggle t1) {
+                if(paymentChoices.getSelectedToggle() == paypal){
+                    //TODO link with paypal but that doesn't seem to be happening
+                    pm.getChildren().clear();
+                    Label email = new Label("Email");
+                    Label pw = new Label("PayPal Password");
+                    TextField e = new TextField();
+                    PasswordField p = new PasswordField();
+                    Button connect = new Button("Connect");
 
+                    pm.add(email, 0,0);
+                    pm.add(pw, 0, 1);
+                    pm.add(e, 1,0);
+                    pm.add(p, 1, 1);
+                    pm.add(connect, 1, 2);
+                }
 
+                else if(paymentChoices.getSelectedToggle() == creditCard ||
+                        paymentChoices.getSelectedToggle() == debitCard){
+                    pm.getChildren().clear();
+                    Label name = new Label("Name on card");
+                    Label cardNumber = new Label("Card Number (no spaces or dashes)");
+                    Label expiration = new Label("Card Expiration Date");
+                    Label securityCode = new Label("Security Code");
+
+                    TextField n = new TextField();
+                    TextField cn = new TextField();
+                    TextField sc = new TextField();
+                    ComboBox month = new ComboBox();
+                    month.getItems().addAll("Jan","Feb","Mar","Apr","May", "Jun",
+                                                 "Jul ", "Aug", "Sep", "Oct", "Nov", "Dec");
+                    ComboBox year = new ComboBox();
+                    year.getItems().addAll(2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026,
+                                                2027, 2028, 2029, 2030);
+
+                    HBox date = new HBox();
+                    date.getChildren().addAll(month, year);
+                    date.setSpacing(10);
+                    date.setAlignment(Pos.CENTER);
+                    date.setPadding(new Insets(10));
+
+                    pm.add(name, 0,0);
+                    pm.add(cardNumber, 0, 1);
+                    pm.add(securityCode, 0, 2);
+                    pm.add(expiration, 0, 3);
+                    pm.add(n, 1, 0);
+                    pm.add(cn, 1, 1);
+                    pm.add(sc, 1, 2);
+                    pm.add(date, 1, 3);
+
+                }
+            }
+        });
         HBox toggle = new HBox();
         toggle.getChildren().addAll(paypal, creditCard, debitCard);
         toggle.setAlignment(Pos.CENTER);
@@ -519,42 +598,11 @@ public class GUIMain extends Application {
 
 
         VBox s = new VBox();
-        s.getChildren().addAll(SHIPPING, separator0, shippingForm, separator1, PAYMENT_METHOD, separator2, toggle);
+        s.getChildren().addAll(SHIPPING, separator0, shippingForm, separator1, PAYMENT_METHOD, separator2, toggle, pm);
         s.setPadding(new Insets(10));
         s.setSpacing(10);
         s.setAlignment(Pos.CENTER_LEFT);
 
-        //AMOUNT DUE
-        final Label TOTAL_ITEMS_PURCHASED = new Label("Total Items Purchased: " + cart.getCartSize());
-        final Label AMOUNT_DUE = new Label("Amount Due: " + cart.getTotalCost());
-        Button purchase = new Button("Purchase");
-        purchase.setOnAction(actionEvent -> {
-            //TODO make a reciept page
-        });
-
-        Button back = new Button("Go Back");
-        back.setOnAction(actionEvent -> {
-            primaryStage.close();
-            try {
-                shoppingCart();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        });
-
-
-        VBox summary = new VBox();
-        summary.getChildren().addAll(TOTAL_ITEMS_PURCHASED, AMOUNT_DUE);
-        summary.setSpacing(10);
-        summary.setPadding(new Insets(10));
-        summary.setAlignment(Pos.CENTER_LEFT);
-
-
-        HBox userInfo = new HBox();
-        userInfo.getChildren().addAll(s, summary);
-        userInfo.setSpacing(10);
-        userInfo.setPadding(new Insets(10));
-        userInfo.setAlignment(Pos.CENTER);
 
         HBox buttons = new HBox();
         buttons.getChildren().addAll(back, purchase);
@@ -562,16 +610,22 @@ public class GUIMain extends Application {
         buttons.setPadding(new Insets(10));
         buttons.setAlignment(Pos.CENTER);
 
-        VBox all = new VBox();
-        all.getChildren().addAll(loginBar,separator, userInfo, buttons);
 
-        Scene ex = new Scene(all);
+        VBox all = new VBox();
+        all.getChildren().addAll(loginBar, separator, s, separator3, TOTAL_ITEMS_PURCHASED, AMOUNT_DUE, buttons);
+        all.setSpacing(10);
+        all.setPadding(new Insets(10));
+        all.setAlignment(Pos.CENTER);
+
+
+        ScrollPane root = new ScrollPane(all);
+        root.setFitToWidth(true);
+        ex = new Scene(root, 500, 500);
         primaryStage.setScene(ex);
         primaryStage.show();
-
     }
 
     protected void receipt(){
-
+    //TODO make receipt page
     }
 }
