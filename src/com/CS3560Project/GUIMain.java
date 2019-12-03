@@ -43,7 +43,7 @@ public class GUIMain extends Application {
     @Override
     public void start(Stage stage) {
         Global.guiMainReference = this;
-        login();
+        checkOutWin();
         //Declarations/Initialization of all GUI components
         BorderPane borderpane = new BorderPane();
         GridPane shoppingList = new GridPane();
@@ -344,7 +344,6 @@ public class GUIMain extends Application {
 
         Button checkOut = new Button("Checkout");
         checkOut.setOnAction(event -> {
-            primaryStage.close();
             checkOutWin();
         });
 
@@ -452,10 +451,20 @@ public class GUIMain extends Application {
 
     private void checkOutWin() {
         Stage primaryStage = new Stage();
+        Separator separator = new Separator();
+        Separator separator0 = new Separator();
+        Separator separator1 = new Separator();
+        Separator separator2 = new Separator();
 
         //TODO Make sure this only pops up if not logged in
-        Label ReturningUser = new Label("Returning User?");
+        Label ReturningUser = new Label("Returning User? ");
         Label login = new Label("Login");
+        HBox loginBar = new HBox();
+        loginBar.getChildren().addAll(ReturningUser, login);
+        loginBar.setPadding(new Insets(10));
+        loginBar.setSpacing(10);
+        loginBar.setAlignment(Pos.CENTER);
+
 
         //form if the user is a guest
         //shipping info
@@ -475,14 +484,12 @@ public class GUIMain extends Application {
         TextField zip = new TextField();
 
         GridPane shippingForm = new GridPane();
-        shippingForm.add(SHIPPING, 0, 0);
         shippingForm.add(ADDRESS_LINE1, 0, 1);
         shippingForm.add(ADDRESS_LINE2, 0, 2);
         shippingForm.add(CITY, 0, 3);
         shippingForm.add(STATE, 0, 4);
         shippingForm.add(COUNTRY, 0, 5);
         shippingForm.add(ZIPCODE, 0 , 6);
-        shippingForm.add(SHIPPING, 1, 0);
         shippingForm.add(aL1, 1, 1);
         shippingForm.add(aL2, 1, 2);
         shippingForm.add(city, 1, 3);
@@ -490,6 +497,8 @@ public class GUIMain extends Application {
         shippingForm.add(country, 1, 5);
         shippingForm.add(zip, 1 , 6);
         shippingForm.setMinSize(30, 50);
+        shippingForm.setHgap(10);
+
 
         //payment info
         final Label PAYMENT_METHOD = new Label("Payment Method");
@@ -509,24 +518,11 @@ public class GUIMain extends Application {
         toggle.setPadding(new Insets(10));
 
 
-        VBox paymentForm = new VBox();
-        paymentForm.getChildren().add(PAYMENT_METHOD);
-        paymentForm.getChildren().add(toggle);
-        paymentChoices.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> observableValue, Toggle toggle, Toggle t1) {
-                if(paymentChoices.getSelectedToggle() == paypal){
-                    //TODO get form
-                }
-                else if(paymentChoices.getSelectedToggle() == creditCard){
-                    //TODO get form
-                }
-                else if(paymentChoices.getSelectedToggle() == debitCard){
-                    //TODO get form
-                }
-            }
-        });
-
+        VBox s = new VBox();
+        s.getChildren().addAll(SHIPPING, separator0, shippingForm, separator1, PAYMENT_METHOD, separator2, toggle);
+        s.setPadding(new Insets(10));
+        s.setSpacing(10);
+        s.setAlignment(Pos.CENTER_LEFT);
 
         //AMOUNT DUE
         final Label TOTAL_ITEMS_PURCHASED = new Label("Total Items Purchased: " + cart.getCartSize());
@@ -535,15 +531,43 @@ public class GUIMain extends Application {
         purchase.setOnAction(actionEvent -> {
             //TODO make a reciept page
         });
+
         Button back = new Button("Go Back");
         back.setOnAction(actionEvent -> {
-            //TODO go back to cart
+            primaryStage.close();
+            try {
+                shoppingCart();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         });
+
 
         VBox summary = new VBox();
         summary.getChildren().addAll(TOTAL_ITEMS_PURCHASED, AMOUNT_DUE);
+        summary.setSpacing(10);
+        summary.setPadding(new Insets(10));
+        summary.setAlignment(Pos.CENTER_LEFT);
 
 
+        HBox userInfo = new HBox();
+        userInfo.getChildren().addAll(s, summary);
+        userInfo.setSpacing(10);
+        userInfo.setPadding(new Insets(10));
+        userInfo.setAlignment(Pos.CENTER);
+
+        HBox buttons = new HBox();
+        buttons.getChildren().addAll(back, purchase);
+        buttons.setSpacing(10);
+        buttons.setPadding(new Insets(10));
+        buttons.setAlignment(Pos.CENTER);
+
+        VBox all = new VBox();
+        all.getChildren().addAll(loginBar,separator, userInfo, buttons);
+
+        Scene ex = new Scene(all);
+        primaryStage.setScene(ex);
+        primaryStage.show();
 
     }
 
