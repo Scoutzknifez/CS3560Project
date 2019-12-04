@@ -9,7 +9,6 @@ import com.CS3560Project.structures.products.Product;
 import com.CS3560Project.structures.products.ProductImage;
 import com.CS3560Project.structures.products.ProductReview;
 import com.CS3560Project.utility.Global;
-import com.CS3560Project.utility.Utils;
 
 public class Main {
     /**

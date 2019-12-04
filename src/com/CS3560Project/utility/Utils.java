@@ -11,6 +11,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javax.imageio.ImageIO;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -82,8 +83,12 @@ public class Utils {
     public static java.awt.image.BufferedImage base64ToBufferedImage(String base64) {
         try {
             byte[] array = Base64.getMimeDecoder().decode(base64);
+            System.out.println(array);
             ByteArrayInputStream bis = new ByteArrayInputStream(array);
-            return ImageIO.read(bis);
+            System.out.println(bis);
+            java.awt.image.BufferedImage img = ImageIO.read(bis); // TODO Returns null and shouldnt
+            System.out.println(img);
+            return img;
         } catch (Exception e) {
             throw new ParseFailureException(base64, java.awt.image.BufferedImage.class);
         }
