@@ -352,13 +352,11 @@ public class GUIMain extends Application {
 
         Button checkOut = new Button("Checkout");
         checkOut.setOnAction(event -> {
-            //TODO this button won't work, trying to figure out why
             checkOutWin();
         });
 
         Button goBack = new Button("Go Back");
         goBack.setOnAction(event -> {
-            //TODO figure how to go to previous page
             shoppingPage();
         });
 
