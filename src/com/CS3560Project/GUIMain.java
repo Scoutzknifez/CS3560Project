@@ -39,6 +39,7 @@ public class GUIMain extends Application {
     //protected List inv = Global.inventoryList;
     protected List<Product> searchResults; // TODO Needs to be fetched from active inventories - Cody (This is something I will take part in on Monday)
     protected List<ProductView> images = new ArrayList<>(); // TODO This aint right - Cody (Products own images themselves)
+
     protected static Cart cart = null;
     protected Stage primaryStage;
     protected GridPane shoppingList = new GridPane();
@@ -348,7 +349,6 @@ public class GUIMain extends Application {
         Label itemName = new Label("item");
 
         //TODO figure out how to pull image from database
-        // Images are already pulled from database and given to a product on creation (if the product has images) - Cody
         Image itemImage = new Image(new FileInputStream("C:\\Users\\Kristine\\Desktop\\purikura fun times!.JPG"));
         ImageView itemImageSet = new ImageView(itemImage);
         itemImageSet.setPreserveRatio(true);
@@ -452,7 +452,7 @@ public class GUIMain extends Application {
         //Scene demo = new Scene();
     }
 
-    private void login (){
+    private void login(){
         primaryStage = new Stage();
         primaryStage.setTitle("Login to MarketPlace");
         primaryStage.setMinHeight(400);
@@ -466,9 +466,9 @@ public class GUIMain extends Application {
 
         Button guestUser = new Button("Login as Guest");
         guestUser.setOnAction(event -> {
+            Global.loggedInUser = Global.GUEST;
+            cart = new Cart(Global.loggedInUser);
             shoppingPage();
-            //TODO link this to the shopping page
-            // The user should be initialized as empty
         });
 
 
@@ -500,14 +500,11 @@ public class GUIMain extends Application {
             Global.loggedInUser = Global.getUserFromCredentials(userID.getText(), password.getText());
             if (Global.loggedInUser == Global.GUEST) {
                 // Failed and defaulted to guest
+                invalid.setText("Username or Password Invalid.");
             } else {
-
+                cart = new Cart(Global.loggedInUser);
+                shoppingPage();
             }
-            cart = new Cart(Global.loggedInUser);
-            shoppingPage();
-            //TODO look through database for authentication
-            // if fails, change the invalid label to notify the user that it's wrong
-            // else make sure the User information is filled using database info
         });
 
         VBox ex = new VBox(10, prompt, uID, userID, pw, password, submit, guestUser, invalid);
@@ -516,7 +513,7 @@ public class GUIMain extends Application {
         ex.setAlignment(Pos.CENTER);
 
         //Scene
-        Scene demo = new Scene(ex);
+        Scene demo = new Scene(ex, 400, 400);
         primaryStage.setScene(demo);
         primaryStage.show();
     }
@@ -564,7 +561,7 @@ public class GUIMain extends Application {
 
 
         //TODO edit this so user != guest
-        if(!user.equals(null)) {
+        if(cart.getOwner() != Global.GUEST) {
             login.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
                 login();
             });
@@ -596,8 +593,15 @@ public class GUIMain extends Application {
         TextField aL1 = new TextField("");
         TextField aL2 = new TextField("");
         TextField city = new TextField("");
-        TextField state = new TextField("");
         TextField zip = new TextField("");
+        ComboBox state = new ComboBox();
+        state.getItems().addAll("AK", "AL", "AR", "AS", "AZ", "CA", "CO", "CT",
+                "DC", "DE", "FL", "GA", "GU","HI", "IA", "ID",
+                "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME",
+                "MI", "MN", "MO", "MS", "MT", "NC", "ND", "NE",
+                "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR",
+                "PA", "PR", "RI", "SC", "SD", "TN", "TX", "UT",
+                "VA", "VI", "VT", "WA", "WI", "WV", "WY");
 
         GridPane shippingForm = new GridPane();
         shippingForm.add(ADDRESS_LINE1, 0, 1);
@@ -663,9 +667,6 @@ public class GUIMain extends Application {
                     ComboBox year = new ComboBox();
                     year.getItems().addAll(2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026,
                                                 2027, 2028, 2029, 2030);
-                    ComboBox states = new ComboBox();
-                    //TODO get an array of states in here
-                    states.getItems().addAll();
 
                     HBox date = new HBox();
                     date.getChildren().addAll(month, year);
@@ -723,7 +724,6 @@ public class GUIMain extends Application {
     }
 
     protected void receipt(){
-    //TODO make receipt page
         primaryStage.close();
         primaryStage.setTitle("Purchase Complete");
         primaryStage.setMinWidth(300);
