@@ -7,6 +7,8 @@ import lombok.Setter;
 @Setter
 @Getter
 public class UpdateWorker extends Worker {
+    private String field;
+    private Object value;
     private Conditional conditions;
 
     public UpdateWorker(Table table, Conditional conditions) {
@@ -24,7 +26,10 @@ public class UpdateWorker extends Worker {
     }
 
     private void doUpdate() {
-        String sqlArg = "UPDATE " + getTable().name() + " SET `field` = \"value\" WHERE " + getConditions().toString();
+        String sqlArg = "UPDATE " + getTable().name() +
+                " SET `" + getField() + "` = " +
+                (getValue() instanceof String ? "\"" + getValue() + "\"" : getValue()) +
+                " WHERE " + getConditions().toString();
         // TODO
     }
 }
