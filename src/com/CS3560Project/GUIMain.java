@@ -41,6 +41,7 @@ public class GUIMain extends Application {
     protected static Cart cart = null;
     protected Stage primaryStage;
     protected GridPane shoppingList = new GridPane();
+    public Label shoppingCartLabel;
 
     @Override
     public void start(Stage stage) {
@@ -126,6 +127,7 @@ public class GUIMain extends Application {
         shoppingList.setPadding(new Insets(10,10,10,10));
 
         Label cart = new Label("Shopping Cart (0)");
+        shoppingCartLabel = cart;
         cart.addEventHandler(MouseEvent.MOUSE_CLICKED, event ->{
             try
             {
