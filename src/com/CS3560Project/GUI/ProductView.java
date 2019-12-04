@@ -18,11 +18,12 @@ public class ProductView
 {
     protected ImageView imageView;
     protected Button add = new Button("+");
-    protected VBox vbox = new VBox(10, imageView, add);
+    protected VBox vbox;
 
     public ProductView(Product product)
     {
         imageView = new ImageView(Utils.bufferedImageToFXImage(Utils.base64ToBufferedImage(product.getProductImages().get(0).getBase64())));
+        vbox = new VBox(10, imageView, add);
     }
 
     public static List<ProductView> createProductViews(List<Product> products)
