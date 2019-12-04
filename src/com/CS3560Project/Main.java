@@ -30,7 +30,7 @@ public class Main {
     private static void testSet() {
         PhoneNumber phoneNumber = new PhoneNumber(951, 1234567);
         Address address = new Address("31798 Random Street", "Temecula", State.CALIFORNIA, 92590);
-        User user = new User("Cody", "Alexander", phoneNumber, address, "csalexander@cpp.edu", "password11", AccountRank.ADMIN);
+        User user = new User("TheKid", "Cody", "Alexander", phoneNumber, address, "csalexander@cpp.edu", "password11", AccountRank.ADMIN);
         SQLHelper.insertIntoTable(Table.USERS, user);
 
         Product product = new Product("plain_jane_shirt", 14.98, "A shirt for the plainest of Janes... and Karens.", "Medium", 1.4);

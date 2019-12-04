@@ -107,9 +107,7 @@ public class Product implements Databasable {
             List<ProductImage> images = (List<ProductImage>)SQLHelper.getFromTableWithConditions(Table.PRODUCT_IMAGES, idCondition);
             List<ProductReview> reviews = (List<ProductReview>) SQLHelper.getFromTableWithConditions(Table.PRODUCT_REVIEWS, idCondition);
 
-            Product product = new Product(id, productName, price, product_description, dimensions, weight, images, reviews);
-            Global.productList.add(product);
-            return product;
+            return new Product(id, productName, price, product_description, dimensions, weight, images, reviews);
         } catch (Exception e) {
             throw new ParseFailureException(set, Product.class);
         }

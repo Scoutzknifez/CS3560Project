@@ -20,7 +20,6 @@ public class Inventory {
     private String id;
     private Map<Product, Integer> inventory = new HashMap<>();
 
-    // TODO Construct from a DB
     public Inventory() {
         this (Utils.generateID(Table.INVENTORIES));
     }

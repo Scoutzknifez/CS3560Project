@@ -22,7 +22,6 @@ import javafx.scene.image.*;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
-import org.w3c.dom.Text;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -40,8 +39,7 @@ public class GUIMain extends Application {
     protected List inv = Global.inventoryList; // TODO This is old / outdated - Cody (Needs to not really have a reference to an inventory anymore but rather Global.inventoryList)
     protected List<Product> searchResults; // TODO Needs to be fetched from active inventories - Cody (This is something I will take part in on Monday)
     protected ArrayList<ProductView> images = new ArrayList<>(); // TODO This aint right - Cody (Products own images themselves)
-    protected static User user = new User(null,null,null,null,null,null,null);
-    protected static Cart cart = new Cart(user);
+    protected static Cart cart = null;
     protected Stage primaryStage;
 
     @Override
@@ -474,6 +472,14 @@ public class GUIMain extends Application {
         };
         submit.disableProperty().bind(b);
         submit.setOnAction(event -> {
+            Global.loggedInUser = Global.getUserFromCredentials(userID.getText(), password.getText());
+            if (Global.loggedInUser == Global.GUEST) {
+                // Failed and defaulted to guest
+            } else {
+
+            }
+            cart = new Cart(Global.loggedInUser);
+            shoppingPage();
             //TODO look through database for authentication
             // if fails, change the invalid label to notify the user that it's wrong
             // else make sure the User information is filled using database info
@@ -700,7 +706,7 @@ public class GUIMain extends Application {
 
         Label thanks = new Label("Thank you for shopping with us!");
           thanks.setStyle("-fx-font-weight: bold");
-        Label action = new Label("A confirmation and receipt have been sent to " + user.getEmail());
+        Label action = new Label("A confirmation and receipt have been sent to " + Global.loggedInUser.getEmail());
         Button back = new Button("Back to shopping");
         back.setOnAction(event -> {
             shoppingPage();
