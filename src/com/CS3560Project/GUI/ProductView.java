@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 import java.util.List;
+import javafx.geometry.Pos;
 
 //How to display images
 //Image image = Utils.bufferImageToFXImage(Utils.base64ToBufferImage(product.getProductImage().get(0).getBase64()));
@@ -26,7 +27,10 @@ public class ProductView
 
         System.out.println(Utils.base64ToBufferedImage(bs.split(",")[1]));*/
         imageView = new ImageView(Utils.bufferedImageToFXImage(Utils.base64ToBufferedImage(product.getProductImages().get(0).getBase64())));
+        imageView.setFitHeight(90);
+        imageView.setFitWidth(80);
         vbox = new VBox(10, imageView, add);
+        vbox.setAlignment(Pos.CENTER);
     }
 
     public static List<ProductView> createProductViews(List<Product> products)

@@ -35,7 +35,7 @@ public class GUIMain extends Application {
     // TODO Temp variables in place for quantity for now
     protected int totalCount = 0, count1 = 0, count2 = 0, count3 = 0, count4 = 0, count5 = 0, count6 = 0;
 
-    protected List inv = Global.inventoryList;
+    //protected List inv = Global.inventoryList;
     protected List<Product> searchResults; // TODO Needs to be fetched from active inventories - Cody (This is something I will take part in on Monday)
     protected List<ProductView> images = new ArrayList<>(); // TODO This aint right - Cody (Products own images themselves)
     protected static Cart cart = null;
@@ -251,7 +251,7 @@ public class GUIMain extends Application {
             }
         });
 
-        Scene scene = new Scene(borderpane,400,400);
+        Scene scene = new Scene(borderpane,1000,1000);
         //scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
         primaryStage = new Stage();
         primaryStage.setTitle("Online Shopping Network");
@@ -265,7 +265,6 @@ public class GUIMain extends Application {
         searchResults = new ArrayList<>();
         for (Inventory inv : Global.inventoryList) {
             searchResults.addAll(inv.search(input.split(Constants.SPACE_REGEX)));
-            System.out.print(input.split(Constants.SPACE_REGEX).length);
         }
         populate(ProductView.createProductViews(searchResults));
     }
