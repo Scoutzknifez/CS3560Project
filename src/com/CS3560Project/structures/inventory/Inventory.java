@@ -1,8 +1,7 @@
 package com.CS3560Project.structures.inventory;
 
-import com.CS3560Project.sqlworkers.Table;
+import com.CS3560Project.structures.User;
 import com.CS3560Project.structures.products.Product;
-import com.CS3560Project.utility.Utils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,12 +17,8 @@ public class Inventory {
     private String id;
     private Map<Product, Integer> inventory = new HashMap<>();
 
-    public Inventory() {
-        this (Utils.generateID(Table.INVENTORIES));
-    }
-
-    public Inventory(String id) {
-        setId(id);
+    public Inventory(User user) {
+        setId(user.getID());
     }
 
     /**

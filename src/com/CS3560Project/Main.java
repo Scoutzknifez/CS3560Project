@@ -41,7 +41,7 @@ public class Main {
         ProductImage pi = new ProductImage(product, 0, base64);
         SQLHelper.insertIntoTable(Table.PRODUCT_IMAGES, pi);
 
-        Inventory inv = new Inventory();
+        Inventory inv = new Inventory(user);
         InventorySlot is = new InventorySlot(inv, product, 4);
         SQLHelper.insertIntoTable(Table.INVENTORIES, is);
     }
