@@ -1,7 +1,6 @@
 package com.CS3560Project;
 
 import com.CS3560Project.structures.Cart;
-import com.CS3560Project.structures.User;
 import com.CS3560Project.structures.products.Product;
 import com.CS3560Project.structures.inventory.Inventory;
 import com.CS3560Project.GUI.ProductView;
@@ -263,7 +262,7 @@ public class GUIMain extends Application {
     //Searches through inventory to display products to screen after search bar is activated
     private void searchProducts(String input)
     {
-        List<Product> searchResults = new ArrayList<>();
+        searchResults = new ArrayList<>();
         for (Inventory inv : Global.inventoryList) {
             searchResults.addAll(inv.search(input.split(Constants.SPACE_REGEX)));
             System.out.print(input.split(Constants.SPACE_REGEX).length);

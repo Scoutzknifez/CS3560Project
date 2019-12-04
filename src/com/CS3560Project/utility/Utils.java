@@ -83,12 +83,8 @@ public class Utils {
     public static java.awt.image.BufferedImage base64ToBufferedImage(String base64) {
         try {
             byte[] array = Base64.getMimeDecoder().decode(base64);
-            System.out.println(array);
             ByteArrayInputStream bis = new ByteArrayInputStream(array);
-            System.out.println(bis);
-            java.awt.image.BufferedImage img = ImageIO.read(bis); // TODO Returns null and shouldnt
-            System.out.println(img);
-            return img;
+            return ImageIO.read(bis);
         } catch (Exception e) {
             throw new ParseFailureException(base64, java.awt.image.BufferedImage.class);
         }
