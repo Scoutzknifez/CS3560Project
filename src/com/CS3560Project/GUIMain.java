@@ -11,6 +11,7 @@ import javafx.application.Application;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
@@ -290,7 +291,6 @@ public class GUIMain extends Application {
         Button minus = new Button("-");
         minus.setMinSize(plus.getHeight(), plus.getWidth());
         minus.setOnAction(event -> {
-
             //remove Item
             cart.getCartItems().remove(product);
             count.getAndDecrement();
@@ -300,6 +300,27 @@ public class GUIMain extends Application {
             itemCount.setText(count + "");
         });
 
+        Label x = new Label("x");
+        x.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                x.setStyle("-fx-font-style: underline");
+            }
+        });
+        x.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                x.setStyle("-fx-font-style: void");
+            }
+        });
+
+        x.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            for(Product item: cart.getCartItems()){
+                if(item.equals(product)){
+                    cart.getCartItems().remove(product);
+                }
+            }
+        });
 
         Label itemName = new Label("item");
 
@@ -317,6 +338,7 @@ public class GUIMain extends Application {
         temp.add(minus, 2, 0);
         temp.add(itemCount, 3, 0);
         temp.add(plus, 4, 0);
+        temp.add(x, 5, 0);
 
         ColumnConstraints col1 = new ColumnConstraints();
         ColumnConstraints col2 = new ColumnConstraints();
@@ -360,6 +382,11 @@ public class GUIMain extends Application {
             shoppingPage();
         });
 
+        Button clearCart = new Button("Clear cart");
+        clearCart.setOnAction(actionEvent -> {
+            cart.empty();
+        });
+
         VBox list = new VBox();
         list.setPadding(new Insets(10));
 
@@ -378,11 +405,16 @@ public class GUIMain extends Application {
         navi.setAlignment(Pos.CENTER);
         navi.setSpacing(10);
 
+        VBox clearAndNavi = new VBox(navi, clearCart);
+        clearAndNavi.setAlignment(Pos.CENTER);
+        clearAndNavi.setSpacing(10);
+        clearAndNavi.setPadding(new Insets(10));
+
 
         BorderPane ex = new BorderPane();
         ex.setCenter(list);
-        ex.setBottom(navi);
-        BorderPane.setMargin(navi, new Insets(10));
+        ex.setBottom(clearAndNavi);
+        BorderPane.setMargin(clearAndNavi, new Insets(10));
 
 
         Scene demo = new Scene(ex);
