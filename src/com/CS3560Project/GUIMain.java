@@ -304,13 +304,13 @@ public class GUIMain extends Application {
         x.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                x.setStyle("-fx-font-style: underline");
+                x.setStyle("-fx-underline: true");
             }
         });
         x.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                x.setStyle("-fx-font-style: void");
+                x.setStyle("-fx-underline: false");
             }
         });
 
@@ -493,6 +493,7 @@ public class GUIMain extends Application {
     private void checkOutWin() {
         primaryStage.close();
         primaryStage = new Stage();
+        primaryStage.setTitle("Check Out");
         Scene ex = null;
         Separator separator = new Separator();
         Separator separator0 = new Separator();
@@ -511,9 +512,9 @@ public class GUIMain extends Application {
             receipt();
         });
 
+
         Button back = new Button("Go Back");
         back.setOnAction(actionEvent -> {
-            primaryStage.close();
             try {
                 shoppingCart();
             } catch (FileNotFoundException e) {
@@ -531,13 +532,33 @@ public class GUIMain extends Application {
         loginBar.setAlignment(Pos.CENTER);
 
 
+        //TODO edit this so user != guest
+        if(!user.equals(null)) {
+            login.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+                login();
+            });
+            login.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    login.setStyle("-fx-underline: true");
+                }
+            });
+            login.setOnMouseExited(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    login.setStyle("-fx-underline: false");
+                }
+            });
+
+        }
+
+
         //form if the user is a guest
         //shipping info
         final Label ADDRESS_LINE1 = new Label("Address Line 1");
         final Label ADDRESS_LINE2 = new Label("Address Line 2");
         final Label CITY = new Label("City");
         final Label STATE = new Label("State");
-        final Label COUNTRY = new Label("Country");
         final Label ZIPCODE = new Label("Zip Code");
 
         //TODO parse the address string, the user can still change it as needed
@@ -545,7 +566,6 @@ public class GUIMain extends Application {
         TextField aL2 = new TextField("");
         TextField city = new TextField("");
         TextField state = new TextField("");
-        TextField country = new TextField("");
         TextField zip = new TextField("");
 
         GridPane shippingForm = new GridPane();
@@ -553,16 +573,15 @@ public class GUIMain extends Application {
         shippingForm.add(ADDRESS_LINE2, 0, 2);
         shippingForm.add(CITY, 0, 3);
         shippingForm.add(STATE, 0, 4);
-        shippingForm.add(COUNTRY, 0, 5);
-        shippingForm.add(ZIPCODE, 0, 6);
+        shippingForm.add(ZIPCODE, 0, 5);
         shippingForm.add(aL1, 1, 1);
         shippingForm.add(aL2, 1, 2);
         shippingForm.add(city, 1, 3);
         shippingForm.add(state, 1, 4);
-        shippingForm.add(country, 1, 5);
-        shippingForm.add(zip, 1, 6);
+        shippingForm.add(zip, 1, 5);
         shippingForm.setMinSize(30, 50);
         shippingForm.setHgap(10);
+        shippingForm.setVgap(10);
 
 
         //payment info
@@ -613,6 +632,9 @@ public class GUIMain extends Application {
                     ComboBox year = new ComboBox();
                     year.getItems().addAll(2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026,
                                                 2027, 2028, 2029, 2030);
+                    ComboBox states = new ComboBox();
+                    //TODO get an array of states in here
+                    states.getItems().addAll();
 
                     HBox date = new HBox();
                     date.getChildren().addAll(month, year);
@@ -628,6 +650,8 @@ public class GUIMain extends Application {
                     pm.add(cn, 1, 1);
                     pm.add(sc, 1, 2);
                     pm.add(date, 1, 3);
+
+                    pm.setVgap(10);
 
                 }
             }
@@ -669,7 +693,7 @@ public class GUIMain extends Application {
 
     protected void receipt(){
     //TODO make receipt page
-        Stage primaryStage = new Stage();
+        primaryStage.close();
         primaryStage.setTitle("Purchase Complete");
         primaryStage.setMinWidth(300);
         primaryStage.setMinHeight(250);
@@ -679,22 +703,12 @@ public class GUIMain extends Application {
         Label action = new Label("A confirmation and receipt have been sent to " + user.getEmail());
         Button back = new Button("Back to shopping");
         back.setOnAction(event -> {
-            primaryStage.close();
-            //TODO go back to the shopping window
+            shoppingPage();
         });
         Button closeWin = new Button("Logout and close");
         closeWin.setOnAction(event -> {
             //TODO clear user data
             primaryStage.close();
-            //TODO if user data clear
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setHeaderText("Logout successful");
-            alert.showAndWait();
-            //TODO if not
-            Alert fail = new Alert(Alert.AlertType.ERROR);
-            fail.setTitle("Error");
-            fail.setHeaderText("Unable to Logout at the moment");
-            fail.showAndWait();
         });
         Separator s = new Separator();
 
