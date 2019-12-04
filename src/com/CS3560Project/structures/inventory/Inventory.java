@@ -1,17 +1,14 @@
 package com.CS3560Project.structures.inventory;
 
-import com.CS3560Project.sqlworkers.Table;
+import com.CS3560Project.structures.User;
 import com.CS3560Project.structures.products.Product;
-import com.CS3560Project.utility.Utils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -20,12 +17,8 @@ public class Inventory {
     private String id;
     private Map<Product, Integer> inventory = new HashMap<>();
 
-    public Inventory() {
-        this (Utils.generateID(Table.INVENTORIES));
-    }
-
-    public Inventory(String id) {
-        setId(id);
+    public Inventory(User user) {
+        setId(user.getID());
     }
 
     /**
@@ -119,9 +112,15 @@ public class Inventory {
         sb.append(getId());
         sb.append("\",\n\tinventory:[");
 
-        //for ()
+        List<Product> products = getInventory().keySet().stream().collect(Collectors.toList());
+        List<Integer> stock = getInventory().values().stream().collect(Collectors.toList());
 
-        // TODO
-        return super.toString();
+        String section;
+        for (int i = 0; i < products.size(); i++) {
+            section = products.get(i).toString() + "," + stock.get(i);
+            sb.append(section);
+        }
+
+        return sb.toString();
     }
 }

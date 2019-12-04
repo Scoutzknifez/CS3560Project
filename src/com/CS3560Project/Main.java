@@ -9,7 +9,6 @@ import com.CS3560Project.structures.products.Product;
 import com.CS3560Project.structures.products.ProductImage;
 import com.CS3560Project.structures.products.ProductReview;
 import com.CS3560Project.utility.Global;
-import com.CS3560Project.utility.Utils;
 
 public class Main {
     /**
@@ -19,8 +18,6 @@ public class Main {
     public static void main(String[] args) {
         // Dispatch the data fetchers and build program running data
         Global.initialize();
-
-        Utils.printList(Global.inventoryList);
 
         // TODO Wait for info to be fetched and parsed before this
         // Shows how to dispatch the com.CS3560Project.GUI from JFX
@@ -44,7 +41,7 @@ public class Main {
         ProductImage pi = new ProductImage(product, 0, base64);
         SQLHelper.insertIntoTable(Table.PRODUCT_IMAGES, pi);
 
-        Inventory inv = new Inventory();
+        Inventory inv = new Inventory(user);
         InventorySlot is = new InventorySlot(inv, product, 4);
         SQLHelper.insertIntoTable(Table.INVENTORIES, is);
     }

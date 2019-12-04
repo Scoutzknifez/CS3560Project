@@ -1,11 +1,11 @@
 package com.CS3560Project;
 
 import com.CS3560Project.structures.Cart;
-import com.CS3560Project.structures.User;
 import com.CS3560Project.structures.products.Product;
 import com.CS3560Project.structures.inventory.Inventory;
 import com.CS3560Project.GUI.ProductView;
 
+import com.CS3560Project.utility.Constants;
 import com.CS3560Project.utility.Global;
 import javafx.application.Application;
 import javafx.beans.binding.BooleanBinding;
@@ -36,11 +36,13 @@ public class GUIMain extends Application {
     // TODO Temp variables in place for quantity for now
     protected int totalCount = 0, count1 = 0, count2 = 0, count3 = 0, count4 = 0, count5 = 0, count6 = 0;
 
-    protected List inv = Global.inventoryList; // TODO This is old / outdated - Cody (Needs to not really have a reference to an inventory anymore but rather Global.inventoryList)
+    //protected List inv = Global.inventoryList;
     protected List<Product> searchResults; // TODO Needs to be fetched from active inventories - Cody (This is something I will take part in on Monday)
-    protected ArrayList<ProductView> images = new ArrayList<>(); // TODO This aint right - Cody (Products own images themselves)
+    protected List<ProductView> images = new ArrayList<>(); // TODO This aint right - Cody (Products own images themselves)
     protected static Cart cart = null;
     protected Stage primaryStage;
+    protected GridPane shoppingList = new GridPane();
+    public Label shoppingCartLabel;
 
     @Override
     public void start(Stage stage) {
@@ -48,18 +50,11 @@ public class GUIMain extends Application {
         login();
     }
 
-    //Searches through inventory to display products to screen after search bar is activated
-    private void searchResults(String input, TextField searchBar)
-    {
-        Inventory foundItems = Global.getInventory(input);
-    }
-
     private void shoppingPage()
     {
         primaryStage.close();
         //Declarations/Initialization of all GUI components
         BorderPane borderpane = new BorderPane();
-        GridPane shoppingList = new GridPane();
 
         Button searchButton = new Button("Search");
         TextField search = new TextField();
@@ -87,7 +82,7 @@ public class GUIMain extends Application {
         Label quantity6 = new Label("0");
 
         //Hboxes and Vboxes to create shopping menu
-        HBox hbox1 = new HBox(10, add1, quantity1, sub1);
+       /* HBox hbox1 = new HBox(10, add1, quantity1, sub1);
         HBox hbox2 = new HBox(10, add2, quantity2, sub2);
         HBox hbox3 = new HBox(10, add3, quantity3, sub3);
         HBox hbox4 = new HBox(10, add4, quantity4, sub4);
@@ -108,12 +103,12 @@ public class GUIMain extends Application {
         hbox5.setAlignment(Pos.CENTER);
         hbox6.setAlignment(Pos.CENTER);
 
-        VBox vbox1 = new VBox(/*item1.getImageView(),*/ hbox1);
-        VBox vbox2 = new VBox(/*item2.getImageView(),*/ hbox2);
-        VBox vbox3 = new VBox(/*item3.getImageView(),*/ hbox3);
-        VBox vbox4 = new VBox(/*item4.getImageView(),*/ hbox4);
-        VBox vbox5 = new VBox(/*item5.getImageView(),*/ hbox5);
-        VBox vbox6 = new VBox(/*item6.getImageView(),*/ hbox6);
+        VBox vbox1 = new VBox(item1.getImageView(), hbox1);
+        VBox vbox2 = new VBox(item2.getImageView(), hbox2);
+        VBox vbox3 = new VBox(item3.getImageView(), hbox3);
+        VBox vbox4 = new VBox(item4.getImageView(), hbox4);
+        VBox vbox5 = new VBox(item5.getImageView(), hbox5);
+        VBox vbox6 = new VBox(item6.getImageView(), hbox6);
 
         vbox1.setAlignment(Pos.CENTER);
         vbox2.setAlignment(Pos.CENTER);
@@ -127,12 +122,13 @@ public class GUIMain extends Application {
         shoppingList.add(vbox3, 2, 0);
         shoppingList.add(vbox4, 0, 1);
         shoppingList.add(vbox5, 1, 1);
-        shoppingList.add(vbox6, 2, 1);
+        shoppingList.add(vbox6, 2, 1);*/
 
         shoppingList.setAlignment(Pos.CENTER);
         shoppingList.setPadding(new Insets(10,10,10,10));
 
         Label cart = new Label("Shopping Cart (0)");
+        shoppingCartLabel = cart;
         cart.addEventHandler(MouseEvent.MOUSE_CLICKED, event ->{
             try
             {
@@ -156,7 +152,7 @@ public class GUIMain extends Application {
         //Action Events
         //Adding to shopping cart; updates quantity under item
         //May be able to bind data to labels later, if time permits. Will work with repeated overwrite for now
-        add1.setOnAction(event -> {
+        /*add1.setOnAction(event -> {
             count1++;
             totalCount++;
             quantity1.setText("" + count1);
@@ -238,29 +234,58 @@ public class GUIMain extends Application {
             totalCount--;
             quantity6.setText("" + count6);
             cart.setText("Shopping Cart (" + totalCount + ")");
-        });
+        });*/
 
         //Read text field for given search term to decide on chosen items
         search.setOnKeyPressed(event ->{
             if(event.getCode() == KeyCode.ENTER)
             {
-                searchResults(search.getText(), search);
+                if(search != null && search.getText() != null && !search.getText().equals(""))
+                {
+                    searchProducts(search.getText());
+                }
             }
         });
 
         searchButton.setOnAction(event ->{
-            if(!search.getText().equals(""))
+            if(search != null && search.getText() != null && !search.getText().equals(""))
             {
-                searchResults(search.getText(), search);
+                searchProducts(search.getText());
             }
         });
 
-        Scene scene = new Scene(borderpane,400,400);
+        Scene scene = new Scene(borderpane,900,800);
         //scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
         primaryStage = new Stage();
         primaryStage.setTitle("Online Shopping Network");
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    //Searches through inventory to display products to screen after search bar is activated
+    private void searchProducts(String input)
+    {
+        searchResults = new ArrayList<>();
+        for (Inventory inv : Global.inventoryList) {
+            searchResults.addAll(inv.search(input.split(Constants.SPACE_REGEX)));
+        }
+        populate(ProductView.createProductViews(searchResults));
+    }
+
+    private void populate(List<ProductView> views)
+    {
+        int itemIndex = 0;
+        for(int i = 0; i < searchResults.size(); i++)
+        {
+            for(int j = 0; j < 4; j++)
+            {
+                if(itemIndex < searchResults.size())
+                {
+                    shoppingList.add(views.get(itemIndex).show(), j, i);
+                    itemIndex++;
+                }
+            }
+        }
     }
 
     //Kristine's Code

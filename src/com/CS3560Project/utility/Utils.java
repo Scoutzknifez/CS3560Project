@@ -100,11 +100,11 @@ public class Utils {
 
     /**
      * Converts a FXImage to it's BufferedImage representation
-     * @param fximage to convert
+     * @param fxImage to convert
      * @return BufferedImage representation
      */
-    public static java.awt.image.BufferedImage fxImageToBufferedImage(javafx.scene.image.Image fximage) {
-        return SwingFXUtils.fromFXImage(fximage, null);
+    public static java.awt.image.BufferedImage fxImageToBufferedImage(javafx.scene.image.Image fxImage) {
+        return SwingFXUtils.fromFXImage(fxImage, null);
     }
 
     /**
