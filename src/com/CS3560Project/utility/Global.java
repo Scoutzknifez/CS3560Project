@@ -59,9 +59,14 @@ public class Global {
             }
         }
 
-        Inventory newInv = new Inventory(id);
-        inventoryList.add(newInv);
-        return newInv;
+        User user = getUser(id);
+        if (user != null) {
+            Inventory newInv = new Inventory(user);
+            inventoryList.add(newInv);
+            return newInv;
+        }
+
+        return null;
     }
 
     public static Product getProduct(String id) {
@@ -69,7 +74,17 @@ public class Global {
             if (product.getId().equals(id))
                 return product;
         }
+
         throw new NullPointerException("Could not find product (" + id + ")");
+    }
+
+    public static User getUser(String id) {
+        for (User user : userList) {
+            if (user.getID().equals(id))
+                return user;
+        }
+
+        return null;
     }
 
     public static User getUserFromCredentials(String username, String password) {
