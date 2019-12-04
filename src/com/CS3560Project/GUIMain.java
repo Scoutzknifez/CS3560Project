@@ -253,7 +253,7 @@ public class GUIMain extends Application {
             }
         });
 
-        Scene scene = new Scene(borderpane,1000,1000);
+        Scene scene = new Scene(borderpane,900,800);
         //scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
         primaryStage = new Stage();
         primaryStage.setTitle("Online Shopping Network");
@@ -278,8 +278,11 @@ public class GUIMain extends Application {
         {
             for(int j = 0; j < 4; j++)
             {
-                shoppingList.add(views.get(itemIndex).show(), j, i);
-                itemIndex++;
+                if(itemIndex < searchResults.size())
+                {
+                    shoppingList.add(views.get(itemIndex).show(), j, i);
+                    itemIndex++;
+                }
             }
         }
     }
