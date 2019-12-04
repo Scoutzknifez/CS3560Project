@@ -20,8 +20,6 @@ public class Main {
         // Dispatch the data fetchers and build program running data
         Global.initialize();
 
-        Utils.printList(Global.inventoryList);
-
         // TODO Wait for info to be fetched and parsed before this
         // Shows how to dispatch the com.CS3560Project.GUI from JFX
         GUIMain.launch(GUIMain.class);

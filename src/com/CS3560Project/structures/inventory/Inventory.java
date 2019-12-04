@@ -7,11 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -119,9 +117,15 @@ public class Inventory {
         sb.append(getId());
         sb.append("\",\n\tinventory:[");
 
-        //for ()
+        List<Product> products = getInventory().keySet().stream().collect(Collectors.toList());
+        List<Integer> stock = getInventory().values().stream().collect(Collectors.toList());
 
-        // TODO
-        return super.toString();
+        String section;
+        for (int i = 0; i < products.size(); i++) {
+            section = products.get(i).toString() + "," + stock.get(i);
+            sb.append(section);
+        }
+
+        return sb.toString();
     }
 }
