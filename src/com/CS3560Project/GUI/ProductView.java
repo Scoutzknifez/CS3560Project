@@ -3,9 +3,7 @@ package com.CS3560Project.GUI;
 import com.CS3560Project.structures.products.*;
 import com.CS3560Project.utility.Global;
 import com.CS3560Project.utility.Utils;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
@@ -21,7 +19,7 @@ public class ProductView
     protected ImageView imageView;
     protected Label addToCart = new Label("Add to Cart");
     protected VBox vbox;
-    protected int count;
+    public static int count;
 
     public ProductView(Product product)
     {

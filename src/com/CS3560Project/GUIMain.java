@@ -11,7 +11,6 @@ import javafx.application.Application;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
@@ -39,7 +38,6 @@ public class GUIMain extends Application {
     //protected List inv = Global.inventoryList;
     protected List<Product> searchResults; // TODO Needs to be fetched from active inventories - Cody (This is something I will take part in on Monday)
     protected List<ProductView> images = new ArrayList<>(); // TODO This aint right - Cody (Products own images themselves)
-
     protected static Cart cart = null;
     protected Stage primaryStage;
     protected GridPane shoppingList = new GridPane();
@@ -315,6 +313,7 @@ public class GUIMain extends Application {
         Button minus = new Button("-");
         minus.setMinSize(plus.getHeight(), plus.getWidth());
         minus.setOnAction(event -> {
+
             //remove Item
             cart.getCartItems().remove(product);
             count.getAndDecrement();
@@ -324,31 +323,11 @@ public class GUIMain extends Application {
             itemCount.setText(count + "");
         });
 
-        Label x = new Label("x");
-        x.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                x.setStyle("-fx-underline: true");
-            }
-        });
-        x.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                x.setStyle("-fx-underline: false");
-            }
-        });
-
-        x.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-            for(Product item: cart.getCartItems()){
-                if(item.equals(product)){
-                    cart.getCartItems().remove(product);
-                }
-            }
-        });
 
         Label itemName = new Label("item");
 
         //TODO figure out how to pull image from database
+        // Images are already pulled from database and given to a product on creation (if the product has images) - Cody
         Image itemImage = new Image(new FileInputStream("C:\\Users\\Kristine\\Desktop\\purikura fun times!.JPG"));
         ImageView itemImageSet = new ImageView(itemImage);
         itemImageSet.setPreserveRatio(true);
@@ -361,7 +340,6 @@ public class GUIMain extends Application {
         temp.add(minus, 2, 0);
         temp.add(itemCount, 3, 0);
         temp.add(plus, 4, 0);
-        temp.add(x, 5, 0);
 
         ColumnConstraints col1 = new ColumnConstraints();
         ColumnConstraints col2 = new ColumnConstraints();
@@ -405,11 +383,6 @@ public class GUIMain extends Application {
             shoppingPage();
         });
 
-        Button clearCart = new Button("Clear cart");
-        clearCart.setOnAction(actionEvent -> {
-            cart.empty();
-        });
-
         VBox list = new VBox();
         list.setPadding(new Insets(10));
 
@@ -428,16 +401,11 @@ public class GUIMain extends Application {
         navi.setAlignment(Pos.CENTER);
         navi.setSpacing(10);
 
-        VBox clearAndNavi = new VBox(navi, clearCart);
-        clearAndNavi.setAlignment(Pos.CENTER);
-        clearAndNavi.setSpacing(10);
-        clearAndNavi.setPadding(new Insets(10));
-
 
         BorderPane ex = new BorderPane();
         ex.setCenter(list);
-        ex.setBottom(clearAndNavi);
-        BorderPane.setMargin(clearAndNavi, new Insets(10));
+        ex.setBottom(navi);
+        BorderPane.setMargin(navi, new Insets(10));
 
 
         Scene demo = new Scene(ex);
@@ -452,7 +420,8 @@ public class GUIMain extends Application {
         //Scene demo = new Scene();
     }
 
-    private void login(){
+    private void login (){
+        primaryStage.close();
         primaryStage = new Stage();
         primaryStage.setTitle("Login to MarketPlace");
         primaryStage.setMinHeight(400);
@@ -466,9 +435,9 @@ public class GUIMain extends Application {
 
         Button guestUser = new Button("Login as Guest");
         guestUser.setOnAction(event -> {
-            Global.loggedInUser = Global.GUEST;
-            cart = new Cart(Global.loggedInUser);
             shoppingPage();
+            //TODO link this to the shopping page
+            // The user should be initialized as empty
         });
 
 
@@ -500,11 +469,14 @@ public class GUIMain extends Application {
             Global.loggedInUser = Global.getUserFromCredentials(userID.getText(), password.getText());
             if (Global.loggedInUser == Global.GUEST) {
                 // Failed and defaulted to guest
-                invalid.setText("Username or Password Invalid.");
             } else {
-                cart = new Cart(Global.loggedInUser);
-                shoppingPage();
+
             }
+            cart = new Cart(Global.loggedInUser);
+            shoppingPage();
+            //TODO look through database for authentication
+            // if fails, change the invalid label to notify the user that it's wrong
+            // else make sure the User information is filled using database info
         });
 
         VBox ex = new VBox(10, prompt, uID, userID, pw, password, submit, guestUser, invalid);
@@ -513,7 +485,7 @@ public class GUIMain extends Application {
         ex.setAlignment(Pos.CENTER);
 
         //Scene
-        Scene demo = new Scene(ex, 400, 400);
+        Scene demo = new Scene(ex);
         primaryStage.setScene(demo);
         primaryStage.show();
     }
@@ -521,7 +493,6 @@ public class GUIMain extends Application {
     private void checkOutWin() {
         primaryStage.close();
         primaryStage = new Stage();
-        primaryStage.setTitle("Check Out");
         Scene ex = null;
         Separator separator = new Separator();
         Separator separator0 = new Separator();
@@ -540,9 +511,9 @@ public class GUIMain extends Application {
             receipt();
         });
 
-
         Button back = new Button("Go Back");
         back.setOnAction(actionEvent -> {
+            primaryStage.close();
             try {
                 shoppingCart();
             } catch (FileNotFoundException e) {
@@ -560,63 +531,38 @@ public class GUIMain extends Application {
         loginBar.setAlignment(Pos.CENTER);
 
 
-        //TODO edit this so user != guest
-        if(cart.getOwner() != Global.GUEST) {
-            login.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-                login();
-            });
-            login.setOnMouseEntered(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    login.setStyle("-fx-underline: true");
-                }
-            });
-            login.setOnMouseExited(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    login.setStyle("-fx-underline: false");
-                }
-            });
-
-        }
-
-
         //form if the user is a guest
         //shipping info
         final Label ADDRESS_LINE1 = new Label("Address Line 1");
         final Label ADDRESS_LINE2 = new Label("Address Line 2");
         final Label CITY = new Label("City");
         final Label STATE = new Label("State");
+        final Label COUNTRY = new Label("Country");
         final Label ZIPCODE = new Label("Zip Code");
 
         //TODO parse the address string, the user can still change it as needed
         TextField aL1 = new TextField("");
         TextField aL2 = new TextField("");
         TextField city = new TextField("");
+        TextField state = new TextField("");
+        TextField country = new TextField("");
         TextField zip = new TextField("");
-        ComboBox state = new ComboBox();
-        state.getItems().addAll("AK", "AL", "AR", "AS", "AZ", "CA", "CO", "CT",
-                "DC", "DE", "FL", "GA", "GU","HI", "IA", "ID",
-                "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME",
-                "MI", "MN", "MO", "MS", "MT", "NC", "ND", "NE",
-                "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR",
-                "PA", "PR", "RI", "SC", "SD", "TN", "TX", "UT",
-                "VA", "VI", "VT", "WA", "WI", "WV", "WY");
 
         GridPane shippingForm = new GridPane();
         shippingForm.add(ADDRESS_LINE1, 0, 1);
         shippingForm.add(ADDRESS_LINE2, 0, 2);
         shippingForm.add(CITY, 0, 3);
         shippingForm.add(STATE, 0, 4);
-        shippingForm.add(ZIPCODE, 0, 5);
+        shippingForm.add(COUNTRY, 0, 5);
+        shippingForm.add(ZIPCODE, 0, 6);
         shippingForm.add(aL1, 1, 1);
         shippingForm.add(aL2, 1, 2);
         shippingForm.add(city, 1, 3);
         shippingForm.add(state, 1, 4);
-        shippingForm.add(zip, 1, 5);
+        shippingForm.add(country, 1, 5);
+        shippingForm.add(zip, 1, 6);
         shippingForm.setMinSize(30, 50);
         shippingForm.setHgap(10);
-        shippingForm.setVgap(10);
 
 
         //payment info
@@ -683,8 +629,6 @@ public class GUIMain extends Application {
                     pm.add(sc, 1, 2);
                     pm.add(date, 1, 3);
 
-                    pm.setVgap(10);
-
                 }
             }
         });
@@ -724,7 +668,8 @@ public class GUIMain extends Application {
     }
 
     protected void receipt(){
-        primaryStage.close();
+    //TODO make receipt page
+        Stage primaryStage = new Stage();
         primaryStage.setTitle("Purchase Complete");
         primaryStage.setMinWidth(300);
         primaryStage.setMinHeight(250);
@@ -734,12 +679,22 @@ public class GUIMain extends Application {
         Label action = new Label("A confirmation and receipt have been sent to " + Global.loggedInUser.getEmail());
         Button back = new Button("Back to shopping");
         back.setOnAction(event -> {
-            shoppingPage();
+            primaryStage.close();
+            //TODO go back to the shopping window
         });
         Button closeWin = new Button("Logout and close");
         closeWin.setOnAction(event -> {
             //TODO clear user data
             primaryStage.close();
+            //TODO if user data clear
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Logout successful");
+            alert.showAndWait();
+            //TODO if not
+            Alert fail = new Alert(Alert.AlertType.ERROR);
+            fail.setTitle("Error");
+            fail.setHeaderText("Unable to Logout at the moment");
+            fail.showAndWait();
         });
         Separator s = new Separator();
 
