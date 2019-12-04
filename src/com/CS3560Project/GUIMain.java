@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -32,7 +33,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class GUIMain extends Application {
     protected List<Product> searchResults;
     protected static Cart cart = null;
-    protected Stage primaryStage;
+    protected Stage primaryStage = new Stage();
     protected GridPane shoppingList = new GridPane();
     public Label shoppingCartLabel;
 
@@ -55,7 +56,7 @@ public class GUIMain extends Application {
         shoppingList.setAlignment(Pos.CENTER);
         shoppingList.setPadding(new Insets(10,10,10,10));
 
-        Label cart = new Label("Shopping Cart (0)");
+        Label cart = new Label("Shopping Cart (" + ProductView.count + ")");
         shoppingCartLabel = cart;
         cart.addEventHandler(MouseEvent.MOUSE_CLICKED, event ->{
             try {
@@ -66,7 +67,17 @@ public class GUIMain extends Application {
             }
         });
 
-        HBox hbox = new HBox(50, hboxSearch, cart);
+        Label logout = new Label ("Logout");
+        logout.setOnMouseClicked(event ->{
+           Alert sure = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to logout?");
+           Optional<ButtonType> result = sure.showAndWait();
+           if(result.isPresent() && result.get() == ButtonType.OK)
+           {
+               login();
+           }
+        });
+
+        HBox hbox = new HBox(75, hboxSearch, cart, logout);
         hbox.setAlignment(Pos.CENTER);
 
         borderpane.setTop(hbox);
@@ -91,7 +102,7 @@ public class GUIMain extends Application {
             }
         });
 
-        Scene scene = new Scene(borderpane,900,800);
+        Scene scene = new Scene(borderpane,1000,600);
         //scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
         primaryStage = new Stage();
         primaryStage.setTitle("Online Shopping Network");
