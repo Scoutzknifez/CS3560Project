@@ -17,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class User implements Databasable {
     private String ID;
+    private String username;
     private String firstName;
     private String lastName;
     private PhoneNumber phoneNumber;
@@ -25,14 +26,15 @@ public class User implements Databasable {
     private String password;
     private AccountRank rank;
 
-    public User(String firstName, String lastName, PhoneNumber phoneNumber, Address address, String email, String password, AccountRank rank) {
-        this(Utils.generateID(Table.USERS), firstName, lastName, phoneNumber, address, email, password, rank);
+    public User(String username, String firstName, String lastName, PhoneNumber phoneNumber, Address address, String email, String password, AccountRank rank) {
+        this(Utils.generateID(Table.USERS), username, firstName, lastName, phoneNumber, address, email, password, rank);
     }
 
     public Object[] fieldsToArray() {
         List<Object> fieldList = new ArrayList<>();
 
         fieldList.add(getID());
+        fieldList.add(getUsername());
         fieldList.add(getFirstName());
         fieldList.add(getLastName());
         fieldList.add(getPhoneNumber().toString());
@@ -46,14 +48,15 @@ public class User implements Databasable {
 
     @Override
     public String toString() {
-        return "{ID:\"" + getID() +
-                "\",firstName:\"" + getFirstName() +
-                "\",lastName:\"" + getLastName() +
-                "\",phoneNumber:\"" + getPhoneNumber().toString() +
-                "\",address:\"" + getAddress().toString() +
-                "\",email:\"" + getEmail() +
-                "\",password:\"" + getPassword() +
-                "\",rank:" + getRank() +
+        return "{\n\tID:\"" + getID() +
+                "\",\n\tusername:\"" + getUsername() +
+                "\",\n\tfirstName:\"" + getFirstName() +
+                "\",\n\tlastName:\"" + getLastName() +
+                "\",\n\tphoneNumber:\"" + getPhoneNumber().toString() +
+                "\",\n\taddress:\"" + getAddress().toString() +
+                "\",\n\temail:\"" + getEmail() +
+                "\",\n\tpassword:\"" + getPassword() +
+                "\",\n\trank:" + getRank() +
                 "}";
     }
 
@@ -66,6 +69,7 @@ public class User implements Databasable {
     public static User createInstance(ResultSet set) {
         try {
             String id = set.getString("id");
+            String username = set.getString("username");
             String firstName = set.getString("firstName");
             String lastName = set.getString("lastName");
             PhoneNumber phoneNumber = PhoneNumber.stringToPhoneNumber(set.getString("phoneNumber"));
@@ -75,7 +79,7 @@ public class User implements Databasable {
             AccountRank user_rank = AccountRank.getRank(set.getInt("user_rank"));
             // TODO if rank is vendor+, pull their inv by ID and push to object
 
-            return new User(id, firstName, lastName, phoneNumber, address, email, user_password, user_rank);
+            return new User(id, username, firstName, lastName, phoneNumber, address, email, user_password, user_rank);
         } catch (Exception e) {
             throw new ParseFailureException(set, User.class);
         }
