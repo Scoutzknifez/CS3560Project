@@ -24,6 +24,8 @@ public class Main {
         GUIMain.launch(GUIMain.class);
 
         SQLHelper.closeSafely();
+        //GUIMain.launch(GUIMain.class);
+        testSet();
     }
 
     /**
@@ -52,5 +54,25 @@ public class Main {
         Inventory inv = new Inventory(user);
         InventorySlot is = new InventorySlot(inv, product, 4);
         SQLHelper.insertIntoTable(Table.INVENTORIES, is);
+
+        //Second Product test run (Shannon)
+        PhoneNumber ph = new PhoneNumber(951, 9876543);
+        Address address2 = new Address("30332 Temp Ln", "Riverside", State.CALIFORNIA, 92563);
+        User user2 = new User("slinky", "Shannon", "Trinh", ph, address2, "smtrinh@cpp.edu", "pass123", AccountRank.ADMIN);
+        SQLHelper.insertIntoTable(Table.USERS, user2);
+
+        Product product2 = new Product("white_shirt", 5.00, "A plain white shirt", "Large", 1.0);
+        SQLHelper.insertIntoTable(Table.PRODUCTS, product2);
+
+        ProductReview pr2 = new ProductReview(product2, user2, 4.0, "It's a bit boring, but it works.");
+        SQLHelper.insertIntoTable(Table.PRODUCT_REVIEWS, pr2);
+
+        String base64p2 = "data:image/jpeg;base64,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";
+        ProductImage pi2 = new ProductImage(product2, 0, base64p2);
+        SQLHelper.insertIntoTable(Table.PRODUCT_IMAGES, pi2);
+
+        Inventory inv2 = new Inventory(user2);
+        InventorySlot is2 = new InventorySlot(inv2, product2, 6);
+        SQLHelper.insertIntoTable(Table.INVENTORIES, is2);
     }
 }

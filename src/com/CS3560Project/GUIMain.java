@@ -75,7 +75,17 @@ public class GUIMain extends Application {
             }
         });
 
+        Label loginLabel = new Label("Login");
         Label logout = new Label ("Logout");
+        if(Global.loggedInUser == Global.GUEST)
+        {
+            logout.setVisible(false);
+        }
+        else
+        {
+            loginLabel.setVisible(false);
+        }
+
         logout.setOnMouseClicked(event ->{
            Alert sure = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to logout?");
            Optional<ButtonType> result = sure.showAndWait();
@@ -85,7 +95,11 @@ public class GUIMain extends Application {
            }
         });
 
-        HBox hbox = new HBox(75, hboxSearch, cart, logout);
+        loginLabel.setOnMouseClicked(event ->{
+           login();
+        });
+
+        HBox hbox = new HBox(75, hboxSearch, cart, loginLabel, logout);
         hbox.setAlignment(Pos.CENTER);
 
         borderpane.setTop(hbox);
