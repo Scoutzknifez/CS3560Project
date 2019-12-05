@@ -24,8 +24,7 @@ public class Main {
         GUIMain.launch(GUIMain.class);
 
         SQLHelper.closeSafely();
-        //GUIMain.launch(GUIMain.class);
-        testSet();
+        //testSet();
     }
 
     /**
@@ -35,7 +34,7 @@ public class Main {
      * EVERY OBJECT AND I MEAN EVERY OBJECT MUST BE FILLED IN
      */
     private static void testSet() {
-        PhoneNumber phoneNumber = new PhoneNumber(951, 1234567);
+        /*PhoneNumber phoneNumber = new PhoneNumber(951, 1234567);
         Address address = new Address("31798 Random Street", "Temecula", State.CALIFORNIA, 92590);
         User user = new User("TheKid", "Cody", "Alexander", phoneNumber, address, "csalexander@cpp.edu", "password11", AccountRank.ADMIN);
         SQLHelper.insertIntoTable(Table.USERS, user);
@@ -53,7 +52,7 @@ public class Main {
 
         Inventory inv = new Inventory(user);
         InventorySlot is = new InventorySlot(inv, product, 4);
-        SQLHelper.insertIntoTable(Table.INVENTORIES, is);
+        SQLHelper.insertIntoTable(Table.INVENTORIES, is);*/
 
         //Second Product test run (Shannon)
         PhoneNumber ph = new PhoneNumber(951, 9876543);
