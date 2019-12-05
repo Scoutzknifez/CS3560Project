@@ -25,13 +25,13 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.time.Month;
+import java.util.stream.Collectors;
 
 /**
  * Main running thread which hosts the GUI
@@ -64,6 +64,8 @@ public class GUIMain extends Application {
         shoppingList.setPadding(new Insets(10,10,10,10));
         shoppingList.setHgap(20);
         shoppingList.setVgap(20);
+
+        populate(ProductView.createProductViews(Global.productList), Global.productList);
 
         Label cart = new Label("Shopping Cart (" + ProductView.count + ")");
         shoppingCartLabel = cart;
@@ -177,17 +179,18 @@ public class GUIMain extends Application {
         for (Inventory inv : Global.inventoryList) {
             searchResults.addAll(inv.search(input.split(Constants.SPACE_REGEX)));
         }
-        populate(ProductView.createProductViews(searchResults));
+        populate(ProductView.createProductViews(searchResults), searchResults);
     }
 
-    private void populate(List<ProductView> views)
+    private void populate(List<ProductView> views, List<Product> products)
     {
+        shoppingList.getChildren().clear();
         int itemIndex = 0;
-        for(int i = 0; i < searchResults.size(); i++)
+        for(int i = 0; i < products.size(); i++)
         {
             for(int j = 0; j < 4; j++)
             {
-                if(itemIndex < searchResults.size())
+                if(itemIndex < products.size())
                 {
                     shoppingList.add(views.get(itemIndex).show(), j, i);
                     itemIndex++;
@@ -198,16 +201,20 @@ public class GUIMain extends Application {
 
     //Kristine's Code
     //this is for the shopping cart windowpane
-    private static GridPane makeItem(Product product) throws FileNotFoundException {
-        System.out.println(product.toString());
-        Label itemCount = new Label("");
-
+    protected GridPane makeItem(Product product) throws FileNotFoundException {
         AtomicInteger count = new AtomicInteger();
-        for(Product item: cart.getInventory().keySet()) {
-            if (item.equals(product))
-                count.getAndIncrement();
+
+        List<Product> products = cart.getInventory().keySet().stream().collect(Collectors.toList());
+        List<Integer> stock = cart.getInventory().values().stream().collect(Collectors.toList());
+
+        for (int i = 0; i < products.size(); i++) {
+            if (products.get(i).equals(product)) {
+                for (int j = 0; j < stock.get(i); j++)
+                    count.getAndIncrement();
+            }
         }
 
+        Label itemCount = new Label("" + count);
         Button plus = new Button("+");
         plus.autosize();
         plus.setOnAction(event -> {
@@ -217,73 +224,64 @@ public class GUIMain extends Application {
 
             //increment and change the label
             itemCount.setText(count + "");
+
+            //Alters shopping cart label if they go back to shopping page
+            changeCartLabel(1);
         });
+
+        GridPane temp = new GridPane();
 
         Button minus = new Button("-");
         minus.setMinSize(plus.getHeight(), plus.getWidth());
         minus.setOnAction(event -> {
             //remove Item
-            cart.getInventory().remove(product);
-            count.getAndDecrement();
+            cart.decrement(product.getId());
+            if (cart.getInventory().containsKey(product)) {
+                count.getAndDecrement();
 
-            //increment and change the label
-            itemCount.setText(count + "");
-        });
+                //decrement and change the label
+                itemCount.setText(count + "");
 
-        Label x = new Label("x");
-        x.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                x.setStyle("-fx-underline: true");
+                //Alters shopping cart label
+                changeCartLabel(-1);
+            } else {
+                temp.getChildren().clear();
             }
         });
-        x.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                x.setStyle("-fx-underline: false");
-            }
-        });
-        x.addEventHandler(MouseEvent.MOUSE_CLICKED, eventDispatchChain -> {
-            cart.getInventory().remove(product);
-        });
 
+        Label itemName = new Label(Utils.capitalize(product.getProductName()));
 
-        Label itemName = new Label("item");
-
-        //TODO figure out how to pull image from database
-        // Images are already pulled from database and given to a product on creation (if the product has images) - Cody
-        Image itemImage = new Image(new FileInputStream("C:\\Users\\Kristine\\Desktop\\purikura fun times!.JPG"));
-        ImageView itemImageSet = new ImageView(itemImage);
+        ImageView itemImageSet = new ImageView(Utils.bufferedImageToFXImage(Utils.base64ToBufferedImage(product.getProductImages().get(0).getBase64().split(",")[1])));
         itemImageSet.setPreserveRatio(true);
         itemImageSet.setFitHeight(50);
 
+        Label x = new Label("x");
+        x.setOnMouseEntered(event -> x.setStyle("-fx-underline: true"));
+        x.setOnMouseExited(event -> x.setStyle("-fx-underline: false"));
 
-        GridPane temp = new GridPane();
+        x.addEventHandler(MouseEvent.MOUSE_CLICKED, eventDispatchChain -> {
+            cart.getInventory().remove(product);
+            temp.getChildren().clear();
+            changeCartLabel(count.get()*-1);
+        });
+
         temp.add(itemImageSet, 0, 0);
         temp.add(itemName, 1, 0);
         temp.add(minus, 2, 0);
         temp.add(itemCount, 3, 0);
         temp.add(plus, 4, 0);
+        temp.add(x,5,0);
 
-        ColumnConstraints col1 = new ColumnConstraints();
-        ColumnConstraints col2 = new ColumnConstraints();
-        ColumnConstraints col3 = new ColumnConstraints();
-        ColumnConstraints col4 = new ColumnConstraints();
-        ColumnConstraints col5 = new ColumnConstraints();
-
-        col1.setPercentWidth(25);
-        col2.setPercentWidth(50);
-        col3.setPercentWidth(10);
-        col4.setPercentWidth(15);
-        col5.setPercentWidth(10);
-
-        temp.getColumnConstraints().addAll(col1, col2, col3, col4, col5);
+        temp.setHgap(10);
+        temp.setVgap(10);
         temp.setPadding(new Insets(20));
+
         temp.setHalignment(itemImageSet, HPos.CENTER);
         temp.setHalignment(itemName, HPos.LEFT);
         temp.setHalignment(minus, HPos.CENTER);
         temp.setHalignment(itemCount, HPos.CENTER);
         temp.setHalignment(plus, HPos.CENTER);
+
         return temp;
     }
 
@@ -291,40 +289,52 @@ public class GUIMain extends Application {
         primaryStage.close();
         primaryStage = new Stage();
 
-
         primaryStage.setTitle("Shopping Cart");
         primaryStage.setMinHeight(300);
         primaryStage.setMinWidth(400);
 
 
+        VBox list = new VBox();
+        Label emptyCart = new Label("Your cart is currently empty");
+        emptyCart.setVisible(false);
+
         Button checkOut = new Button("Checkout");
         checkOut.setOnAction(event -> {
             checkOutWin();
         });
+        if(cart.getCartSize() == 0){
+            checkOut.setDisable(true);
+        }
+        else{
+            checkOut.setDisable(false);
+        }
 
         Button goBack = new Button("Go Back");
         goBack.setOnAction(event -> {
             shoppingPage();
         });
 
+        if(cart.getCartSize() == 0)
+            emptyCart.setVisible(true);
+
         Button clearCart = new Button("Clear Cart");
         clearCart.setOnAction(actionEvent -> {
             cart.empty();
+            list.setVisible(false);
+            emptyCart.setVisible(true);
+            ProductView.count = 0;
+            shoppingCartLabel.setText("Shopping Cart(" + ProductView.count + ")");
+            checkOut.setDisable(true);
         });
 
-        Label emptyCart = new Label("");
-        if(cart.getCartSize() == 0)
-          emptyCart.setText("Your cart is currently empty.");
-
-
-        VBox list = new VBox();
-        list.getChildren().add(emptyCart);
+        VBox vbox = new VBox(emptyCart, list);
+        vbox.setAlignment(Pos.CENTER);
         list.setSpacing(10);
         list.setPadding(new Insets(10));
 
         //makes the rows for items
         ArrayList<Product> addedItems = new ArrayList<>();
-        for(Product product: cart.getInventory().keySet()) {
+        for(Product product: cart.getInventory().keySet().stream().collect(Collectors.toList())) {
             if(!addedItems.contains(product)) {
                 addedItems.add(product);
                 list.getChildren().add(makeItem(product));
@@ -345,7 +355,7 @@ public class GUIMain extends Application {
 
 
         BorderPane ex = new BorderPane();
-        ex.setCenter(list);
+        ex.setCenter(vbox);
         ex.setBottom(buttons);
         BorderPane.setMargin(navi, new Insets(10));
 
@@ -530,6 +540,7 @@ public class GUIMain extends Application {
 
         Label prompt = new Label("Please Sign In");
         Label invalid = new Label("");
+        prompt.setStyle("-fx-font-weight: bold");
 
         Label newUser = new Label("New User?");
         newUser.setTextFill(Color.BLUE);
@@ -582,6 +593,16 @@ public class GUIMain extends Application {
         };
         submit.disableProperty().bind(b);
         submit.setOnAction(event -> {
+            Global.loggedInUser = Global.getUserFromCredentials(userID.getText(), password.getText());
+            if (Global.loggedInUser == Global.GUEST) {
+                invalid.setText("Username or Password invalid.");
+            } else {
+                cart = new Cart(Global.loggedInUser);
+                shoppingPage();
+            }
+        });
+
+        password.setOnKeyPressed(event ->{
             Global.loggedInUser = Global.getUserFromCredentials(userID.getText(), password.getText());
             if (Global.loggedInUser == Global.GUEST) {
                 invalid.setText("Username or Password invalid.");
@@ -783,8 +804,14 @@ public class GUIMain extends Application {
 
         //AMOUNT DUE and BUTTONS
         final Label TOTAL_ITEMS_PURCHASED = new Label("Total Items Purchased: " + cart.getCartSize());
-        final Label AMOUNT_DUE = new Label("Amount Due: " + cart.getTotalCost());
+
+        final Label AMOUNT_DUE = new Label("Amount Due: " + cart.getTotal());
         Button purchase = new Button("Purchase");
+        purchase.setOnAction(event ->{
+           cart.finishCheckout();
+           receipt();
+        });
+
         BooleanBinding b = new BooleanBinding() {
             {
                 super.bind(aL1.textProperty(), city.textProperty(), zip.textProperty(),email.textProperty(), cn.textProperty(),
@@ -795,36 +822,34 @@ public class GUIMain extends Application {
             @Override
             protected boolean computeValue()
             {
-                boolean temp = true;
-                //if (cart.getCartSize() ==0){ return true; }
-                if(!(aL1.getText().isEmpty() || city.getText().isEmpty() || zip.getText().isEmpty()  || email.getText().isEmpty() || state.getValue() == null)){
-                    if(cn.getText().isEmpty()  &&  n.getText().isEmpty()    &&   sc.getText().isEmpty() && month.getValue() == null  && year.getValue() == null){
-                        if(e.getText().isEmpty() || p.getText().isEmpty()){
+                if(!(aL1.getText().isEmpty() || city.getText().isEmpty() || zip.getText().isEmpty()  || email.getText().isEmpty() || state.getValue() == null)) {
+
+                    if(cn.getText().isEmpty()  &&  n.getText().isEmpty()    &&   sc.getText().isEmpty() && month.getValue() == null  && year.getValue() == null) {
+
+                        if(e.getText().isEmpty() || p.getText().isEmpty()) {
+                            // TODO
                         }
+
                         if(!e.getText().isEmpty() && !p.getText().isEmpty()) {
-                            temp = false;
+                            return false;
                         }
                     }
-                    if(!(cn.getText().isEmpty()  || n.getText().isEmpty()    ||   sc.getText().isEmpty() || month.getValue() == null  || year.getValue() == null)) {
-                        temp = false;
-                    }
+
+                    return (!(cn.getText().isEmpty()|| n.getText().isEmpty() || sc.getText().isEmpty() || month.getValue() == null || year.getValue() == null));
                 }
-                return temp;
+
+                return true;
             }
         };
         purchase.disableProperty().bind(b);
-
-        purchase.setOnAction(actionEvent -> {
-            receipt();
-        });
 
         Button back = new Button("Go Back");
         back.setOnAction(actionEvent -> {
             primaryStage.close();
             try {
                 shoppingCart();
-            } catch (FileNotFoundException execpt) {
-                execpt.printStackTrace();
+            } catch (Exception exception) {
+                exception.printStackTrace();
             }
         });
 
@@ -881,5 +906,11 @@ public class GUIMain extends Application {
         Scene ex = new Scene(all, 300, 250);
         primaryStage.setScene(ex);
         primaryStage.show();
+    }
+
+    public void changeCartLabel(int num)
+    {
+        ProductView.count += num;
+        shoppingCartLabel.setText("Shopping Cart(" + ProductView.count + ")");
     }
 }

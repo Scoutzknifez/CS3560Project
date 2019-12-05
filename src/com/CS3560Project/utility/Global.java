@@ -29,17 +29,17 @@ public class Global {
     public static List<User> userList = new ArrayList<>();
 
     public static void initialize() {
-        System.out.println("[-----PRODUCTS-----]");
+        //System.out.println("[-----PRODUCTS-----]");
         List<?> list = SQLHelper.getFromTable(Table.PRODUCTS);
         list.forEach(product -> productList.add((Product) product));
         Utils.printList(list);
 
-        System.out.println("[-----USERS-----]");
+        //System.out.println("[-----USERS-----]");
         list = SQLHelper.getFromTable(Table.USERS);
         list.forEach(user -> userList.add((User) user));
-        Utils.printList(list);
+        //tils.printList(list);
 
-        System.out.println("[-----INVENTORYSLOTS-----]");
+        //System.out.println("[-----INVENTORYSLOTS-----]");
         list = SQLHelper.getFromTable(Table.INVENTORIES);
         Utils.printList(list);
 

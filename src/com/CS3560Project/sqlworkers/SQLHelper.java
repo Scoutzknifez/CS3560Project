@@ -26,6 +26,7 @@ public class SQLHelper {
      * presented by fieldName (the database column) and the
      * updateValue (the value that goes into the database column)
      * when the database entry meets the given conditions (Must have some)
+     *
      * @param table         The table to update from
      * @param fieldName     The column to update with new value
      * @param updateValue   The new value in the column
