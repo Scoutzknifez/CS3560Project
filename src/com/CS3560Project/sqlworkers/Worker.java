@@ -51,6 +51,7 @@ public abstract class Worker implements Runnable {
         Utils.log("Connecting driver!");
         try {
             Class.forName(Constants.JDBC_DRIVER);
+
             return Result.SUCCESS;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

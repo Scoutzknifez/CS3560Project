@@ -204,14 +204,16 @@ public class GUIMain extends Application {
     //this is for the shopping cart windowpane
     protected GridPane makeItem(Product product) throws FileNotFoundException {
         System.out.println(product.toString());
-        Label itemCount = new Label("");
+
 
         AtomicInteger count = new AtomicInteger();
         for(Product item: cart.getInventory().keySet().stream().collect(Collectors.toList())) {
             if (item.equals(product))
                 count.getAndIncrement();
         }
+        System.out.println(count);
 
+        Label itemCount = new Label("" + count);
         Button plus = new Button("+");
         plus.autosize();
         plus.setOnAction(event -> {
@@ -240,6 +242,14 @@ public class GUIMain extends Application {
             changeCartLabel(-1);
         });
 
+        Label itemName = new Label(Utils.capitalize(product.getProductName()));
+
+        ImageView itemImageSet = new ImageView(Utils.bufferedImageToFXImage(Utils.base64ToBufferedImage(product.getProductImages().get(0).getBase64().split(",")[1])));
+        itemImageSet.setPreserveRatio(true);
+        itemImageSet.setFitHeight(50);
+
+
+        GridPane temp = new GridPane();
         Label x = new Label("x");
         x.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
@@ -255,22 +265,14 @@ public class GUIMain extends Application {
         });
         x.addEventHandler(MouseEvent.MOUSE_CLICKED, eventDispatchChain -> {
             cart.getInventory().remove(product);
+            temp.getChildren().removeAll();
         });
-
-
-        Label itemName = new Label(Utils.capitalize(product.getProductName()));
-
-        ImageView itemImageSet = new ImageView(Utils.bufferedImageToFXImage(Utils.base64ToBufferedImage(product.getProductImages().get(0).getBase64().split(",")[1])));
-        itemImageSet.setPreserveRatio(true);
-        itemImageSet.setFitHeight(50);
-
-
-        GridPane temp = new GridPane();
         temp.add(itemImageSet, 0, 0);
         temp.add(itemName, 1, 0);
         temp.add(minus, 2, 0);
         temp.add(itemCount, 3, 0);
         temp.add(plus, 4, 0);
+        temp.add(x,5,0);
         temp.setHgap(10);
         temp.setVgap(10);
         temp.setPadding(new Insets(20));

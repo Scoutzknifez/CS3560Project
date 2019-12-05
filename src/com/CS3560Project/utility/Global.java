@@ -33,6 +33,7 @@ public class Global {
         List<?> list = SQLHelper.getFromTable(Table.PRODUCTS);
         list.forEach(product -> productList.add((Product) product));
         Utils.printList(list);
+        System.out.println("HEY");
 
         System.out.println("[-----USERS-----]");
         list = SQLHelper.getFromTable(Table.USERS);
