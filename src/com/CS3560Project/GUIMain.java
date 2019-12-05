@@ -16,6 +16,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 import javafx.geometry.*;
@@ -480,6 +481,7 @@ public class GUIMain extends Application {
         Label invalid = new Label("");
 
         Label newUser = new Label("New User?");
+        newUser.setTextFill(Color.BLUE);
         newUser.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -574,6 +576,7 @@ public class GUIMain extends Application {
             loginBar.setPadding(new Insets(10));
             loginBar.setSpacing(10);
             loginBar.setAlignment(Pos.CENTER);
+            login.setTextFill(Color.BLUE);
             login.setOnMouseEntered(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
