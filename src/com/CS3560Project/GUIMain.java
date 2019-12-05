@@ -192,7 +192,7 @@ public class GUIMain extends Application {
             }
         });
         x.addEventHandler(MouseEvent.MOUSE_CLICKED, eventDispatchChain -> {
-           //TODO add a remove item label
+            cart.getInventory().remove(product);
         });
 
 
