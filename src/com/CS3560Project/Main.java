@@ -1,13 +1,6 @@
 package com.CS3560Project;
 
 import com.CS3560Project.sqlworkers.SQLHelper;
-import com.CS3560Project.sqlworkers.Table;
-import com.CS3560Project.structures.*;
-import com.CS3560Project.structures.inventory.Inventory;
-import com.CS3560Project.structures.inventory.InventorySlot;
-import com.CS3560Project.structures.products.Product;
-import com.CS3560Project.structures.products.ProductImage;
-import com.CS3560Project.structures.products.ProductReview;
 import com.CS3560Project.utility.Global;
 
 public class Main {
@@ -25,7 +18,6 @@ public class Main {
 
         //testSet();
         SQLHelper.closeSafely();
-
     }
 
     /**
