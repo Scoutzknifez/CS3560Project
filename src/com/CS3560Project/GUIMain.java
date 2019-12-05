@@ -76,7 +76,6 @@ public class GUIMain extends Application {
             } catch(Exception e) {
                 Alert notFound = new Alert(Alert.AlertType.ERROR, "There was an error finding the next page.");
                 notFound.show();
-                e.printStackTrace();
             }
         });
 
@@ -256,12 +255,10 @@ public class GUIMain extends Application {
 
         //TODO figure out how to pull image from database
         // Images are already pulled from database and given to a product on creation (if the product has images) - Cody
-        //Image itemImage = new Image(new FileInputStream("C:\\Users\\Kristine\\Desktop\\purikura fun times!.JPG"));
-        ImageView itemImageSet = new ImageView(Utils.bufferedImageToFXImage(Utils.base64ToBufferedImage(product.getProductImages().get(0).getBase64().split(",")[1])));
+        Image itemImage = new Image(new FileInputStream("C:\\Users\\Kristine\\Desktop\\purikura fun times!.JPG"));
+        ImageView itemImageSet = new ImageView(itemImage);
         itemImageSet.setPreserveRatio(true);
         itemImageSet.setFitHeight(50);
-
-
 
 
         GridPane temp = new GridPane();
@@ -270,20 +267,8 @@ public class GUIMain extends Application {
         temp.add(minus, 2, 0);
         temp.add(itemCount, 3, 0);
         temp.add(plus, 4, 0);
-
-        ColumnConstraints col1 = new ColumnConstraints();
-        ColumnConstraints col2 = new ColumnConstraints();
-        ColumnConstraints col3 = new ColumnConstraints();
-        ColumnConstraints col4 = new ColumnConstraints();
-        ColumnConstraints col5 = new ColumnConstraints();
-
-        col1.setPercentWidth(25);
-        col2.setPercentWidth(50);
-        col3.setPercentWidth(10);
-        col4.setPercentWidth(15);
-        col5.setPercentWidth(10);
-
-        temp.getColumnConstraints().addAll(col1, col2, col3, col4, col5);
+        temp.setHgap(10);
+        temp.setVgap(10);
         temp.setPadding(new Insets(20));
         temp.setHalignment(itemImageSet, HPos.CENTER);
         temp.setHalignment(itemName, HPos.LEFT);
@@ -536,6 +521,7 @@ public class GUIMain extends Application {
 
         Label prompt = new Label("Please Sign In");
         Label invalid = new Label("");
+        prompt.setStyle("-fx-font-weight: bold");
 
         Label newUser = new Label("New User?");
         newUser.setTextFill(Color.BLUE);
