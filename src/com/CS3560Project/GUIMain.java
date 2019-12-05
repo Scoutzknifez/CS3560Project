@@ -9,6 +9,7 @@ import com.CS3560Project.utility.Constants;
 import com.CS3560Project.utility.Global;
 import javafx.application.Application;
 import javafx.beans.binding.BooleanBinding;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.time.Month;
 
 /**
  * Main running thread which hosts the GUI
@@ -337,6 +339,7 @@ public class GUIMain extends Application {
     private void checkOutWin() {
         primaryStage.close();
         primaryStage = new Stage();
+        primaryStage.setTitle("Checkout");
         Scene ex;
         Separator separator = new Separator();
         Separator separator0 = new Separator();
@@ -350,8 +353,16 @@ public class GUIMain extends Application {
         final Label TOTAL_ITEMS_PURCHASED = new Label("Total Items Purchased: " + cart.getCartSize());
         final Label AMOUNT_DUE = new Label("Amount Due: " + cart.getTotalCost());
         Button purchase = new Button("Purchase");
+        BooleanBinding b = new BooleanBinding() {
+            @Override
+            protected boolean computeValue()
+            {
+                return (cart.getCartSize() == 0);
+            }
+        };
+        purchase.disableProperty().bind(b);
+
         purchase.setOnAction(actionEvent -> {
-            //TODO condition that the input is valid before purchase
             receipt();
         });
 
@@ -365,14 +376,30 @@ public class GUIMain extends Application {
             }
         });
 
-
-        Label ReturningUser = new Label("Returning User? ");
-        Label login = new Label("Login");
         HBox loginBar = new HBox();
-        loginBar.getChildren().addAll(ReturningUser, login);
-        loginBar.setPadding(new Insets(10));
-        loginBar.setSpacing(10);
-        loginBar.setAlignment(Pos.CENTER);
+        if(Global.loggedInUser == Global.GUEST) {
+            Label ReturningUser = new Label("Returning User? ");
+            Label login = new Label("Login");
+            loginBar.getChildren().addAll(ReturningUser, login);
+            loginBar.setPadding(new Insets(10));
+            loginBar.setSpacing(10);
+            loginBar.setAlignment(Pos.CENTER);
+            login.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    login.setStyle("-fx-underline: true");
+                }
+            });
+            login.setOnMouseExited(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    login.setStyle("-fx-underline: false");
+                }
+            });
+            login.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+                login();
+            });
+        }
 
 
         //form if the user is a guest
@@ -388,11 +415,19 @@ public class GUIMain extends Application {
         TextField aL1 = new TextField("");
         TextField aL2 = new TextField("");
         TextField city = new TextField("");
-        TextField state = new TextField("");
         TextField country = new TextField("");
         TextField zip = new TextField("");
+        ComboBox state = new ComboBox();
+        state.getItems().addAll("AK", "AL", "AR", "AS", "AZ", "CA", "CO", "CT", "DC", "DE",
+                                      "FL", "GA", "GU", "HI", "IA", "ID", "IL", "IN", "KS", "KY",
+                                      "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC",
+                                      "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR",
+                                      "PA", "PR", "RI", "SC", "SD", "TN", "TX", "UT", "VA", "VI",
+                                      "VT", "WA", "WI", "WV", "WY");
 
         GridPane shippingForm = new GridPane();
+
+
         shippingForm.add(ADDRESS_LINE1, 0, 1);
         shippingForm.add(ADDRESS_LINE2, 0, 2);
         shippingForm.add(CITY, 0, 3);
@@ -406,7 +441,10 @@ public class GUIMain extends Application {
         shippingForm.add(country, 1, 5);
         shippingForm.add(zip, 1, 6);
         shippingForm.setMinSize(30, 50);
+
+
         shippingForm.setHgap(10);
+        shippingForm.setVgap(10);
 
 
         //payment info
@@ -420,10 +458,11 @@ public class GUIMain extends Application {
         GridPane pm = new GridPane();
         pm.setHgap(10);
         pm.setPadding(new Insets(10));
+        pm.setVgap(10);
+        pm.setHgap(10);
         pm.setAlignment(Pos.CENTER_LEFT);
         paymentChoices.selectedToggleProperty().addListener(listener -> {
             if(paymentChoices.getSelectedToggle() == paypal){
-                //TODO link with paypal but that doesn't seem to be happening
                 pm.getChildren().clear();
                 Label email = new Label("Email");
                 Label pw = new Label("PayPal Password");
@@ -449,14 +488,11 @@ public class GUIMain extends Application {
                 TextField cn = new TextField();
                 TextField sc = new TextField();
                 ComboBox month = new ComboBox();
-                // TODO Would Rather you use an Enums for this... - Cody
-                month.getItems().addAll("Jan","Feb","Mar","Apr","May", "Jun",
-                        "Jul ", "Aug", "Sep", "Oct", "Nov", "Dec");
+                month.getItems().addAll(Month.values());
                 ComboBox year = new ComboBox();
-                // TODO Would rather you do this dynamically rather than typing in a hardcoded set.
-                //  Aka for loop i = 2019; i <= 2030
-                year.getItems().addAll(2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026,
-                        2027, 2028, 2029, 2030);
+                for(int i = 2019; i<= 2030; i++){
+                    year.getItems().add(i);
+                }
 
                 HBox date = new HBox();
                 date.getChildren().addAll(month, year);
@@ -508,7 +544,6 @@ public class GUIMain extends Application {
     }
 
     protected void receipt(){
-    //TODO make receipt page
         Stage primaryStage = new Stage();
         primaryStage.setTitle("Purchase Complete");
         primaryStage.setMinWidth(300);
@@ -520,22 +555,15 @@ public class GUIMain extends Application {
         Button back = new Button("Back to shopping");
         back.setOnAction(event -> {
             primaryStage.close();
-            //TODO go back to the shopping window
+            shoppingPage();
         });
 
         Button closeWin = new Button("Logout and close");
         closeWin.setOnAction(event -> {
-            //TODO clear user data
             primaryStage.close();
-            //TODO if user data clear
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("Logout successful");
             alert.showAndWait();
-            //TODO if not
-            Alert fail = new Alert(Alert.AlertType.ERROR);
-            fail.setTitle("Error");
-            fail.setHeaderText("Unable to Logout at the moment");
-            fail.showAndWait();
         });
 
         Separator s = new Separator();
