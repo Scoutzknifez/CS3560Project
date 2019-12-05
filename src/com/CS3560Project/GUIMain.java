@@ -1,11 +1,11 @@
 package com.CS3560Project;
 
-import com.CS3560Project.structures.Cart;
-import com.CS3560Project.structures.State;
+import com.CS3560Project.sqlworkers.SQLHelper;
+import com.CS3560Project.sqlworkers.Table;
+import com.CS3560Project.structures.*;
 import com.CS3560Project.structures.products.Product;
 import com.CS3560Project.structures.inventory.Inventory;
 import com.CS3560Project.GUI.ProductView;
-import com.CS3560Project.structures.User;
 
 import com.CS3560Project.utility.Constants;
 import com.CS3560Project.utility.Global;
@@ -344,7 +344,7 @@ public class GUIMain extends Application {
         TextField city = new TextField();
         ComboBox state = new ComboBox();
         TextField zip = new TextField();
-        TextField num = new TextField();
+        TextField num = new TextField("(xxx)xxx-xxxx");
 
         List<String> abbreviations = new ArrayList<>();
         for (State stateObj : State.values())
@@ -392,13 +392,26 @@ public class GUIMain extends Application {
                 error.show();
             }
             else{
-                Alert accMade = new Alert(Alert.AlertType.INFORMATION);
-                accMade.setTitle("Success");
-                accMade.setHeaderText("Account made successfully");
-                accMade.setContentText("You will be directed to the login page.");
-                accMade.showAndWait();
-                primaryStage.close();
-                login();
+                try{
+                    Address ad = Address.stringToAddress(al1.getText() + city.getText() + state.getValue() + zip.getText());
+                    PhoneNumber pn = PhoneNumber.stringToPhoneNumber(num.getText());
+                    User newUser = new User(un.getText(), fn.getText(), ln.getText(), pn , ad, em.getText(), pw.getText(), AccountRank.BASIC);
+                    SQLHelper.insertIntoTable(Table.USERS, newUser);
+
+                    Alert accMade = new Alert(Alert.AlertType.INFORMATION);
+                    accMade.setTitle("Success");
+                    accMade.setHeaderText("Account made successfully");
+                    accMade.setContentText("You will be directed to the login page.");
+                    accMade.showAndWait();
+                    primaryStage.close();
+                    login();
+                }catch(Exception e){
+                    error.setHeaderText("Unable to make an Account.");
+                    error.setContentText("Something has gone wrong, we are working on it.");
+                    //send an error report to us
+                    error.setTitle("ERROR");
+                    error.showAndWait();
+                }
             }
         });
 
