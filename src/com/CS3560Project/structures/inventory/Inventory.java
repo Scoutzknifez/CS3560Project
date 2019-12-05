@@ -1,5 +1,9 @@
 package com.CS3560Project.structures.inventory;
 
+import com.CS3560Project.sqlworkers.SQLHelper;
+import com.CS3560Project.sqlworkers.Table;
+import com.CS3560Project.sqlworkers.conditions.AndConditional;
+import com.CS3560Project.sqlworkers.conditions.Conditional;
 import com.CS3560Project.structures.User;
 import com.CS3560Project.structures.products.Product;
 import lombok.AllArgsConstructor;
@@ -103,6 +107,15 @@ public class Inventory {
         }
 
         return productsFound;
+    }
+
+    /**
+     * Changes the databases' stock count of the given product
+     * @param product   The product to change stock of
+     * @param newStock  The new stock value
+     */
+    public void updateStockOnProduct(Product product, int newStock) {
+        SQLHelper.updateTable(Table.INVENTORIES, "stock", newStock, new AndConditional(new Conditional("id", getId()), new Conditional("product_id", product.getId())));
     }
 
     @Override
