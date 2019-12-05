@@ -24,13 +24,9 @@ import javafx.scene.image.*;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
-import org.w3c.dom.Text;
 
-import javax.swing.*;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -206,13 +202,16 @@ public class GUIMain extends Application {
     //Kristine's Code
     //this is for the shopping cart windowpane
     protected GridPane makeItem(Product product) throws FileNotFoundException {
-        System.out.println(product.toString());
-
-
         AtomicInteger count = new AtomicInteger();
-        for(Product item: cart.getInventory().keySet().stream().collect(Collectors.toList())) {
-            if (item.equals(product))
-                count.getAndIncrement();
+
+        List<Product> products = cart.getInventory().keySet().stream().collect(Collectors.toList());
+        List<Integer> stock = cart.getInventory().values().stream().collect(Collectors.toList());
+
+        for (int i = 0; i < products.size(); i++) {
+            if (products.get(i).equals(product)) {
+                for (int j = 0; j < stock.get(i); j++)
+                    count.getAndIncrement();
+            }
         }
 
         Label itemCount = new Label("" + count);
@@ -253,18 +252,9 @@ public class GUIMain extends Application {
 
         GridPane temp = new GridPane();
         Label x = new Label("x");
-        x.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                x.setStyle("-fx-underline: true");
-            }
-        });
-        x.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                x.setStyle("-fx-underline: false");
-            }
-        });
+        x.setOnMouseEntered(event -> x.setStyle("-fx-underline: true"));
+        x.setOnMouseExited(event -> x.setStyle("-fx-underline: false"));
+
         x.addEventHandler(MouseEvent.MOUSE_CLICKED, eventDispatchChain -> {
             cart.getInventory().remove(product);
             temp.getChildren().clear();
@@ -806,7 +796,8 @@ public class GUIMain extends Application {
 
         //AMOUNT DUE and BUTTONS
         final Label TOTAL_ITEMS_PURCHASED = new Label("Total Items Purchased: " + cart.getCartSize());
-        final Label AMOUNT_DUE = new Label("Amount Due: " + cart.getTotalCost());
+
+        final Label AMOUNT_DUE = new Label("Amount Due: " + cart.getTotal());
         Button purchase = new Button("Purchase");
         purchase.setOnAction(event ->{
            cart.finishCheckout();

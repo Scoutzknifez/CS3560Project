@@ -8,6 +8,9 @@ import com.CS3560Project.utility.Utils;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Setter
 @Getter
 public class Cart extends Inventory {
@@ -22,7 +25,13 @@ public class Cart extends Inventory {
      * @param quantity  The amount the customer wants
      */
     public void addProduct(Product product, int quantity) {
-        getInventory().put(product, quantity);
+        if (!getInventory().containsKey(product)) {
+            getInventory().put(product, quantity);
+        } else {
+            int old = getInventory().get(product);
+            getInventory().remove(product);
+            getInventory().put(product, old + quantity);
+        }
     }
 
     /**
@@ -58,8 +67,12 @@ public class Cart extends Inventory {
     public double getTotalCost() {
         double totalPrice = 0;
 
-        for (Product product : getInventory().keySet())
-            totalPrice += product.getPrice();
+        List<Product> products = getInventory().keySet().stream().collect(Collectors.toList());
+        List<Integer> stock = getInventory().values().stream().collect(Collectors.toList());
+
+        for (int i = 0; i < products.size(); i++) {
+            totalPrice += (products.get(i).getPrice() * stock.get(i));
+        }
 
         return totalPrice + (totalPrice * Constants.TAX_RATE);
     }
@@ -68,7 +81,7 @@ public class Cart extends Inventory {
      * Returns the carts total in the format #.##
      * @return  formatted total price
      */
-    private String getTotal() {
+    public String getTotal() {
         return Utils.formatDouble(getTotalCost(), 2);
     }
 
@@ -77,7 +90,15 @@ public class Cart extends Inventory {
      * @return  shopping cart item count
      */
     public int getCartSize() {
-        return getInventory().size();
+        int size = 0;
+
+        List<Integer> stock = getInventory().values().stream().collect(Collectors.toList());
+
+        for (int i = 0; i < stock.size(); i++) {
+            size += stock.get(i);
+        }
+
+        return size;
     }
 
     @Override
