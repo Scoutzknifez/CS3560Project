@@ -274,7 +274,6 @@ public class GUIMain extends Application {
         primaryStage.setTitle("Make a New Account");
         Separator s0 = new Separator();
         Separator s1 = new Separator();
-        Separator s2 = new Separator();
 
 
         Label title = new Label("Creating New Account");
@@ -310,6 +309,11 @@ public class GUIMain extends Application {
         TextField zip = new TextField();
         TextField num = new TextField();
 
+        List<String> abbreviations = new ArrayList<>();
+        for (State stateObj : State.values())
+            abbreviations.add(stateObj.getAbbreviation());
+        state.getItems().addAll(abbreviations);
+
         Button cancel = new Button("Cancel");
         cancel.setOnAction(actionEvent -> {
             primaryStage.close();
@@ -332,6 +336,9 @@ public class GUIMain extends Application {
             }
         };
         createAccount.disableProperty().bind(b);
+        createAccount.setOnAction(actionEvent -> {
+            //TODO add all of the verifications that have to go here and alerts depending on the error
+        });
 
         HBox buttons = new HBox();
         buttons.getChildren().addAll(createAccount, cancel);
