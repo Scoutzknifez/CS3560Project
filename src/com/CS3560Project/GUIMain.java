@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.time.Month;
+import java.util.stream.Collectors;
 
 /**
  * Main running thread which hosts the GUI
@@ -201,12 +202,12 @@ public class GUIMain extends Application {
 
     //Kristine's Code
     //this is for the shopping cart windowpane
-    private static GridPane makeItem(Product product) throws FileNotFoundException {
+    protected GridPane makeItem(Product product) throws FileNotFoundException {
         System.out.println(product.toString());
         Label itemCount = new Label("");
 
         AtomicInteger count = new AtomicInteger();
-        for(Product item: cart.getInventory().keySet()) {
+        for(Product item: cart.getInventory().keySet().stream().collect(Collectors.toList())) {
             if (item.equals(product))
                 count.getAndIncrement();
         }
@@ -220,6 +221,9 @@ public class GUIMain extends Application {
 
             //increment and change the label
             itemCount.setText(count + "");
+
+            //Alters shopping cart label if they go back to shopping page
+            changeCartLabel(1);
         });
 
         Button minus = new Button("-");
@@ -229,8 +233,11 @@ public class GUIMain extends Application {
             cart.getInventory().remove(product);
             count.getAndDecrement();
 
-            //increment and change the label
+            //decrement and change the label
             itemCount.setText(count + "");
+
+            //Alters shopping cart label
+            changeCartLabel(-1);
         });
 
         Label x = new Label("x");
@@ -251,12 +258,9 @@ public class GUIMain extends Application {
         });
 
 
-        Label itemName = new Label("item");
+        Label itemName = new Label(Utils.capitalize(product.getProductName()));
 
-        //TODO figure out how to pull image from database
-        // Images are already pulled from database and given to a product on creation (if the product has images) - Cody
-        Image itemImage = new Image(new FileInputStream("C:\\Users\\Kristine\\Desktop\\purikura fun times!.JPG"));
-        ImageView itemImageSet = new ImageView(itemImage);
+        ImageView itemImageSet = new ImageView(Utils.bufferedImageToFXImage(Utils.base64ToBufferedImage(product.getProductImages().get(0).getBase64().split(",")[1])));
         itemImageSet.setPreserveRatio(true);
         itemImageSet.setFitHeight(50);
 
@@ -282,11 +286,12 @@ public class GUIMain extends Application {
         primaryStage.close();
         primaryStage = new Stage();
 
-
         primaryStage.setTitle("Shopping Cart");
         primaryStage.setMinHeight(300);
         primaryStage.setMinWidth(400);
 
+        VBox list = new VBox();
+        Label emptyCart = new Label("");
 
         Button checkOut = new Button("Checkout");
         checkOut.setOnAction(event -> {
@@ -298,24 +303,26 @@ public class GUIMain extends Application {
             shoppingPage();
         });
 
+        if(cart.getCartSize() == 0)
+            emptyCart.setText("Your cart is currently empty.");
+
         Button clearCart = new Button("Clear Cart");
         clearCart.setOnAction(actionEvent -> {
             cart.empty();
+            emptyCart.setText("Your cart is currently empty.");
+            list.setVisible(false);
+            ProductView.count = 0;
+            shoppingCartLabel.setText("Shopping Cart(" + ProductView.count + ")");
         });
 
-        Label emptyCart = new Label("");
-        if(cart.getCartSize() == 0)
-          emptyCart.setText("Your cart is currently empty.");
 
-
-        VBox list = new VBox();
         list.getChildren().add(emptyCart);
         list.setSpacing(10);
         list.setPadding(new Insets(10));
 
         //makes the rows for items
         ArrayList<Product> addedItems = new ArrayList<>();
-        for(Product product: cart.getInventory().keySet()) {
+        for(Product product: cart.getInventory().keySet().stream().collect(Collectors.toList())) {
             if(!addedItems.contains(product)) {
                 addedItems.add(product);
                 list.getChildren().add(makeItem(product));
@@ -873,5 +880,19 @@ public class GUIMain extends Application {
         Scene ex = new Scene(all, 300, 250);
         primaryStage.setScene(ex);
         primaryStage.show();
+    }
+
+    public void changeCartLabel(int num)
+    {
+        if(num > 0)
+        {
+            ProductView.count++;
+            shoppingCartLabel.setText("Shopping Cart(" + ProductView.count + ")");
+        }
+        else
+        {
+            ProductView.count--;
+            shoppingCartLabel.setText("Shopping Cart(" + ProductView.count + ")");
+        }
     }
 }

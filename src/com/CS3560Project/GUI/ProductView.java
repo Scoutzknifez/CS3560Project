@@ -45,8 +45,7 @@ public class ProductView
         vbox.setAlignment(Pos.CENTER);
 
         addToCart.setOnMouseClicked(e -> {
-            count++;
-            Global.guiMainReference.shoppingCartLabel.setText("Shopping Cart (" + count + ")");
+            Global.guiMainReference.changeCartLabel(1);
             GUIMain.cart.addProduct(product, 1);
         });
 
