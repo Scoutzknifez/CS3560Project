@@ -168,7 +168,7 @@ public class Main {
         SQLHelper.insertIntoTable(Table.INVENTORIES, is7);*/
 
         //Eighth
-        PhoneNumber ph8 = new PhoneNumber(783, 5710792);
+        /*PhoneNumber ph8 = new PhoneNumber(783, 5710792);
         Address address8 = new Address("17935 Done Wt", "Pomona", State.CALIFORNIA, 90003);
         User user8 = new User("xxblueshoesnewsxx", "Sam", "Burger", ph8, address8, "burgercats49@gmail.com", "catsandburgs", AccountRank.BASIC);
         SQLHelper.insertIntoTable(Table.USERS, user8);
@@ -185,6 +185,6 @@ public class Main {
 
         Inventory inv8 = new Inventory(user8);
         InventorySlot is8 = new InventorySlot(inv8, product8, 10);
-        SQLHelper.insertIntoTable(Table.INVENTORIES, is8);
+        SQLHelper.insertIntoTable(Table.INVENTORIES, is8);*/
     }
 }

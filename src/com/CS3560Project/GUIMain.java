@@ -609,12 +609,15 @@ public class GUIMain extends Application {
         });
 
         password.setOnKeyPressed(event ->{
-            Global.loggedInUser = Global.getUserFromCredentials(userID.getText(), password.getText());
-            if (Global.loggedInUser == Global.GUEST) {
-                invalid.setText("Username or Password invalid.");
-            } else {
-                cart = new Cart(Global.loggedInUser);
-                shoppingPage();
+            if(event.getCode() == KeyCode.ENTER)
+            {
+                Global.loggedInUser = Global.getUserFromCredentials(userID.getText(), password.getText());
+                if (Global.loggedInUser == Global.GUEST) {
+                    invalid.setText("Username or Password invalid.");
+                } else {
+                    cart = new Cart(Global.loggedInUser);
+                    shoppingPage();
+                }
             }
         });
 
