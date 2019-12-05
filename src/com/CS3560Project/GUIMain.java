@@ -263,10 +263,14 @@ public class GUIMain extends Application {
     }
 
     private void newUser(){
-        Stage primaryStage = new Stage();
+        primaryStage.close();
+        primaryStage = new Stage();
         primaryStage.setTitle("Make a New Account");
+        VBox all = new VBox();
         //TODO make newUser page
-        //Scene demo = new Scene();
+        Scene ex = new Scene(all);
+        primaryStage.setScene(ex);
+        primaryStage.show();
     }
 
     private void login (){
@@ -331,7 +335,7 @@ public class GUIMain extends Application {
         ex.setAlignment(Pos.CENTER);
 
         //Scene
-        Scene demo = new Scene(ex);
+        Scene demo = new Scene(ex, 400, 400);
         primaryStage.setScene(demo);
         primaryStage.show();
     }
@@ -348,6 +352,8 @@ public class GUIMain extends Application {
         Separator separator3 = new Separator();
         final Label SHIPPING = new Label("Shipping address");
         final Label PAYMENT_METHOD = new Label("Payment Method");
+        SHIPPING.setStyle("-fx-font-weight: bold");
+        PAYMENT_METHOD.setStyle("-fx-font-weight: bold");
 
         //AMOUNT DUE and BUTTONS
         final Label TOTAL_ITEMS_PURCHASED = new Label("Total Items Purchased: " + cart.getCartSize());
@@ -408,22 +414,27 @@ public class GUIMain extends Application {
         final Label ADDRESS_LINE2 = new Label("Address Line 2");
         final Label CITY = new Label("City");
         final Label STATE = new Label("State");
-        final Label COUNTRY = new Label("Country");
         final Label ZIPCODE = new Label("Zip Code");
 
         //TODO parse the address string, the user can still change it as needed
         TextField aL1 = new TextField("");
         TextField aL2 = new TextField("");
         TextField city = new TextField("");
-        TextField country = new TextField("");
         TextField zip = new TextField("");
         ComboBox state = new ComboBox();
         state.getItems().addAll("AK", "AL", "AR", "AS", "AZ", "CA", "CO", "CT", "DC", "DE",
-                                      "FL", "GA", "GU", "HI", "IA", "ID", "IL", "IN", "KS", "KY",
-                                      "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC",
-                                      "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR",
-                                      "PA", "PR", "RI", "SC", "SD", "TN", "TX", "UT", "VA", "VI",
-                                      "VT", "WA", "WI", "WV", "WY");
+                "FL", "GA", "GU", "HI", "IA", "ID", "IL", "IN", "KS", "KY",
+                "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC",
+                "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR",
+                "PA", "PR", "RI", "SC", "SD", "TN", "TX", "UT", "VA", "VI",
+                "VT", "WA", "WI", "WV", "WY");
+        if(Global.loggedInUser != Global.GUEST){
+            aL1.setText(Global.loggedInUser.getAddress().getHouseNumber());
+            city.setText(Global.loggedInUser.getAddress().getCity());
+            zip.setText("" + Global.loggedInUser.getAddress().getZip());
+            state.setValue(Global.loggedInUser.getAddress().getState());
+        }
+
 
         GridPane shippingForm = new GridPane();
 
@@ -432,14 +443,12 @@ public class GUIMain extends Application {
         shippingForm.add(ADDRESS_LINE2, 0, 2);
         shippingForm.add(CITY, 0, 3);
         shippingForm.add(STATE, 0, 4);
-        shippingForm.add(COUNTRY, 0, 5);
-        shippingForm.add(ZIPCODE, 0, 6);
+        shippingForm.add(ZIPCODE, 0, 5);
         shippingForm.add(aL1, 1, 1);
         shippingForm.add(aL2, 1, 2);
         shippingForm.add(city, 1, 3);
         shippingForm.add(state, 1, 4);
-        shippingForm.add(country, 1, 5);
-        shippingForm.add(zip, 1, 6);
+        shippingForm.add(zip, 1, 5);
         shippingForm.setMinSize(30, 50);
 
 
