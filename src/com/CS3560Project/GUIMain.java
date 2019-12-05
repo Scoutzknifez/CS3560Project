@@ -41,7 +41,7 @@ import java.time.Month;
  */
 public class GUIMain extends Application {
     protected List<Product> searchResults;
-    protected static Cart cart = null;
+    public static Cart cart = null;
     protected Stage primaryStage;
     protected GridPane shoppingList = new GridPane();
     public Label shoppingCartLabel;
@@ -62,8 +62,11 @@ public class GUIMain extends Application {
         TextField search = new TextField();
         HBox hboxSearch = new HBox(search, searchButton);
 
+
         shoppingList.setAlignment(Pos.CENTER);
         shoppingList.setPadding(new Insets(10,10,10,10));
+        shoppingList.setHgap(20);
+        shoppingList.setVgap(20);
 
         Label cart = new Label("Shopping Cart (" + ProductView.count + ")");
         shoppingCartLabel = cart;
@@ -73,6 +76,19 @@ public class GUIMain extends Application {
             } catch(Exception e) {
                 Alert notFound = new Alert(Alert.AlertType.ERROR, "There was an error finding the next page.");
                 notFound.show();
+            }
+        });
+
+        cart.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                cart.setStyle("-fx-underline: true");
+            }
+        });
+        cart.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                cart.setStyle("-fx-underline: false");
             }
         });
 
@@ -95,9 +111,33 @@ public class GUIMain extends Application {
                login();
            }
         });
+        logout.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                logout.setStyle("-fx-underline: true");
+            }
+        });
+        logout.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                logout.setStyle("-fx-underline: false");
+            }
+        });
 
         loginLabel.setOnMouseClicked(event ->{
            login();
+        });
+        loginLabel.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                loginLabel.setStyle("-fx-underline: true");
+            }
+        });
+        loginLabel.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                loginLabel.setStyle("-fx-underline: false");
+            }
         });
 
         HBox hbox = new HBox(75, hboxSearch, cart, loginLabel, logout);
