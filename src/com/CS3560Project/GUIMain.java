@@ -203,22 +203,6 @@ public class GUIMain extends Application {
         }
     }
 
-    /*private void populateMain(List<ProductView> views)
-    {
-        int itemIndex = 0;
-        for(int i = 0; i < Global.productList.size(); i++)
-        {
-            for(int j = 0; j < 4; j++)
-            {
-                if(itemIndex < Global.productList.size())
-                {
-                    shoppingList.add(views.get(itemIndex).show(), j, i);
-                    itemIndex++;
-                }
-            }
-        }
-    }*/
-
     //Kristine's Code
     //this is for the shopping cart windowpane
     protected GridPane makeItem(Product product) throws FileNotFoundException {
@@ -611,6 +595,16 @@ public class GUIMain extends Application {
         };
         submit.disableProperty().bind(b);
         submit.setOnAction(event -> {
+            Global.loggedInUser = Global.getUserFromCredentials(userID.getText(), password.getText());
+            if (Global.loggedInUser == Global.GUEST) {
+                invalid.setText("Username or Password invalid.");
+            } else {
+                cart = new Cart(Global.loggedInUser);
+                shoppingPage();
+            }
+        });
+
+        password.setOnKeyPressed(event ->{
             Global.loggedInUser = Global.getUserFromCredentials(userID.getText(), password.getText());
             if (Global.loggedInUser == Global.GUEST) {
                 invalid.setText("Username or Password invalid.");
