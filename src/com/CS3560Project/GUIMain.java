@@ -808,6 +808,11 @@ public class GUIMain extends Application {
         final Label TOTAL_ITEMS_PURCHASED = new Label("Total Items Purchased: " + cart.getCartSize());
         final Label AMOUNT_DUE = new Label("Amount Due: " + cart.getTotalCost());
         Button purchase = new Button("Purchase");
+        purchase.setOnAction(event ->{
+           cart.finishCheckout();
+           receipt();
+        });
+
         BooleanBinding b = new BooleanBinding() {
             {
                 super.bind(aL1.textProperty(), city.textProperty(), zip.textProperty(),email.textProperty(), cn.textProperty(),
@@ -835,10 +840,6 @@ public class GUIMain extends Application {
             }
         };
         purchase.disableProperty().bind(b);
-
-        purchase.setOnAction(actionEvent -> {
-            receipt();
-        });
 
         Button back = new Button("Go Back");
         back.setOnAction(actionEvent -> {
