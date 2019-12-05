@@ -290,8 +290,10 @@ public class GUIMain extends Application {
         primaryStage.setMinHeight(300);
         primaryStage.setMinWidth(400);
 
+
         VBox list = new VBox();
-        Label emptyCart = new Label("");
+        Label emptyCart = new Label("Your cart is currently empty");
+        emptyCart.setVisible(false);
 
         Button checkOut = new Button("Checkout");
         checkOut.setOnAction(event -> {
@@ -304,19 +306,20 @@ public class GUIMain extends Application {
         });
 
         if(cart.getCartSize() == 0)
-            emptyCart.setText("Your cart is currently empty.");
+            emptyCart.setVisible(true);
 
         Button clearCart = new Button("Clear Cart");
         clearCart.setOnAction(actionEvent -> {
             cart.empty();
-            emptyCart.setText("Your cart is currently empty.");
             list.setVisible(false);
+            emptyCart.setVisible(true);
             ProductView.count = 0;
             shoppingCartLabel.setText("Shopping Cart(" + ProductView.count + ")");
         });
 
-
-        list.getChildren().add(emptyCart);
+        VBox vbox = new VBox(emptyCart, list);
+        vbox.setAlignment(Pos.CENTER);
+        //list.getChildren().add(emptyCart);
         list.setSpacing(10);
         list.setPadding(new Insets(10));
 
@@ -343,7 +346,7 @@ public class GUIMain extends Application {
 
 
         BorderPane ex = new BorderPane();
-        ex.setCenter(list);
+        ex.setCenter(vbox);
         ex.setBottom(buttons);
         BorderPane.setMargin(navi, new Insets(10));
 
