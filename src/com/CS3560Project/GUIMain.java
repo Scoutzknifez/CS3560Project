@@ -178,6 +178,23 @@ public class GUIMain extends Application {
             itemCount.setText(count + "");
         });
 
+        Label x = new Label("x");
+        x.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                x.setStyle("-fx-underline: true");
+            }
+        });
+        x.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                x.setStyle("-fx-underline: false");
+            }
+        });
+        x.addEventHandler(MouseEvent.MOUSE_CLICKED, eventDispatchChain -> {
+           //TODO add a remove item label
+        });
+
 
         Label itemName = new Label("item");
 
@@ -238,7 +255,19 @@ public class GUIMain extends Application {
             shoppingPage();
         });
 
+        Button clearCart = new Button("Clear Cart");
+        clearCart.setOnAction(actionEvent -> {
+            cart.empty();
+        });
+
+        Label emptyCart = new Label("");
+        if(cart.getCartSize() == 0)
+          emptyCart.setText("Your cart is currently empty.");
+
+
         VBox list = new VBox();
+        list.getChildren().add(emptyCart);
+        list.setSpacing(10);
         list.setPadding(new Insets(10));
 
         //makes the rows for items
@@ -256,10 +285,16 @@ public class GUIMain extends Application {
         navi.setAlignment(Pos.CENTER);
         navi.setSpacing(10);
 
+        VBox buttons = new VBox();
+        buttons.getChildren().addAll(navi, clearCart);
+        buttons.setAlignment(Pos.CENTER);
+        buttons.setSpacing(10);
+        buttons.setPadding(new Insets(10));
+
 
         BorderPane ex = new BorderPane();
         ex.setCenter(list);
-        ex.setBottom(navi);
+        ex.setBottom(buttons);
         BorderPane.setMargin(navi, new Insets(10));
 
 
