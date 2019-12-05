@@ -3,11 +3,49 @@ package com.CS3560Project.sqlworkers;
 import com.CS3560Project.sqlworkers.conditions.Conditional;
 import com.CS3560Project.sqlworkers.insertion.Databasable;
 import com.CS3560Project.sqlworkers.insertion.InsertWorker;
+import com.CS3560Project.utility.Constants;
 import com.CS3560Project.utility.Utils;
+import lombok.NonNull;
 
 import java.util.List;
 
 public class SQLHelper {
+    public static void closeSafely() {
+        try {
+            GetWorker.connection.close();
+        } catch (Exception e) {
+            // Unref and let GC handle it
+            // TODO This may be incorrect handling when this occurs
+            GetWorker.connection = null;
+            Utils.log("Could not close the connection to the database at " + Constants.DATABASE_URL);
+        }
+    }
+
+    /**
+     * Updates a database entry in table specified with the new data
+     * presented by fieldName (the database column) and the
+     * updateValue (the value that goes into the database column)
+     * when the database entry meets the given conditions (Must have some)
+     * @param table         The table to update from
+     * @param fieldName     The column to update with new value
+     * @param updateValue   The new value in the column
+     * @param conditions    The conditions to meet for the update to occur
+     * @return              didSucceed
+     */
+    public static boolean updateTable(Table table, String fieldName, Object updateValue, @NonNull Conditional conditions) {
+        UpdateWorker worker = new UpdateWorker(table, fieldName, updateValue, conditions);
+        Thread thread = new Thread(worker);
+
+        thread.start();
+        try {
+            thread.join();
+            return true;
+        } catch (Exception e) {
+            Utils.log("Failed to update on table " + table.name() + ")" + " updating item with conditions of " + conditions.toString());
+        }
+        return false;
+    }
+
     /**
      * Inserts a item into the table specified
      * @param table         The table to insert into

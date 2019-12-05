@@ -12,8 +12,10 @@ public class UpdateWorker extends Worker {
     private Object value;
     private Conditional conditions;
 
-    public UpdateWorker(Table table, Conditional conditions) {
+    public UpdateWorker(Table table, String field, Object value, Conditional conditions) {
         super(table);
+        setField(field);
+        setValue(value);
         setConditions(conditions);
     }
 
@@ -30,6 +32,7 @@ public class UpdateWorker extends Worker {
         String sqlArg = "UPDATE " + getTable().name() +
                 " SET `" + getField() + "` = " +
                 (getValue() instanceof String ? "\"" + getValue() + "\"" : getValue()) +
+                //(conditions == null ? "" : " WHERE " + getConditions().toString()); TODO Maybe use this (Trying to think of a case where this is preferred
                 " WHERE " + getConditions().toString();
 
         try {
