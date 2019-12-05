@@ -407,8 +407,8 @@ public class GUIMain extends Application {
                 error.show();
             }
             else{
-                try{
-                    Address ad = Address.stringToAddress(al1.getText() + city.getText() + state.getValue() + zip.getText());
+                try {
+                    Address ad = Address.stringToAddress(al1.getText() + "," + city.getText() + "," + State.getStateFromAbbreviation((String) state.getValue()) + "," + zip.getText());
                     PhoneNumber pn = PhoneNumber.stringToPhoneNumber(num.getText());
                     User newUser = new User(un.getText(), fn.getText(), ln.getText(), pn , ad, em.getText(), pw.getText(), AccountRank.BASIC);
                     SQLHelper.insertIntoTable(Table.USERS, newUser);
