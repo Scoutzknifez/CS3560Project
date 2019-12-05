@@ -211,7 +211,6 @@ public class GUIMain extends Application {
             if (item.equals(product))
                 count.getAndIncrement();
         }
-        System.out.println(count);
 
         Label itemCount = new Label("" + count);
         Button plus = new Button("+");
@@ -265,7 +264,8 @@ public class GUIMain extends Application {
         });
         x.addEventHandler(MouseEvent.MOUSE_CLICKED, eventDispatchChain -> {
             cart.getInventory().remove(product);
-            temp.getChildren().removeAll();
+            temp.getChildren().clear();
+
         });
         temp.add(itemImageSet, 0, 0);
         temp.add(itemName, 1, 0);
