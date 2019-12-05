@@ -283,9 +283,9 @@ public class GUIMain extends Application {
 
         Button guestUser = new Button("Login as Guest");
         guestUser.setOnAction(event -> {
+            Global.loggedInUser = Global.GUEST;
+            cart = new Cart(Global.loggedInUser);
             shoppingPage();
-            //TODO link this to the shopping page
-            // The user should be initialized as empty
         });
 
 
@@ -316,15 +316,11 @@ public class GUIMain extends Application {
         submit.setOnAction(event -> {
             Global.loggedInUser = Global.getUserFromCredentials(userID.getText(), password.getText());
             if (Global.loggedInUser == Global.GUEST) {
-                // Failed and defaulted to guest
+                invalid.setText("Username or Password invalid.");
             } else {
-
+                cart = new Cart(Global.loggedInUser);
+                shoppingPage();
             }
-            cart = new Cart(Global.loggedInUser);
-            shoppingPage();
-            //TODO look through database for authentication
-            // if fails, change the invalid label to notify the user that it's wrong
-            // else make sure the User information is filled using database info
         });
 
         VBox ex = new VBox(10, prompt, uID, userID, pw, password, submit, guestUser, invalid);
