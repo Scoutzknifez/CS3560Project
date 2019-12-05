@@ -33,10 +33,6 @@ public class ProductImage implements Databasable {
         return fieldList.stream().toArray(Object[]::new);
     }
 
-    public String getBase64() {
-        return base64.split(",")[1];
-    }
-
     @Override
     public String toString() {
         return "{\n\tID:\"" + getId() +

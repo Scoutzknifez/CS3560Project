@@ -23,7 +23,7 @@ public class ProductView
 
     public ProductView(Product product)
     {
-        imageView = new ImageView(Utils.bufferedImageToFXImage(Utils.base64ToBufferedImage(product.getProductImages().get(0).getBase64())));
+        imageView = new ImageView(Utils.bufferedImageToFXImage(Utils.base64ToBufferedImage(product.getProductImages().get(0).getBase64().split(",")[1])));
         imageView.setFitHeight(90);
         imageView.setFitWidth(80);
         vbox = new VBox(10, imageView, addToCart);
