@@ -32,7 +32,7 @@ public class Global {
         //System.out.println("[-----PRODUCTS-----]");
         List<?> list = SQLHelper.getFromTable(Table.PRODUCTS);
         list.forEach(product -> productList.add((Product) product));
-        //Utils.printList(list);
+        Utils.printList(list);
 
         //System.out.println("[-----USERS-----]");
         list = SQLHelper.getFromTable(Table.USERS);
@@ -41,7 +41,7 @@ public class Global {
 
         //System.out.println("[-----INVENTORYSLOTS-----]");
         list = SQLHelper.getFromTable(Table.INVENTORIES);
-        //Utils.printList(list);
+        Utils.printList(list);
 
         constructInventories((List<InventorySlot>) list);
     }

@@ -229,18 +229,24 @@ public class GUIMain extends Application {
             changeCartLabel(1);
         });
 
+        GridPane temp = new GridPane();
+
         Button minus = new Button("-");
         minus.setMinSize(plus.getHeight(), plus.getWidth());
         minus.setOnAction(event -> {
             //remove Item
-            cart.getInventory().remove(product);
-            count.getAndDecrement();
+            cart.decrement(product.getId());
+            if (cart.getInventory().containsKey(product)) {
+                count.getAndDecrement();
 
-            //decrement and change the label
-            itemCount.setText(count + "");
+                //decrement and change the label
+                itemCount.setText(count + "");
 
-            //Alters shopping cart label
-            changeCartLabel(-1);
+                //Alters shopping cart label
+                changeCartLabel(-1);
+            } else {
+                temp.getChildren().clear();
+            }
         });
 
         Label itemName = new Label(Utils.capitalize(product.getProductName()));
@@ -249,8 +255,6 @@ public class GUIMain extends Application {
         itemImageSet.setPreserveRatio(true);
         itemImageSet.setFitHeight(50);
 
-
-        GridPane temp = new GridPane();
         Label x = new Label("x");
         x.setOnMouseEntered(event -> x.setStyle("-fx-underline: true"));
         x.setOnMouseExited(event -> x.setStyle("-fx-underline: false"));
@@ -260,20 +264,24 @@ public class GUIMain extends Application {
             temp.getChildren().clear();
             changeCartLabel(count.get()*-1);
         });
+
         temp.add(itemImageSet, 0, 0);
         temp.add(itemName, 1, 0);
         temp.add(minus, 2, 0);
         temp.add(itemCount, 3, 0);
         temp.add(plus, 4, 0);
         temp.add(x,5,0);
+
         temp.setHgap(10);
         temp.setVgap(10);
         temp.setPadding(new Insets(20));
+
         temp.setHalignment(itemImageSet, HPos.CENTER);
         temp.setHalignment(itemName, HPos.LEFT);
         temp.setHalignment(minus, HPos.CENTER);
         temp.setHalignment(itemCount, HPos.CENTER);
         temp.setHalignment(plus, HPos.CENTER);
+
         return temp;
     }
 
@@ -814,20 +822,23 @@ public class GUIMain extends Application {
             @Override
             protected boolean computeValue()
             {
-                boolean temp = true;
-                if(!(aL1.getText().isEmpty() || city.getText().isEmpty() || zip.getText().isEmpty()  || email.getText().isEmpty() || state.getValue() == null)){
-                    if(cn.getText().isEmpty()  &&  n.getText().isEmpty()    &&   sc.getText().isEmpty() && month.getValue() == null  && year.getValue() == null){
-                        if(e.getText().isEmpty() || p.getText().isEmpty()){
+                if(!(aL1.getText().isEmpty() || city.getText().isEmpty() || zip.getText().isEmpty()  || email.getText().isEmpty() || state.getValue() == null)) {
+
+                    if(cn.getText().isEmpty()  &&  n.getText().isEmpty()    &&   sc.getText().isEmpty() && month.getValue() == null  && year.getValue() == null) {
+
+                        if(e.getText().isEmpty() || p.getText().isEmpty()) {
+                            // TODO
                         }
+
                         if(!e.getText().isEmpty() && !p.getText().isEmpty()) {
-                            temp = false;
+                            return false;
                         }
                     }
-                    if(!(cn.getText().isEmpty()  || n.getText().isEmpty()    ||   sc.getText().isEmpty() || month.getValue() == null  || year.getValue() == null)) {
-                        temp = false;
-                    }
+
+                    return (!(cn.getText().isEmpty()|| n.getText().isEmpty() || sc.getText().isEmpty() || month.getValue() == null || year.getValue() == null));
                 }
-                return temp;
+
+                return true;
             }
         };
         purchase.disableProperty().bind(b);
@@ -837,8 +848,8 @@ public class GUIMain extends Application {
             primaryStage.close();
             try {
                 shoppingCart();
-            } catch (FileNotFoundException execpt) {
-                execpt.printStackTrace();
+            } catch (Exception exception) {
+                exception.printStackTrace();
             }
         });
 
