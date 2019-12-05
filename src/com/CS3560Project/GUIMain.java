@@ -345,6 +345,8 @@ public class GUIMain extends Application {
     private void checkOutWin() {
         primaryStage.close();
         primaryStage = new Stage();
+        primaryStage.setMinHeight(400);
+        primaryStage.setMaxWidth(400);
         primaryStage.setTitle("Checkout");
         Scene ex;
         Separator separator = new Separator();
@@ -356,33 +358,6 @@ public class GUIMain extends Application {
         final Label PAYMENT_METHOD = new Label("Payment Method");
         SHIPPING.setStyle("-fx-font-weight: bold");
         PAYMENT_METHOD.setStyle("-fx-font-weight: bold");
-
-        //AMOUNT DUE and BUTTONS
-        final Label TOTAL_ITEMS_PURCHASED = new Label("Total Items Purchased: " + cart.getCartSize());
-        final Label AMOUNT_DUE = new Label("Amount Due: " + cart.getTotalCost());
-        Button purchase = new Button("Purchase");
-        BooleanBinding b = new BooleanBinding() {
-            @Override
-            protected boolean computeValue()
-            {
-                return (cart.getCartSize() == 0);
-            }
-        };
-        purchase.disableProperty().bind(b);
-
-        purchase.setOnAction(actionEvent -> {
-            receipt();
-        });
-
-        Button back = new Button("Go Back");
-        back.setOnAction(actionEvent -> {
-            primaryStage.close();
-            try {
-                shoppingCart();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        });
 
         HBox loginBar = new HBox();
         if(Global.loggedInUser == Global.GUEST) {
@@ -417,12 +392,14 @@ public class GUIMain extends Application {
         final Label CITY = new Label("City");
         final Label STATE = new Label("State");
         final Label ZIPCODE = new Label("Zip Code");
+        final Label EMAIL = new Label("Email");
 
         //TODO parse the address string, the user can still change it as needed
         TextField aL1 = new TextField("");
         TextField aL2 = new TextField("");
         TextField city = new TextField("");
         TextField zip = new TextField("");
+        TextField email = new TextField("");
         ComboBox state = new ComboBox();
 
         List<String> abbreviations = new ArrayList<>();
@@ -435,6 +412,7 @@ public class GUIMain extends Application {
             city.setText(Global.loggedInUser.getAddress().getCity());
             zip.setText("" + Global.loggedInUser.getAddress().getZip());
             state.setValue(Utils.capitalize(Global.loggedInUser.getAddress().getState().name()));
+            email.setText(Global.loggedInUser.getEmail());
         }
 
         GridPane shippingForm = new GridPane();
@@ -444,12 +422,15 @@ public class GUIMain extends Application {
         shippingForm.add(CITY, 0, 3);
         shippingForm.add(STATE, 0, 4);
         shippingForm.add(ZIPCODE, 0, 5);
+        shippingForm.add(EMAIL, 0, 6);
         shippingForm.add(aL1, 1, 1);
         shippingForm.add(aL2, 1, 2);
         shippingForm.add(city, 1, 3);
         shippingForm.add(state, 1, 4);
         shippingForm.add(zip, 1, 5);
+        shippingForm.add(email, 1, 6);
         shippingForm.setMinSize(30, 50);
+
 
         shippingForm.setHgap(10);
         shippingForm.setVgap(10);
@@ -462,6 +443,30 @@ public class GUIMain extends Application {
         paypal.setToggleGroup(paymentChoices);
         creditCard.setToggleGroup(paymentChoices);
         debitCard.setToggleGroup(paymentChoices);
+
+        Label name = new Label("Name on card");
+        Label cardNumber = new Label("Card Number (no spaces or dashes)");
+        Label expiration = new Label("Card Expiration Date");
+        Label securityCode = new Label("Security Code");
+
+        TextField n = new TextField();
+        TextField cn = new TextField();
+        TextField sc = new TextField();
+        ComboBox month = new ComboBox();
+        month.getItems().addAll(Month.values());
+        ComboBox year = new ComboBox();
+        for(int i = 2019; i<= 2030; i++){
+            year.getItems().add(i);
+        }
+
+        //paypal
+        Label ppemail = new Label("Email");
+        Label pw = new Label("PayPal Password");
+        TextField e = new TextField("");
+        PasswordField p = new PasswordField();
+        Button connect = new Button("Connect");
+
+
         GridPane pm = new GridPane();
         pm.setHgap(10);
         pm.setPadding(new Insets(10));
@@ -471,36 +476,16 @@ public class GUIMain extends Application {
         paymentChoices.selectedToggleProperty().addListener(listener -> {
             if(paymentChoices.getSelectedToggle() == paypal){
                 pm.getChildren().clear();
-                Label email = new Label("Email");
-                Label pw = new Label("PayPal Password");
-                TextField e = new TextField();
-                PasswordField p = new PasswordField();
-                Button connect = new Button("Connect");
-
-                pm.add(email, 0,0);
+                pm.add(ppemail, 0,0);
                 pm.add(pw, 0, 1);
                 pm.add(e, 1,0);
                 pm.add(p, 1, 1);
                 pm.add(connect, 1, 2);
             }
 
-            else if(paymentChoices.getSelectedToggle() == creditCard || paymentChoices.getSelectedToggle() == debitCard){
+
+            if(paymentChoices.getSelectedToggle() == creditCard || paymentChoices.getSelectedToggle() == debitCard){
                 pm.getChildren().clear();
-                Label name = new Label("Name on card");
-                Label cardNumber = new Label("Card Number (no spaces or dashes)");
-                Label expiration = new Label("Card Expiration Date");
-                Label securityCode = new Label("Security Code");
-
-                TextField n = new TextField();
-                TextField cn = new TextField();
-                TextField sc = new TextField();
-                ComboBox month = new ComboBox();
-                month.getItems().addAll(Month.values());
-                ComboBox year = new ComboBox();
-                for(int i = 2019; i<= 2030; i++){
-                    year.getItems().add(i);
-                }
-
                 HBox date = new HBox();
                 date.getChildren().addAll(month, year);
                 date.setSpacing(10);
@@ -530,6 +515,53 @@ public class GUIMain extends Application {
         s.setSpacing(10);
         s.setAlignment(Pos.CENTER_LEFT);
 
+        //AMOUNT DUE and BUTTONS
+        final Label TOTAL_ITEMS_PURCHASED = new Label("Total Items Purchased: " + cart.getCartSize());
+        final Label AMOUNT_DUE = new Label("Amount Due: " + cart.getTotalCost());
+        Button purchase = new Button("Purchase");
+        BooleanBinding b = new BooleanBinding() {
+            {
+                super.bind(aL1.textProperty(), city.textProperty(), zip.textProperty(),email.textProperty(), cn.textProperty(),
+                           n.textProperty(), sc.textProperty(), state.valueProperty(), month.valueProperty(), year.valueProperty(),
+                           e.textProperty(), p.textProperty());
+            }
+
+            @Override
+            protected boolean computeValue()
+            {
+                boolean temp = true;
+                //if (cart.getCartSize() ==0){ return true; }
+                if(!(aL1.getText().isEmpty() || city.getText().isEmpty() || zip.getText().isEmpty()  || email.getText().isEmpty() || state.getValue() == null)){
+                    if(cn.getText().isEmpty()  &&  n.getText().isEmpty()    &&   sc.getText().isEmpty() && month.getValue() == null  && year.getValue() == null){
+                        if(e.getText().isEmpty() || p.getText().isEmpty()){
+                        }
+                        if(!e.getText().isEmpty() && !p.getText().isEmpty()) {
+                            temp = false;
+                        }
+                    }
+                    if(!(cn.getText().isEmpty()  || n.getText().isEmpty()    ||   sc.getText().isEmpty() || month.getValue() == null  || year.getValue() == null)) {
+                        temp = false;
+                    }
+                }
+                return temp;
+            }
+        };
+        purchase.disableProperty().bind(b);
+
+        purchase.setOnAction(actionEvent -> {
+            receipt();
+        });
+
+        Button back = new Button("Go Back");
+        back.setOnAction(actionEvent -> {
+            primaryStage.close();
+            try {
+                shoppingCart();
+            } catch (FileNotFoundException execpt) {
+                execpt.printStackTrace();
+            }
+        });
+
         HBox buttons = new HBox();
         buttons.getChildren().addAll(back, purchase);
         buttons.setSpacing(10);
@@ -544,7 +576,7 @@ public class GUIMain extends Application {
 
         ScrollPane root = new ScrollPane(all);
         root.setFitToWidth(true);
-        ex = new Scene(root, 500, 500);
+        ex = new Scene(root, 400, 400);
         primaryStage.setScene(ex);
         primaryStage.show();
     }
@@ -557,7 +589,7 @@ public class GUIMain extends Application {
 
         Label thanks = new Label("Thank you for shopping with us!");
         thanks.setStyle("-fx-font-weight: bold");
-        Label action = new Label("A confirmation and receipt have been sent to " + Global.loggedInUser.getEmail());
+        Label action = new Label("A confirmation and receipt have been sent to your email.");
         Button back = new Button("Back to shopping");
         back.setOnAction(event -> {
             primaryStage.close();
