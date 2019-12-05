@@ -1,5 +1,6 @@
 package com.CS3560Project.structures;
 
+import com.CS3560Project.utility.Utils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,7 +33,7 @@ public class TimeAtMoment {
             minute = Integer.parseInt(splits[4]);
             second = Integer.parseInt(splits[5]);
         } catch (Exception e) {
-            System.out.println("Can not properly create TimeAtMoment object.");
+            Utils.log("Can not properly create TimeAtMoment object.");
         }
     }
 

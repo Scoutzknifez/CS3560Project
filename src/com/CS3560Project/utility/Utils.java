@@ -125,9 +125,9 @@ public class Utils {
 
     /**
      * Sends a message out to console with time stamp of log execution
-     * @param input The message to display
+     * @param input The object to display
      */
-    public static void log(String input) {
+    public static void log(Object input) {
         TimeAtMoment timeAtMoment = new TimeAtMoment(System.currentTimeMillis());
         System.out.println("[" + timeAtMoment + "] " + input);
     }

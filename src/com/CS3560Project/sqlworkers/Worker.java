@@ -12,8 +12,8 @@ import java.sql.Statement;
 
 @Getter
 public abstract class Worker implements Runnable {
+    public static Connection connection;
     private Statement statement;
-    private Connection connection;
     @Setter private Table table;
 
     public Worker(Table table) {
@@ -25,21 +25,22 @@ public abstract class Worker implements Runnable {
      * Gets the MySQL connector ready to work.
      */
     private void ready() {
-        if (connectToDriver() == Result.FAILURE) {
-            System.out.println("Could not connect driver for MySQL.");
-            return; // TODO should instead throw exceptions rather than returning
-        }
-
-
-        connection = connectToMySQLDatabase();
         if (connection == null) {
-            Utils.log("Could not connect to MySQL Database.");
-            return;
+            if (connectToDriver() == Result.FAILURE) {
+                Utils.log("Could not connect driver for MySQL.");
+                return; // TODO should instead throw exceptions rather than returning
+            }
+
+            connection = connectToMySQLDatabase();
+            if (connection == null) {
+                Utils.log("Could not connect to MySQL Database.");
+                return;
+            }
         }
 
         statement = getSQLStatement();
         if (statement == null)
-            System.out.println("Could not get MySQL statement.");
+            Utils.log("Could not get MySQL statement.");
     }
 
     /**
@@ -47,7 +48,7 @@ public abstract class Worker implements Runnable {
      * @return  Fail/Success
      */
     private Result connectToDriver() {
-        System.out.println("Connecting driver! ");
+        Utils.log("Connecting driver!");
         try {
             Class.forName(Constants.JDBC_DRIVER);
             return Result.SUCCESS;
@@ -76,10 +77,21 @@ public abstract class Worker implements Runnable {
      */
     private Statement getSQLStatement() {
         try {
-            return getConnection().createStatement();
+            return connection.createStatement();
         } catch (Exception e) {
-            System.out.println("Could not create MySQL statement.");
+            Utils.log("Could not create MySQL statement.");
             return null;
+        }
+    }
+
+    /**
+     * Closes the currently open statement.
+     */
+    protected void closeStatement() {
+        try {
+            statement.close();
+        } catch (Exception e) {
+            Utils.log("Could not close statement for connection.");
         }
     }
 
@@ -88,14 +100,9 @@ public abstract class Worker implements Runnable {
      */
     protected void closeConnection() {
         try {
-            statement.close();
-        } catch (Exception e) {
-            System.out.println("Could not close statement for connection.");
-        }
-        try {
             connection.close();
         } catch (Exception e) {
-            System.out.println("Could not close connection.");
+            Utils.log("Could not close connection.");
         }
     }
 }

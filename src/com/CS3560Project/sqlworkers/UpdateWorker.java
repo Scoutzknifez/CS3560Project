@@ -1,6 +1,7 @@
 package com.CS3560Project.sqlworkers;
 
 import com.CS3560Project.sqlworkers.conditions.Conditional;
+import com.CS3560Project.utility.Utils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,7 +23,7 @@ public class UpdateWorker extends Worker {
             return;
 
         doUpdate();
-        closeConnection();
+        closeStatement();
     }
 
     private void doUpdate() {
@@ -30,6 +31,11 @@ public class UpdateWorker extends Worker {
                 " SET `" + getField() + "` = " +
                 (getValue() instanceof String ? "\"" + getValue() + "\"" : getValue()) +
                 " WHERE " + getConditions().toString();
-        // TODO
+
+        try {
+            getStatement().execute(sqlArg);
+        } catch (Exception e) {
+            Utils.log("Failed to update on table " + getTable().name() + ")" + " updating item with conditions of " + conditions.toString());
+        }
     }
 }

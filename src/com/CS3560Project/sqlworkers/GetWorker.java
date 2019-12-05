@@ -38,7 +38,7 @@ public class GetWorker extends Worker {
             Utils.log("Item list is null from GetWorker");
         }
 
-        closeConnection();
+        closeStatement();
     }
 
     /**

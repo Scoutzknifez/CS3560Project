@@ -23,7 +23,7 @@ public class InsertWorker extends Worker {
             return;
 
         doInsertion();
-        closeConnection();
+        closeStatement();
     }
 
     private void doInsertion() {
@@ -31,7 +31,6 @@ public class InsertWorker extends Worker {
         try {
             getStatement().execute(sqlArg);
         } catch (Exception e) {
-            e.printStackTrace();
             Utils.log("Failed to do insertion on table: " + getTable().name());
         }
     }
