@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class GUIMain extends Application {
     protected List<Product> searchResults;
     protected static Cart cart = null;
-    protected Stage primaryStage = new Stage();
+    protected Stage primaryStage;
     protected GridPane shoppingList = new GridPane();
     public Label shoppingCartLabel;
 
@@ -268,14 +268,15 @@ public class GUIMain extends Application {
     }
 
     private void login (){
-        primaryStage.close();
+        if (primaryStage != null)
+            primaryStage.close();
+
         primaryStage = new Stage();
         primaryStage.setTitle("Login to MarketPlace");
         primaryStage.setMinHeight(400);
         primaryStage.setMinWidth(400);
         primaryStage.setMaxHeight(400);
         primaryStage.setMaxWidth(400);
-
 
         Label prompt = new Label("Please Sign In");
         Label invalid = new Label("");
