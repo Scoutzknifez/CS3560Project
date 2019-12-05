@@ -5,6 +5,7 @@ import com.CS3560Project.structures.State;
 import com.CS3560Project.structures.products.Product;
 import com.CS3560Project.structures.inventory.Inventory;
 import com.CS3560Project.GUI.ProductView;
+import com.CS3560Project.structures.User;
 
 import com.CS3560Project.utility.Constants;
 import com.CS3560Project.utility.Global;
@@ -337,8 +338,33 @@ public class GUIMain extends Application {
             }
         };
         createAccount.disableProperty().bind(b);
+        Alert error = new Alert(Alert.AlertType.ERROR);
         createAccount.setOnAction(actionEvent -> {
             //TODO add all of the verifications that have to go here and alerts depending on the error
+            for(User user : Global.userList){
+              if(em.getText() == user.getEmail()){
+                  error.setHeaderText("Email in use");
+                  error.setTitle("ERROR");
+                  error.setContentText("This email is currently in use by another account.");
+                  error.show();
+                  break;
+              }
+            }
+            if(!pw.getText().equals(rpw.getText())){
+                error.setHeaderText("Passwords do not match");
+                error.setTitle("ERROR");
+                error.setContentText("Please maker sure your password and re-entered password matches.");
+                error.show();
+            }
+            else{
+                Alert accMade = new Alert(Alert.AlertType.INFORMATION);
+                accMade.setTitle("Success");
+                accMade.setHeaderText("Account made successfully");
+                accMade.setContentText("You will be directed to the login page.");
+                accMade.showAndWait();
+                primaryStage.close();
+                login();
+            }
         });
 
         HBox buttons = new HBox();
