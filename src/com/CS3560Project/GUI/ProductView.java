@@ -58,7 +58,7 @@ public class ProductView
 
         remove.setOnMouseClicked(e -> {
             Global.guiMainReference.changeCartLabel(-1);
-            GUIMain.cart.getInventory().remove(product);
+            GUIMain.cart.decrement(product.getId());;
             remove.setVisible(false);
             addToCart.setVisible(true);
         });
