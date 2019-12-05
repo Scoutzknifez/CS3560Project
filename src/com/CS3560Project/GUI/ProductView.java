@@ -4,10 +4,8 @@ import com.CS3560Project.GUIMain;
 import com.CS3560Project.structures.products.*;
 import com.CS3560Project.utility.Global;
 import com.CS3560Project.utility.Utils;
-import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
@@ -44,18 +42,9 @@ public class ProductView
             Global.guiMainReference.shoppingCartLabel.setText("Shopping Cart (" + count + ")");
             GUIMain.cart.addProduct(product, 1);
         });
-        addToCart.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                addToCart.setStyle("-fx-underline: true");
-            }
-        });
-        addToCart.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                addToCart.setStyle("-fx-underline: false");
-            }
-        });
+
+        addToCart.setOnMouseEntered(e -> addToCart.setStyle("-fx-underline: true"));
+        addToCart.setOnMouseExited(e -> addToCart.setStyle("-fx-underline: false"));
     }
 
     public static List<ProductView> createProductViews(List<Product> products)

@@ -5,7 +5,6 @@ import com.CS3560Project.sqlworkers.SQLHelper;
 import com.CS3560Project.sqlworkers.Table;
 import com.CS3560Project.sqlworkers.conditions.Conditional;
 import com.CS3560Project.sqlworkers.insertion.Databasable;
-import com.CS3560Project.utility.Global;
 import com.CS3560Project.utility.Utils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
