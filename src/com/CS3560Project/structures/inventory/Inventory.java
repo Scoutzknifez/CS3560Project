@@ -33,11 +33,17 @@ public class Inventory {
      */
     public boolean incrementByValue(String productID, int incrementBy) {
         Product product = search(productID);
-        if (product == null)
-            throw new NullPointerException(productID);
+        if (product == null) {
+            // Returns false if product is not in list
+            return false;
+        }
 
         int newQuantity = getInventory().get(product) + incrementBy;
-        getInventory().put(product, newQuantity);
+        if (newQuantity >= 1)
+            getInventory().put(product, newQuantity);
+        else
+            getInventory().remove(product);
+
         return true;
     }
 
