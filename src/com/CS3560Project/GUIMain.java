@@ -76,6 +76,7 @@ public class GUIMain extends Application {
             } catch(Exception e) {
                 Alert notFound = new Alert(Alert.AlertType.ERROR, "There was an error finding the next page.");
                 notFound.show();
+                e.printStackTrace();
             }
         });
 
@@ -255,10 +256,12 @@ public class GUIMain extends Application {
 
         //TODO figure out how to pull image from database
         // Images are already pulled from database and given to a product on creation (if the product has images) - Cody
-        Image itemImage = new Image(new FileInputStream("C:\\Users\\Kristine\\Desktop\\purikura fun times!.JPG"));
-        ImageView itemImageSet = new ImageView(itemImage);
+        //Image itemImage = new Image(new FileInputStream("C:\\Users\\Kristine\\Desktop\\purikura fun times!.JPG"));
+        ImageView itemImageSet = new ImageView(Utils.bufferedImageToFXImage(Utils.base64ToBufferedImage(product.getProductImages().get(0).getBase64().split(",")[1])));
         itemImageSet.setPreserveRatio(true);
         itemImageSet.setFitHeight(50);
+
+
 
 
         GridPane temp = new GridPane();

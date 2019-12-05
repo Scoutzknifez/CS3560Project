@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.geometry.Pos;
+import javafx.scene.paint.Color;
 
 //How to display images
 //Image image = Utils.bufferImageToFXImage(Utils.base64ToBufferImage(product.getProductImage().get(0).getBase64()));
@@ -33,6 +34,12 @@ public class ProductView
 
         name.setText(Utils.capitalize(product.getProductName()));
         rating.setText("Average Rating: " + Utils.formatDouble(product.getAverageRating(), 1));
+        if(product.getAverageRating() > 3)
+            rating.setTextFill(Color.GREEN);
+        else if(product.getAverageRating() >= 3 && product.getAverageRating() < 4)
+            rating.setTextFill(Color.DARKGOLDENROD);
+        else
+            rating.setTextFill(Color.RED);
 
         vbox = new VBox(10, name, imageView, rating, addToCart);
         vbox.setAlignment(Pos.CENTER);
