@@ -301,13 +301,12 @@ public class GUIMain extends Application {
         checkOut.setOnAction(event -> {
             checkOutWin();
         });
-        BooleanBinding b = new BooleanBinding() {
-            @Override
-            protected boolean computeValue() {
-                return cart.getCartSize() == 0;
-            }
-        };
-        checkOut.disableProperty().bind(b);
+        if(cart.getCartSize() == 0){
+            checkOut.setDisable(true);
+        }
+        else{
+            checkOut.setDisable(false);
+        }
 
         Button goBack = new Button("Go Back");
         goBack.setOnAction(event -> {
@@ -324,6 +323,7 @@ public class GUIMain extends Application {
             emptyCart.setVisible(true);
             ProductView.count = 0;
             shoppingCartLabel.setText("Shopping Cart(" + ProductView.count + ")");
+            checkOut.setDisable(true);
         });
 
         VBox vbox = new VBox(emptyCart, list);
