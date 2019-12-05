@@ -22,8 +22,16 @@ public class Main {
         // TODO Wait for info to be fetched and parsed before this
         // Shows how to dispatch the com.CS3560Project.GUI from JFX
         GUIMain.launch(GUIMain.class);
+
+        SQLHelper.closeSafely();
     }
 
+    /**
+     * ALL OF THESE MUST BE A UNIQUE ONE HERE THAT SOMEONE DOES NOT HAVE
+     * ESSENTIALLY EVERYTIME SOMEONE USES THIS METHOD, IT NEEDS TO BE RETYPED IN THE VALUES
+     * OF EACH OBJECT FOR THE DB TO HAVE UNIQUE DATA
+     * EVERY OBJECT AND I MEAN EVERY OBJECT MUST BE FILLED IN
+     */
     private static void testSet() {
         PhoneNumber phoneNumber = new PhoneNumber(951, 1234567);
         Address address = new Address("31798 Random Street", "Temecula", State.CALIFORNIA, 92590);

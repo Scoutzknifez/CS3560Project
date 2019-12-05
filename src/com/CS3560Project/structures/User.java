@@ -57,7 +57,7 @@ public class User implements Databasable {
                 "\",\n\temail:\"" + getEmail() +
                 "\",\n\tpassword:\"" + getPassword() +
                 "\",\n\trank:" + getRank() +
-                "}";
+                "\n}";
     }
 
     /**

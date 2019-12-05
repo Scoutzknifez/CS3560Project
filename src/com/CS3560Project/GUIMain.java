@@ -1,12 +1,14 @@
 package com.CS3560Project;
 
 import com.CS3560Project.structures.Cart;
+import com.CS3560Project.structures.State;
 import com.CS3560Project.structures.products.Product;
 import com.CS3560Project.structures.inventory.Inventory;
 import com.CS3560Project.GUI.ProductView;
 
 import com.CS3560Project.utility.Constants;
 import com.CS3560Project.utility.Global;
+import com.CS3560Project.utility.Utils;
 import javafx.application.Application;
 import javafx.beans.binding.BooleanBinding;
 import javafx.event.EventHandler;
@@ -145,7 +147,7 @@ public class GUIMain extends Application {
         Label itemCount = new Label("");
 
         AtomicInteger count = new AtomicInteger();
-        for(Product item: cart.getCartItems()) {
+        for(Product item: cart.getInventory().keySet()) {
             if (item.equals(product))
                 count.getAndIncrement();
         }
@@ -154,7 +156,7 @@ public class GUIMain extends Application {
         plus.autosize();
         plus.setOnAction(event -> {
             //adds more of item
-            cart.addProduct(product);
+            cart.addProduct(product, 1);
             count.getAndIncrement();
 
             //increment and change the label
@@ -165,7 +167,7 @@ public class GUIMain extends Application {
         minus.setMinSize(plus.getHeight(), plus.getWidth());
         minus.setOnAction(event -> {
             //remove Item
-            cart.getCartItems().remove(product);
+            cart.getInventory().remove(product);
             count.getAndDecrement();
 
             //increment and change the label
@@ -236,8 +238,8 @@ public class GUIMain extends Application {
         list.setPadding(new Insets(10));
 
         //makes the rows for items
-        ArrayList<Product> addedItems = new ArrayList<Product>();
-        for(Product product: cart.getCartItems()) {
+        ArrayList<Product> addedItems = new ArrayList<>();
+        for(Product product: cart.getInventory().keySet()) {
             if(!addedItems.contains(product)) {
                 addedItems.add(product);
                 list.getChildren().add(makeItem(product));
@@ -422,22 +424,20 @@ public class GUIMain extends Application {
         TextField city = new TextField("");
         TextField zip = new TextField("");
         ComboBox state = new ComboBox();
-        state.getItems().addAll("AK", "AL", "AR", "AS", "AZ", "CA", "CO", "CT", "DC", "DE",
-                "FL", "GA", "GU", "HI", "IA", "ID", "IL", "IN", "KS", "KY",
-                "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC",
-                "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR",
-                "PA", "PR", "RI", "SC", "SD", "TN", "TX", "UT", "VA", "VI",
-                "VT", "WA", "WI", "WV", "WY");
+
+        List<String> abbreviations = new ArrayList<>();
+        for (State stateObj : State.values())
+            abbreviations.add(stateObj.getAbbreviation());
+        state.getItems().addAll(abbreviations);
+
         if(Global.loggedInUser != Global.GUEST){
             aL1.setText(Global.loggedInUser.getAddress().getHouseNumber());
             city.setText(Global.loggedInUser.getAddress().getCity());
             zip.setText("" + Global.loggedInUser.getAddress().getZip());
-            state.setValue(Global.loggedInUser.getAddress().getState());
+            state.setValue(Utils.capitalize(Global.loggedInUser.getAddress().getState().name()));
         }
 
-
         GridPane shippingForm = new GridPane();
-
 
         shippingForm.add(ADDRESS_LINE1, 0, 1);
         shippingForm.add(ADDRESS_LINE2, 0, 2);
@@ -451,10 +451,8 @@ public class GUIMain extends Application {
         shippingForm.add(zip, 1, 5);
         shippingForm.setMinSize(30, 50);
 
-
         shippingForm.setHgap(10);
         shippingForm.setVgap(10);
-
 
         //payment info
         final ToggleGroup paymentChoices = new ToggleGroup();
@@ -517,7 +515,6 @@ public class GUIMain extends Application {
                 pm.add(cn, 1, 1);
                 pm.add(sc, 1, 2);
                 pm.add(date, 1, 3);
-
             }
         });
 

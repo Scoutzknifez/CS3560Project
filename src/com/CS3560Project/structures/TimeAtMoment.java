@@ -39,38 +39,36 @@ public class TimeAtMoment {
 
     @Override
     public String toString() {
-        boolean isPM = false;
-        String builder;
-
-        int realHour = getHour() + 1;
+        StringBuilder sb = new StringBuilder();
+        String section;
 
         if(getHour() > 12) {
-            builder = (getHour() - 12) + ":";
-            isPM = true;
+            section = (getHour() - 12) + ":";
         } else {
-            builder = (getHour()) + ":";
+            section = (getHour()) + ":";
         }
+        sb.append(section);
 
         if(getMinute() < 10) {
-            builder += "0" + getMinute();
+            section = "0" + getMinute() + ":";
         } else {
-            builder += getMinute();
+            section = "" + getMinute() + ":";
         }
-
-        builder += ":";
+        sb.append(section);
 
         if(getSecond() < 10) {
-            builder += "0" + getSecond();
+            section = "0" + getSecond();
         } else {
-            builder += getSecond();
+            section = "" + getSecond();
+        }
+        sb.append(section);
+
+        if(getHour() > 12) {
+            sb.append(" PM");
+        } else {
+            sb.append(" AM");
         }
 
-        if(isPM) {
-            builder += " PM";
-        } else {
-            builder += " AM";
-        }
-
-        return builder;
+        return sb.toString();
     }
 }

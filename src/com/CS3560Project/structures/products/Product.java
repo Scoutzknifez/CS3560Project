@@ -43,7 +43,7 @@ public class Product implements Databasable {
         List<Object> fieldList = new ArrayList<>();
 
         fieldList.add(getId());
-        fieldList.add(getProductName());
+        fieldList.add(Utils.capitalize(getProductName()));
         fieldList.add(getPrice());
         fieldList.add(getDescription());
         fieldList.add(getDimensions());
