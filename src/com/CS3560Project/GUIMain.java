@@ -258,7 +258,7 @@ public class GUIMain extends Application {
         x.addEventHandler(MouseEvent.MOUSE_CLICKED, eventDispatchChain -> {
             cart.getInventory().remove(product);
             temp.getChildren().clear();
-
+            changeCartLabel(count.get()*-1);
         });
         temp.add(itemImageSet, 0, 0);
         temp.add(itemName, 1, 0);
@@ -899,15 +899,7 @@ public class GUIMain extends Application {
 
     public void changeCartLabel(int num)
     {
-        if(num > 0)
-        {
-            ProductView.count++;
-            shoppingCartLabel.setText("Shopping Cart(" + ProductView.count + ")");
-        }
-        else
-        {
-            ProductView.count--;
-            shoppingCartLabel.setText("Shopping Cart(" + ProductView.count + ")");
-        }
+        ProductView.count += num;
+        shoppingCartLabel.setText("Shopping Cart(" + ProductView.count + ")");
     }
 }

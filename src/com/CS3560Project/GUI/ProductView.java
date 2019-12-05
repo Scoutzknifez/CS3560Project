@@ -39,7 +39,7 @@ public class ProductView
         remove.setTextFill(Color.RED);
 
         rating.setText("Average Rating: " + Utils.formatDouble(product.getAverageRating(), 1));
-        if(product.getAverageRating() > 3)
+        if(product.getAverageRating() >= 4)
             rating.setTextFill(Color.GREEN);
         else if(product.getAverageRating() >= 3 && product.getAverageRating() < 4)
             rating.setTextFill(Color.DARKGOLDENROD);
