@@ -301,6 +301,13 @@ public class GUIMain extends Application {
         checkOut.setOnAction(event -> {
             checkOutWin();
         });
+        BooleanBinding b = new BooleanBinding() {
+            @Override
+            protected boolean computeValue() {
+                return cart.getCartSize() == 0;
+            }
+        };
+        checkOut.disableProperty().bind(b);
 
         Button goBack = new Button("Go Back");
         goBack.setOnAction(event -> {
@@ -321,7 +328,6 @@ public class GUIMain extends Application {
 
         VBox vbox = new VBox(emptyCart, list);
         vbox.setAlignment(Pos.CENTER);
-        //list.getChildren().add(emptyCart);
         list.setSpacing(10);
         list.setPadding(new Insets(10));
 
@@ -800,7 +806,6 @@ public class GUIMain extends Application {
             protected boolean computeValue()
             {
                 boolean temp = true;
-                //if (cart.getCartSize() ==0){ return true; }
                 if(!(aL1.getText().isEmpty() || city.getText().isEmpty() || zip.getText().isEmpty()  || email.getText().isEmpty() || state.getValue() == null)){
                     if(cn.getText().isEmpty()  &&  n.getText().isEmpty()    &&   sc.getText().isEmpty() && month.getValue() == null  && year.getValue() == null){
                         if(e.getText().isEmpty() || p.getText().isEmpty()){
