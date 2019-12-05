@@ -22,7 +22,9 @@ import javafx.scene.image.*;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
+import org.w3c.dom.Text;
 
+import javax.swing.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -267,9 +269,115 @@ public class GUIMain extends Application {
     private void newUser(){
         primaryStage.close();
         primaryStage = new Stage();
+        primaryStage.setMinHeight(400);
+        primaryStage.setMinWidth(250);
         primaryStage.setTitle("Make a New Account");
-        VBox all = new VBox();
-        //TODO make newUser page
+        Separator s0 = new Separator();
+        Separator s1 = new Separator();
+        Separator s2 = new Separator();
+
+
+        Label title = new Label("Creating New Account");
+        Label emailInUse = new Label("");
+        Label passwordsDontMatch = new Label("");
+
+
+        final Label EMAIL = new Label("Email");
+        final Label USERNAME = new Label("Username");
+        final Label PASSWORD = new Label("Password");
+        final Label RENTER_PASSWORD = new Label("Re-enter your password");
+        final Label FIRST_NAME = new Label("First Name");
+        final Label LAST_NAME = new Label("Last Name");
+        final Label ADDRESS = new Label("Address Information");
+        final Label ADD_LINE_1 = new Label("Address Line 1");
+        final Label ADD_LINE_2 = new Label("Address Line 2");
+        final Label CITY = new Label("City");
+        final Label STATE = new Label("State");
+        final Label ZIPCODE = new Label("Zip Code");
+        final Label PHONE_NUMBER = new Label("Phone Number");
+
+
+        TextField em = new TextField();
+        TextField un = new TextField();
+        PasswordField pw = new PasswordField();
+        PasswordField rpw = new PasswordField();
+        TextField fn = new TextField();
+        TextField ln = new TextField();
+        TextField al1 = new TextField();
+        TextField al2 = new TextField();
+        TextField city = new TextField();
+        ComboBox state = new ComboBox();
+        TextField zip = new TextField();
+        TextField num = new TextField();
+
+        Button cancel = new Button("Cancel");
+        cancel.setOnAction(actionEvent -> {
+            primaryStage.close();
+            login();
+        });
+
+        Button createAccount = new Button("Create Account");
+        BooleanBinding b = new BooleanBinding() {
+
+            {
+                super.bind(un.textProperty(), pw.textProperty(), rpw.textProperty(), fn.textProperty(), ln.textProperty(), al1.textProperty(), num.textProperty(), em.textProperty(),
+                           city.textProperty(), state.valueProperty(), zip.textProperty());
+            }
+
+            @Override
+            protected boolean computeValue() {
+                return un.getText().isEmpty() || pw.getText().isEmpty() || fn.getText().isEmpty() || ln.getText().isEmpty() || al1.getText().isEmpty() ||
+                       num.getText().isEmpty() || em.getText().isEmpty() || city.getText().isEmpty() || zip.getText().isEmpty() ||
+                       state.getValue() == null || zip.getText().isEmpty() || rpw.getText().isEmpty();
+            }
+        };
+        createAccount.disableProperty().bind(b);
+
+        HBox buttons = new HBox();
+        buttons.getChildren().addAll(createAccount, cancel);
+        buttons.setPadding(new Insets(10));
+        buttons.setAlignment(Pos.CENTER);
+        buttons.setSpacing(10);
+
+        GridPane form = new GridPane();
+        form.add(EMAIL, 0, 0);
+        form.add(FIRST_NAME, 0 , 1);
+        form.add(LAST_NAME, 0 , 2);
+        form.add(USERNAME, 0, 3);
+        form.add(PASSWORD, 0, 4);
+        form.add(RENTER_PASSWORD, 0 , 5);
+        form.add(ADD_LINE_1, 0, 6);
+        form.add(ADD_LINE_2, 0, 7);
+        form.add(CITY, 0, 8);
+        form.add(STATE, 0, 9);
+        form.add(ZIPCODE, 0 , 10);
+        form.add(PHONE_NUMBER, 0, 11);
+        form.add(em, 1,0);
+        form.add(fn,1,1);
+        form.add(ln,1,2);
+        form.add(un,1,3);
+        form.add(pw,1,4);
+        form.add(rpw,1,5);
+        form.add(al1,1,6);
+        form.add(al2,1,7);
+        form.add(city,1,8);
+        form.add(state,1,9);
+        form.add(zip,1,10);
+        form.add(num,1,11);
+        form.setVgap(10);
+        form.setHgap(10);
+        form.setAlignment(Pos.CENTER_LEFT);
+        form.setPadding(new Insets(10));
+
+
+
+        VBox layout = new VBox();
+        layout.setPadding(new Insets(10));
+        layout.setSpacing(10);
+        layout.setAlignment(Pos.CENTER);
+        layout.getChildren().addAll(title, s0 ,form, s1, buttons);
+
+        ScrollPane all = new ScrollPane(layout);
         Scene ex = new Scene(all);
         primaryStage.setScene(ex);
         primaryStage.show();
@@ -288,6 +396,23 @@ public class GUIMain extends Application {
 
         Label prompt = new Label("Please Sign In");
         Label invalid = new Label("");
+
+        Label newUser = new Label("New User?");
+        newUser.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                newUser.setStyle("-fx-underline: true");
+            }
+        });
+        newUser.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                newUser.setStyle("-fx-underline: false");
+            }
+        });
+        newUser.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            newUser();
+        });
 
         Button guestUser = new Button("Login as Guest");
         guestUser.setOnAction(event -> {
@@ -331,7 +456,7 @@ public class GUIMain extends Application {
             }
         });
 
-        VBox ex = new VBox(10, prompt, uID, userID, pw, password, submit, guestUser, invalid);
+        VBox ex = new VBox(10, prompt, uID, userID, pw, password, submit, guestUser, newUser,invalid);
         ex.setPadding(new Insets(10));
         ex.setSpacing(20);
         ex.setAlignment(Pos.CENTER);
