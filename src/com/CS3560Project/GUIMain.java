@@ -28,6 +28,7 @@ import javax.swing.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -585,7 +586,12 @@ public class GUIMain extends Application {
         TextField cn = new TextField();
         TextField sc = new TextField();
         ComboBox month = new ComboBox();
-        month.getItems().addAll(Month.values());
+        List<String> months = new ArrayList<>();
+        for (Month monthObj : Month.values()) {
+            months.add(Utils.capitalize(monthObj.name()));
+        }
+        month.getItems().addAll(months);
+
         ComboBox year = new ComboBox();
         for(int i = 2019; i<= 2030; i++){
             year.getItems().add(i);
