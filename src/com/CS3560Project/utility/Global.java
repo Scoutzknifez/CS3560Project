@@ -45,6 +45,7 @@ public class Global {
         Utils.printList(list);
 
         constructInventories((List<InventorySlot>) list);
+
     }
 
     private static void constructInventories(List<InventorySlot> slots) {

@@ -96,7 +96,7 @@ public class Main {
         SQLHelper.insertIntoTable(Table.INVENTORIES, is3);*/
 
         //Fourth
-        PhoneNumber ph4 = new PhoneNumber(909, 5746390);
+        /*PhoneNumber ph4 = new PhoneNumber(909, 5746390);
         Address address4 = new Address("57205 Scream Ct", "Los Angeles", State.CALIFORNIA, 90001);
         User user4 = new User("fredward21", "Fredrick", "Smith", ph4, address4, "freddieMan@hotmail.com", "username123", AccountRank.BASIC);
         SQLHelper.insertIntoTable(Table.USERS, user4);
@@ -113,6 +113,26 @@ public class Main {
 
         Inventory inv4 = new Inventory(user4);
         InventorySlot is4 = new InventorySlot(inv4, product4, 15);
-        SQLHelper.insertIntoTable(Table.INVENTORIES, is4);
+        SQLHelper.insertIntoTable(Table.INVENTORIES, is4);*/
+
+        //Fifth
+        PhoneNumber ph5 = new PhoneNumber(865, 9467384);
+        Address address5 = new Address("12486 TangleTree Cr", "San Diego", State.CALIFORNIA, 22434);
+        User user5 = new User("hello1234", "Hannah", "Benson", ph5, address5, "yodellingllama123@gmail.com", "yellow43", AccountRank.BASIC);
+        SQLHelper.insertIntoTable(Table.USERS, user5);
+
+        Product product5 = new Product("lounge_pants", 30.00, "Pants for lounging around on even your busiest days.", "Large", 2.0);
+        SQLHelper.insertIntoTable(Table.PRODUCTS, product5);
+
+        ProductReview pr5 = new ProductReview(product5, user5, 2.0, "They're great pants, but they're just pants. Not worth $30.");
+        SQLHelper.insertIntoTable(Table.PRODUCT_REVIEWS, pr5);
+
+        String base64p5 = "data:image/jpeg;base64,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";
+        ProductImage pi5 = new ProductImage(product5, 0, base64p5);
+        SQLHelper.insertIntoTable(Table.PRODUCT_IMAGES, pi5);
+
+        Inventory inv5 = new Inventory(user5);
+        InventorySlot is5 = new InventorySlot(inv5, product5, 20);
+        SQLHelper.insertIntoTable(Table.INVENTORIES, is5);
     }
 }

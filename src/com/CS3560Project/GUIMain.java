@@ -69,6 +69,8 @@ public class GUIMain extends Application {
         shoppingList.setHgap(20);
         shoppingList.setVgap(20);
 
+        populate(ProductView.createProductViews(Global.productList), Global.productList);
+
         Label cart = new Label("Shopping Cart (" + ProductView.count + ")");
         shoppingCartLabel = cart;
         cart.addEventHandler(MouseEvent.MOUSE_CLICKED, event ->{
@@ -181,17 +183,18 @@ public class GUIMain extends Application {
         for (Inventory inv : Global.inventoryList) {
             searchResults.addAll(inv.search(input.split(Constants.SPACE_REGEX)));
         }
-        populate(ProductView.createProductViews(searchResults));
+        populate(ProductView.createProductViews(searchResults), searchResults);
     }
 
-    private void populate(List<ProductView> views)
+    private void populate(List<ProductView> views, List<Product> products)
     {
+        shoppingList.getChildren().clear();
         int itemIndex = 0;
-        for(int i = 0; i < searchResults.size(); i++)
+        for(int i = 0; i < products.size(); i++)
         {
             for(int j = 0; j < 4; j++)
             {
-                if(itemIndex < searchResults.size())
+                if(itemIndex < products.size())
                 {
                     shoppingList.add(views.get(itemIndex).show(), j, i);
                     itemIndex++;
@@ -199,6 +202,22 @@ public class GUIMain extends Application {
             }
         }
     }
+
+    /*private void populateMain(List<ProductView> views)
+    {
+        int itemIndex = 0;
+        for(int i = 0; i < Global.productList.size(); i++)
+        {
+            for(int j = 0; j < 4; j++)
+            {
+                if(itemIndex < Global.productList.size())
+                {
+                    shoppingList.add(views.get(itemIndex).show(), j, i);
+                    itemIndex++;
+                }
+            }
+        }
+    }*/
 
     //Kristine's Code
     //this is for the shopping cart windowpane

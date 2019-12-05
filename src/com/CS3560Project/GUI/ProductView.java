@@ -20,6 +20,7 @@ public class ProductView
 {
     protected ImageView imageView;
     protected Label addToCart = new Label("Add to Cart");
+    protected Label remove = new Label("Remove from Cart");
     protected Label name = new Label();
     protected Label rating = new Label();
     protected VBox vbox;
@@ -32,7 +33,11 @@ public class ProductView
         imageView.setFitHeight(120);
         imageView.setFitWidth(100);
 
+        remove.setVisible(false);
+
         name.setText(Utils.capitalize(product.getProductName()));
+        remove.setTextFill(Color.RED);
+
         rating.setText("Average Rating: " + Utils.formatDouble(product.getAverageRating(), 1));
         if(product.getAverageRating() > 3)
             rating.setTextFill(Color.GREEN);
@@ -41,16 +46,28 @@ public class ProductView
         else
             rating.setTextFill(Color.RED);
 
-        vbox = new VBox(10, name, imageView, rating, addToCart);
+        vbox = new VBox(10, name, imageView, rating, addToCart, remove);
         vbox.setAlignment(Pos.CENTER);
 
         addToCart.setOnMouseClicked(e -> {
             Global.guiMainReference.changeCartLabel(1);
             GUIMain.cart.addProduct(product, 1);
+            remove.setVisible(true);
+            addToCart.setVisible(false);
+        });
+
+        remove.setOnMouseClicked(e -> {
+            Global.guiMainReference.changeCartLabel(-1);
+            GUIMain.cart.getInventory().remove(product);
+            remove.setVisible(false);
+            addToCart.setVisible(true);
         });
 
         addToCart.setOnMouseEntered(e -> addToCart.setStyle("-fx-underline: true"));
         addToCart.setOnMouseExited(e -> addToCart.setStyle("-fx-underline: false"));
+
+        remove.setOnMouseEntered(e -> remove.setStyle("-fx-underline: true"));
+        remove.setOnMouseExited(e -> remove.setStyle("-fx-underline: false"));
     }
 
     public static List<ProductView> createProductViews(List<Product> products)
