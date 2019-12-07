@@ -52,13 +52,18 @@ public class GUIMain extends Application {
     private void shoppingPage()
     {
         primaryStage.close();
+
+        if(shoppingCartLabel != null)
+        {
+            changeCartLabel(ProductView.count*-1);
+        }
+
         //Declarations/Initialization of all GUI components
         BorderPane borderpane = new BorderPane();
 
         Button searchButton = new Button("Search");
         TextField search = new TextField();
         HBox hboxSearch = new HBox(search, searchButton);
-
 
         shoppingList.setAlignment(Pos.CENTER);
         shoppingList.setPadding(new Insets(10,10,10,10));
@@ -105,6 +110,7 @@ public class GUIMain extends Application {
         logout.setOnMouseClicked(event ->{
            Alert sure = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to logout?");
            Optional<ButtonType> result = sure.showAndWait();
+
            if(result.isPresent() && result.get() == ButtonType.OK)
            {
                login();
@@ -603,12 +609,15 @@ public class GUIMain extends Application {
         });
 
         password.setOnKeyPressed(event ->{
-            Global.loggedInUser = Global.getUserFromCredentials(userID.getText(), password.getText());
-            if (Global.loggedInUser == Global.GUEST) {
-                invalid.setText("Username or Password invalid.");
-            } else {
-                cart = new Cart(Global.loggedInUser);
-                shoppingPage();
+            if(event.getCode() == KeyCode.ENTER)
+            {
+                Global.loggedInUser = Global.getUserFromCredentials(userID.getText(), password.getText());
+                if (Global.loggedInUser == Global.GUEST) {
+                    invalid.setText("Username or Password invalid.");
+                } else {
+                    cart = new Cart(Global.loggedInUser);
+                    shoppingPage();
+                }
             }
         });
 
