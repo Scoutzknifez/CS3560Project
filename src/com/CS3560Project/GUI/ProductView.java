@@ -25,7 +25,7 @@ public class ProductView
     protected Label rating = new Label();
     protected VBox vbox;
 
-    public static int count;
+    public static int count = 0;
 
     public ProductView(Product product)
     {
