@@ -13,6 +13,7 @@ import java.util.List;
 
 @Setter
 @Getter
+// DTO
 public class InventorySlot implements Databasable {
     private Inventory inventory;
     private Product product;

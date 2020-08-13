@@ -16,6 +16,7 @@ import java.util.List;
 @Setter
 @Getter
 @AllArgsConstructor
+// DTO
 public class ProductReview implements Databasable {
     private String id;      // Compound Primary Key
     private String userId;  // Compound Alternate Key

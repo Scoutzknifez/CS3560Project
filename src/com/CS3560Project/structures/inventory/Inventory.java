@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @AllArgsConstructor
+// DTO
 public class Inventory {
     private String id;
     private Map<Product, Integer> inventory = new HashMap<>();

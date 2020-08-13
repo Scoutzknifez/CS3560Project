@@ -17,6 +17,7 @@ import java.util.List;
 @Setter
 @Getter
 @AllArgsConstructor
+// DTO
 public class Product implements Databasable {
     private String id;
     private String productName;

@@ -13,6 +13,7 @@ import java.util.List;
 @Setter
 @Getter
 @AllArgsConstructor
+// DTO
 public class ProductImage implements Databasable {
     private String id;      // Compound Primary Key
     // Displays images in priority the smaller the number, the sooner it is shown, 0 is before 1
