@@ -15,6 +15,7 @@ import java.util.List;
 @Setter
 @Getter
 @AllArgsConstructor
+// DTO
 public class User implements Databasable {
     private String ID;
     private String username;
