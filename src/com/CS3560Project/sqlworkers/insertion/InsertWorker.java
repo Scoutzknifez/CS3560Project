@@ -7,14 +7,24 @@ import com.CS3560Project.utility.Utils;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Setter
 @Getter
 public class InsertWorker extends Worker {
+    private boolean listInsertionMode;
+    private List<Databasable> listToInsert;
     private String objectStringForm;
 
     public InsertWorker(Table table, Databasable databasableObject) {
         super(table);
         setObjectStringForm(SQLHelper.databasableToInsertionForm(databasableObject));
+    }
+
+    public InsertWorker(Table table, List<Databasable> list) {
+        super(table);
+        setListInsertionMode(true);
+        setListToInsert(list);
     }
 
     @Override
@@ -27,11 +37,22 @@ public class InsertWorker extends Worker {
     }
 
     private void doInsertion() {
-        String sqlArg = "INSERT INTO " + getTable().name() + " VALUES " + getObjectStringForm();
-        try {
-            getStatement().execute(sqlArg);
-        } catch (Exception e) {
-            Utils.log("Failed to do insertion on table: " + getTable().name());
+        if (listInsertionMode) {
+            for(Databasable data : listToInsert) {
+                String sqlArg = "INSERT INTO " + getTable().name() + " VALUES " + SQLHelper.databasableToInsertionForm(data);
+                try {
+                    getStatement().execute(sqlArg);
+                } catch (Exception e) {
+                    Utils.log("Failed to do insertion on table: " + getTable().name());
+                }
+            }
+        } else {
+            String sqlArg = "INSERT INTO " + getTable().name() + " VALUES " + getObjectStringForm();
+            try {
+                getStatement().execute(sqlArg);
+            } catch (Exception e) {
+                Utils.log("Failed to do insertion on table: " + getTable().name());
+            }
         }
     }
 }
